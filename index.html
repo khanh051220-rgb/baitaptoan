@@ -13,77 +13,82 @@
 
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            padding: 20px; 
+            padding: 40px 20px; 
             background: linear-gradient(135deg, #d8f3dc 0%, #b7e4c7 100%); 
             min-height: 100vh;
             margin: 0;
             display: flex;
             justify-content: center;
+            align-items: center; /* Căn giữa màn hình */
         }
 
+        /* ĐÃ SỬA: LÀM FORM TO HƠN */
         .container { 
             width: 100%;
-            max-width: 750px; 
+            max-width: 1000px; /* Tăng chiều rộng từ 750px lên 1000px */
             background: rgba(255, 255, 255, 0.95); 
-            padding: 35px; 
-            border-radius: 30px; 
-            box-shadow: 0 20px 50px rgba(0,0,0,0.1); 
+            padding: 50px; /* Tăng khoảng cách đệm bên trong */
+            border-radius: 40px; 
+            box-shadow: 0 25px 60px rgba(0,0,0,0.15); 
         }
 
-        h1 { text-align: center; color: var(--primary); font-size: 32px; margin-bottom: 20px; letter-spacing: 1px; }
+        h1 { text-align: center; color: var(--primary); font-size: 42px; margin-bottom: 30px; letter-spacing: 1px; }
 
-        #login-screen { text-align: center; padding: 30px 10px; }
+        #login-screen { text-align: center; padding: 40px 10px; }
+        
+        /* ĐÃ SỬA: CÁC Ô NHẬP LIỆU TO HƠN */
         .input-login { 
-            padding: 15px; 
+            padding: 20px; 
             border: 2px solid #b7e4c7; 
-            border-radius: 15px; 
-            width: 85%; 
-            max-width: 320px; 
-            margin-bottom: 15px; 
-            font-size: 16px;
+            border-radius: 20px; 
+            width: 90%; 
+            max-width: 450px; 
+            margin-bottom: 20px; 
+            font-size: 20px;
             transition: 0.3s;
             text-align: center;
         }
-        .input-login:focus { border-color: var(--secondary); outline: none; box-shadow: 0 0 10px rgba(64,145,108,0.2); }
+        .input-login:focus { border-color: var(--secondary); outline: none; box-shadow: 0 0 15px rgba(64,145,108,0.2); }
 
         #dong-ho { 
-            font-size: 22px; font-weight: bold; color: #e63946; 
-            text-align: center; margin-bottom: 25px; padding: 15px; 
-            background: #fff1f2; border-radius: 20px; border: 2px solid #ffccd5;
+            font-size: 28px; font-weight: bold; color: #e63946; 
+            text-align: center; margin-bottom: 30px; padding: 20px; 
+            background: #fff1f2; border-radius: 25px; border: 2px solid #ffccd5;
         }
 
         .khung { 
-            padding: 25px; margin-bottom: 25px; border-radius: 20px; 
+            padding: 35px; margin-bottom: 30px; border-radius: 25px; 
             background: white; border: 1px solid #e9ecef;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
-            border-left: 8px solid var(--secondary);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            border-left: 10px solid var(--secondary);
             transition: 0.3s;
         }
-        .khung:hover { transform: scale(1.02); }
+        .khung:hover { transform: scale(1.01); }
 
         .cau-dung { border-left-color: #2dc653 !important; background: #f0fff4; }
         .cau-sai { border-left-color: #e63946 !important; background: #fff5f5; }
 
+        /* ĐÃ SỬA: NÚT BẤM TO HƠN */
         button { 
-            padding: 15px 35px; cursor: pointer; 
+            padding: 20px 50px; cursor: pointer; 
             background: linear-gradient(45deg, #2d6a4f, #52b788); 
-            color: white; border: none; border-radius: 50px; 
-            font-weight: bold; font-size: 16px;
-            box-shadow: 0 5px 15px rgba(45,106,79,0.3);
+            color: white; border: none; border-radius: 60px; 
+            font-weight: bold; font-size: 20px;
+            box-shadow: 0 8px 20px rgba(45,106,79,0.3);
             transition: 0.3s;
         }
-        button:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(45,106,79,0.4); }
+        button:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(45,106,79,0.4); }
 
         label { 
-            display: block; padding: 12px; margin: 8px 0; 
-            border-radius: 12px; background: #f8f9fa; cursor: pointer;
-            transition: 0.2s;
+            display: block; padding: 15px; margin: 10px 0; 
+            border-radius: 15px; background: #f8f9fa; cursor: pointer;
+            transition: 0.2s; font-size: 18px;
         }
         label:hover { background: #e9ecef; }
-        input[type='radio'] { accent-color: var(--secondary); transform: scale(1.3); margin-right: 12px; }
+        input[type='radio'] { accent-color: var(--secondary); transform: scale(1.5); margin-right: 15px; }
 
         #ket-qua { text-align: center; margin-top: 30px; }
-        .loi-giai { font-style: italic; color: #d90429; margin-top: 15px; display: none; font-weight: bold; }
+        .loi-giai { font-style: italic; color: #d90429; margin-top: 15px; display: none; font-weight: bold; font-size: 18px; }
     </style>
 </head>
 <body>
@@ -91,7 +96,7 @@
 <div class="container">
     <div id="login-screen">
         <h1>🌿 EzMath 🌿</h1>
-        <p style="color: #666;">Chào mừng các em đến với thử thách hôm nay! ✨</p>
+        <p style="color: #666; font-size: 18px;">Chào mừng các em đến với thử thách hôm nay! ✨</p>
         <input type="text" id="student-name" class="input-login" placeholder="👤 Nhập họ và tên..."><br>
         <input type="password" id="student-code" class="input-login" placeholder="🔑 Nhập mã bí mật..."><br>
         <button id="btn-login">🚀 BẮT ĐẦU THỬ THÁCH</button>
@@ -103,7 +108,7 @@
         <div id="vung-chua"></div>
         <div style="text-align: center;">
             <button id="btn-nop-bai">✔️ HOÀN THÀNH & NỘP BÀI</button>
-            <button onclick="location.reload()">🔄 LÀM ĐỀ MỚI</button>
+            <button onclick="location.reload()" style="background: #6c757d; margin-left: 10px;">🔄 LÀM ĐỀ MỚI</button>
         </div>
         <div id="ket-qua"></div>
     </div>
@@ -136,11 +141,9 @@
 
     var danhSachHienTai = []; 
 
-    // 2. GÁN SỰ KIỆN
     document.getElementById('btn-login').addEventListener('click', checkLogin);
     document.getElementById('btn-nop-bai').addEventListener('click', chamDiem);
 
-    // 3. CÁC HÀM XỬ LÝ
     function checkLogin() {
         var n = document.getElementById('student-name').value.trim();
         var c = document.getElementById('student-code').value.trim();
@@ -177,13 +180,13 @@
             .slice(0, SO_CAU_MOI_DE);
 
         danhSachHienTai.forEach((item, i) => {
-            // SỬA LỖI Ở ĐÂY: Dùng dấu backtick (`) thay vì ngoặc nhọn trực tiếp
-            var html = <div class='khung' id='box${i}'><p style='font-weight:bold;'>📝 Câu ${i+1}: ${item.de}</p>;
+            // ĐÃ SỬA LỖI: Dùng dấu backtick (`) chuẩn để bao quanh chuỗi HTML
+            var html = `<div class='khung' id='box${i}'><p style='font-weight:bold; font-size: 20px;'>📝 Câu ${i+1}: ${item.de}</p>`;
             let luaChonTron = [...item.luaChon].sort(() => 0.5 - Math.random());
             luaChonTron.forEach(lc => {
-                html += <label><input type='radio' name='cau${i}' value='${lc}'> ${lc}</label>;
+                html += `<label><input type='radio' name='cau${i}' value='${lc}'> ${lc}</label>`;
             });
-            html += <div class='loi-giai' id='note${i}'>💡 Đáp án đúng: ${item.dung}</div></div>;
+            html += `<div class='loi-giai' id='note${i}'>💡 Đáp án đúng: ${item.dung}</div></div>`;
             v.innerHTML += html;
         });
     }
@@ -220,7 +223,6 @@
             </div>`;
         document.getElementById('btn-nop-bai').style.display = "none";
 
-        // GỬI KẾT QUẢ VỀ GOOGLE SHEETS (Giữ nguyên link của cậu)
         fetch("https://script.google.com/macros/s/AKfycbzSoiKPu8jwc3z4oqwqLu0Gy_kMd-MukfhsvM--SB82WEpGs9bt3-1k6FtSKBYBjts/exec", {
             method: "POST", 
             mode: "no-cors", 
