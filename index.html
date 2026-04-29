@@ -85,6 +85,14 @@
         #ket-qua { text-align: center; margin-top: 30px; }
         .loi-giai { font-style: italic; color: #d90429; margin-top: 15px; display: none; font-weight: bold; }
     </style>
+    @keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+}
+.cau-sai { animation: shake 0.5s; }
 </head>
 <body>
 
@@ -99,6 +107,10 @@
 
     <div id="main-content" style="display:none;">
         <h1>✍️ BÀI TẬP RÈN LUYỆN</h1>
+        <!-- Thêm vào ngay sau <h1>✍️ BÀI TẬP RÈN LUYỆN</h1> -->
+<div style="width: 100%; background: #eee; border-radius: 10px; margin-bottom: 20px;">
+    <div id="progress-bar" style="width: 0%; height: 10px; background: var(--secondary); border-radius: 10px; transition: 0.5s;"></div>
+</div>
         <div id="dong-ho">⏳ Thời gian còn lại: 15:00</div>
         <div id="vung-chua"></div>
         <div style="text-align: center;">
@@ -110,6 +122,17 @@
 </div>
 
 <script>
+    // Thêm hàm này để cập nhật thanh tiến độ khi người dùng click chọn đáp án
+document.addEventListener('change', function(e) {
+    if(e.target.type === 'radio') {
+        let soCauDaLam = 0;
+        for(let i=0; i < SO_CAU_MOI_DE; i++) {
+            if(document.querySelector(`input[name="cau${i}"]:checked`)) soCauDaLam++;
+        }
+        let phanTram = (soCauDaLam / SO_CAU_MOI_DE) * 100;
+        document.getElementById('progress-bar').style.width = phanTram + "%";
+    }
+});
     // 1. CẤU HÌNH & BIẾN TOÀN CỤC
     var studentNameStored = "";
     var giay = 900; 
