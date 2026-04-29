@@ -8,7 +8,6 @@
         .container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
         h1 { text-align: center; color: #2d6a4f; font-size: 28px; margin-bottom: 30px; }
         
-        /* Giao diện Đăng nhập */
         #login-screen { text-align: center; padding: 40px 10px; }
         #main-content { display: none; } 
         .input-login { padding: 12px; border: 2px solid #b7e4c7; border-radius: 10px; width: 80%; max-width: 300px; margin-bottom: 10px; outline: none; font-size: 16px; text-align: center; }
@@ -49,9 +48,13 @@
 <script>
     var studentNameStored = "";
 
-    // --- CHỖ CẬU CẦN SỬA MÃ Ở ĐÂY ---
-    var danhSachMa = ["toan2024", "lop6a1", "khanh2k"]; // Cậu có thể thêm bao nhiêu mã tùy ý
-    // --------------------------------
+    // --- CẬU SỬA DANH SÁCH HỌC SINH VÀ MÃ Ở ĐÂY ---
+    // Cấu trúc: "Tên chính xác": "Mã tương ứng"
+    var danhSachHocSinh = {
+        "Nguyễn Văn An": "an123",
+        "Trần Thị Bình": "binh456",
+        "Khánh": "0512" 
+    };
 
     var danhSach = [
         { de: "Câu 1: 15 + 25 bằng bao nhiêu?", luaChon: ["30", "35", "40", "45"], dung: "40" },
@@ -60,23 +63,26 @@
     ];
 
     function checkLogin() {
-        var nameValue = document.getElementById('student-name').value;
-        var codeValue = document.getElementById('student-code').value;
+        var nameValue = document.getElementById('student-name').value.trim();
+        var codeValue = document.getElementById('student-code').value.trim();
 
-        if (nameValue.trim().length < 2) {
+        // Máy sẽ tìm mã đúng dựa trên tên học sinh nhập vào
+        var maChuan = danhSachHocSinh[nameValue];
+
+        if (nameValue.length < 2) {
             alert("Em vui lòng nhập đầy đủ Họ và Tên!");
             return;
         }
 
-        // Kiểm tra xem mã nhập vào có nằm trong danh sách mã của cậu không
-        if (danhSachMa.includes(codeValue)) {
+        // Kiểm tra xem tên có trong danh sách không VÀ mã có khớp không
+        if (maChuan && maChuan === codeValue) {
             studentNameStored = nameValue;
             document.getElementById('login-screen').style.display = "none";
             document.getElementById('main-content').style.display = "block";
             document.getElementById('header-title').innerText = "Chào " + studentNameStored + ", chúc em làm bài tốt!";
             taoDe();
         } else {
-            alert("Mã học sinh không đúng rồi! Em kiểm tra lại nhé.");
+            alert("Tên hoặc Mã không đúng rồi! Em kiểm tra lại nhé.");
         }
     }
 
