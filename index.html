@@ -186,32 +186,101 @@
             method: "POST", mode: "no-cors", body: JSON.stringify({hoTen: studentNameStored, soCauDung: d+"/"+danhSach.length, diemSo: diem})
         });
     }
-    // --- CHỨC NĂNG CHỐNG GIAN LẬN ---
-var soLanViPham = 0;
-const GIOI_HAN_VI_PHAM = 3;
+    <script>
+    // 1. KHAI BÁO BIẾN TOÀN CỤC (Phải đặt ở đầu)
+    var studentNameStored = "";
+    var giay = 900; 
+    var timer;
+    var daNopBai = false;
+    var soLanViPham = 0; // Biến đếm vi phạm
+    const GIOI_HAN_VI_PHAM = 3; // Ngưỡng vi phạm
 
-// Theo dõi sự kiện người dùng chuyển Tab hoặc ẩn trình duyệt
-document.addEventListener("visibilitychange", function() {
-    if (document.visibilityState === 'hidden' && !daNopBai && studentNameStored !== "") {
-        soLanViPham++;
-        
-        if (soLanViPham < GIOI_HAN_VI_PHAM) {
-            alert("⚠️ CẢNH BÁO: Em không được rời khỏi trang làm bài! \nVi phạm thêm " + (GIOI_HAN_VI_PHAM - soLanViPham) + " lần nữa hệ thống sẽ tự động nộp bài.");
-        } else {
-            alert("❌ VI PHẠM QUÁ NHIỀU: Hệ thống tự động nộp bài của em!");
-            chamDiem(); // Tự động nộp bài khi vi phạm quá số lần
+    var danhSachHocSinh = { "Nguyễn Văn An": "an123", "Trần Thị Bình": "binh456", "Khánh": "0512" };
+    var danhSach = [
+        { de: "15 + 25 bằng bao nhiêu?", luaChon: ["30", "35", "40", "45"], dung: "40" },
+        { de: "Hình tam giác có mấy cạnh?", luaChon: ["2", "3", "4", "5"], dung: "3" },
+        { de: "Số nào lớn nhất: 89, 98, 100, 99?", luaChon: ["89", "98", "100", "99"], dung: "100" }
+    ];
+
+    // 2. CÁC HÀM CHỨC NĂNG CHÍNH (Đăng nhập, Tạo đề, Chấm điểm)
+    function checkLogin() {
+        var n = document.getElementById('student-name').value.trim();
+        var c = document.getElementById('student-code').value.trim();
+        if (danhSachHocSinh[n] && danhSachHocSinh[n] === c) {
+            studentNameStored = n;
+            document.getElementById('login-screen').style.display = "none";
+            document.getElementById('main-content').style.display = "block";
+            taoDe();
+            batDauDemNguoc();
+        } else { alert("Sai thông tin rồi em ơi! ❌"); }
+    }
+
+    function batDauDemNguoc() {
+        timer = setInterval(function() {
+            if (daNopBai) return;
+            var p = Math.floor(giay / 60), g = giay % 60;
+            document.getElementById('dong-ho').innerHTML = "⏳ Thời gian còn lại: " + p + ":" + (g < 10 ? "0" + g : g);
+            if (giay-- <= 0) { clearInterval(timer); chamDiem(); }
+        }, 1000);
+    }
+
+    var danhSachHienTai = [];
+    function taoDe() {
+        var v = document.getElementById('vung-chua'); v.innerHTML = "";
+        danhSachHienTai = JSON.parse(JSON.stringify(danhSach)).sort(() => 0.5 - Math.random());
+        danhSachHienTai.forEach((item, i) => {
+            var html = `<div class='khung' id='box${i}'><p style='font-weight:bold;'>📝 Câu ${i+1}: ${item.de}</p>`;
+            item.luaChon.sort(() => 0.5 - Math.random()).forEach(lc => {
+                html += `<label><input type='radio' name='cau${i}' value='${lc}'> ${lc}</label>`;
+            });
+            html += `<div class='loi-giai' id='note${i}'>💡 Đáp án đúng: ${item.dung}</div></div>`;
+            v.innerHTML += html;
+        });
+    }
+
+    function chamDiem() {
+        if (daNopBai) return; 
+        daNopBai = true; 
+        clearInterval(timer);
+        var d = 0;
+        danhSachHienTai.forEach((item, i) => {
+            var chon = Array.from(document.getElementsByName('cau'+i)).find(r => r.checked)?.value;
+            var b = document.getElementById('box'+i);
+            if (chon === item.dung) { d++; b.classList.add('cau-dung'); }
+            else { b.classList.add('cau-sai'); document.getElementById('note'+i).style.display = "block"; }
+            Array.from(document.getElementsByName('cau'+i)).forEach(r => r.disabled = true);
+        });
+
+        var diem = Math.round((d/danhSach.length)*100)/10;
+        document.getElementById('ket-qua').innerHTML = `<h2>Kết quả: ${diem} điểm</h2>`;
+        document.getElementById('btn-nop-bai').style.display = "none";
+
+        // Gửi dữ liệu về Sheet
+        fetch("https://script.google.com/macros/s/AKfycbzSoiKPu8jwc3z4oqwqLu0Gy_kMd-MukfhsvM--SB82WEpGs9bt3-1k6FtSKBYBjts/exec", {
+            method: "POST", mode: "no-cors", body: JSON.stringify({hoTen: studentNameStored, soCauDung: d+"/"+danhSach.length, diemSo: diem})
+        });
+    }
+
+    // 3. LOGIC CHỐNG GIAN LẬN (Đặt ở cuối để không ảnh hưởng các hàm trên)
+    document.addEventListener("visibilitychange", function() {
+        // Chỉ phạt khi đã đăng nhập và chưa nộp bài
+        if (document.visibilityState === 'hidden' && !daNopBai && studentNameStored !== "") {
+            soLanViPham++;
+            if (soLanViPham < GIOI_HAN_VI_PHAM) {
+                alert("⚠️ CẢNH BÁO: Em đã rời trang " + soLanViPham + " lần! Vi phạm " + GIOI_HAN_VI_PHAM + " lần sẽ bị nộp bài tự động.");
+            } else {
+                alert("❌ VI PHẠM QUÁ GIỚI HẠN! Hệ thống tự động nộp bài.");
+                chamDiem();
+            }
         }
-    }
-});
+    });
 
-// Chặn chuột phải (để học sinh không copy câu hỏi đi tra Google nhanh được)
-document.addEventListener('contextmenu', event => {
-    if (!daNopBai && studentNameStored !== "") {
-        event.preventDefault();
-        alert("🤫  Khánh nhắc: Tập trung làm bài, đừng dùng chuột phải nhé!");
-    }
-});
-
+    document.addEventListener('contextmenu', event => {
+        if (!daNopBai && studentNameStored !== "") {
+            event.preventDefault();
+            alert("🤫 Khánh nhắc: Đừng dùng chuột phải nhé!");
+        }
+    });
 </script>
 </body>
 </html>
