@@ -2,7 +2,6 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <!-- Cập nhật tên hiển thị trên tab trình duyệt -->
     <title>Học toán cùng Khánh</title>
     <style>
         :root {
@@ -91,7 +90,6 @@
 
 <div class="container">
     <div id="login-screen">
-        <!-- Thay đổi tên thương hiệu tại giao diện đăng nhập -->
         <h1>🌿 EzMath 🌿</h1>
         <p style="color: #666;">Chào mừng các em đến với thử thách hôm nay! ✨</p>
         <input type="text" id="student-name" class="input-login" placeholder="👤 Nhập họ và tên..."><br>
@@ -112,10 +110,13 @@
 </div>
 
 <script>
+    // 1. BIẾN TOÀN CỤC
     var studentNameStored = "";
     var giay = 900; 
     var timer;
     var daNopBai = false;
+    var soLanViPham = 0; 
+    const GIOI_HAN_VI_PHAM = 3; 
 
     var danhSachHocSinh = { "Nguyễn Văn An": "an123", "Trần Thị Bình": "binh456", "Khánh": "0512" };
     var danhSach = [
@@ -124,6 +125,7 @@
         { de: "Số nào lớn nhất: 89, 98, 100, 99?", luaChon: ["89", "98", "100", "99"], dung: "100" }
     ];
 
+    // 2. CÁC HÀM XỬ LÝ
     function checkLogin() {
         var n = document.getElementById('student-name').value.trim();
         var c = document.getElementById('student-code').value.trim();
@@ -150,90 +152,12 @@
         var v = document.getElementById('vung-chua'); v.innerHTML = "";
         danhSachHienTai = JSON.parse(JSON.stringify(danhSach)).sort(() => 0.5 - Math.random());
         danhSachHienTai.forEach((item, i) => {
-            var html = <div class='khung' id='box${i}'><p style='font-weight:bold;'>📝 Câu ${i+1}: ${item.de}</p>;
+            // Đã sửa: Dùng dấu backtick ` để bọc HTML giúp mã chạy đúng
+            var html = `<div class='khung' id='box${i}'><p style='font-weight:bold;'>📝 Câu ${i+1}: ${item.de}</p>`;
             item.luaChon.sort(() => 0.5 - Math.random()).forEach(lc => {
-                html += <label><input type='radio' name='cau${i}' value='${lc}'> ${lc}</label>;
+                html += `<label><input type='radio' name='cau${i}' value='${lc}'> ${lc}</label>`;
             });
-            html += <div class='loi-giai' id='note${i}'>💡 Đáp án đúng: ${item.dung}</div></div>;
-            v.innerHTML += html;
-        });
-    }
-
-    function chamDiem() {
-        if (daNopBai) return; daNopBai = true; clearInterval(timer);
-        var d = 0;
-        danhSachHienTai.forEach((item, i) => {
-            var chon = Array.from(document.getElementsByName('cau'+i)).find(r => r.checked)?.value;
-            var b = document.getElementById('box'+i);
-            if (chon === item.dung) { d++; b.classList.add('cau-dung'); }
-            else { b.classList.add('cau-sai'); document.getElementById('note'+i).style.display = "block"; }
-            Array.from(document.getElementsByName('cau'+i)).forEach(r => r.disabled = true);
-        });
-
-        var diem = Math.round((d/danhSach.length)*100)/10;
-        var icon = diem >= 8 ? "🏆 Tuyệt vời!" : (diem >= 5 ? "👏 Khá lắm!" : "💪 Cố gắng lên!");
-        
-        document.getElementById('ket-qua').innerHTML = `
-            <div style="background:#e9f5ee; padding:20px; border-radius:20px; border:2px solid #b7e4c7;">
-                <h2 style="margin:0; color:#1b4332;">${icon}</h2>
-                <p style="font-size:40px; font-weight:bold; color:#d00000; margin:10px 0;">💯 ${diem} ĐIỂM</p>
-                <p>Em đã đúng ${d}/${danhSach.length} câu. Kết quả đã được gửi cho thầy!</p>
-            </div>`;
-        document.getElementById('btn-nop-bai').style.display = "none";
-
-        // Gửi dữ liệu về máy chủ (Google Sheets)
-        fetch("https://script.google.com/macros/s/AKfycbzSoiKPu8jwc3z4oqwqLu0Gy_kMd-MukfhsvM--SB82WEpGs9bt3-1k6FtSKBYBjts/exec", {
-            method: "POST", mode: "no-cors", body: JSON.stringify({hoTen: studentNameStored, soCauDung: d+"/"+danhSach.length, diemSo: diem})
-        });
-    }
-    <script>
-    // 1. KHAI BÁO BIẾN TOÀN CỤC (Phải đặt ở đầu)
-    var studentNameStored = "";
-    var giay = 900; 
-    var timer;
-    var daNopBai = false;
-    var soLanViPham = 0; // Biến đếm vi phạm
-    const GIOI_HAN_VI_PHAM = 3; // Ngưỡng vi phạm
-
-    var danhSachHocSinh = { "Nguyễn Văn An": "an123", "Trần Thị Bình": "binh456", "Khánh": "0512" };
-    var danhSach = [
-        { de: "15 + 25 bằng bao nhiêu?", luaChon: ["30", "35", "40", "45"], dung: "40" },
-        { de: "Hình tam giác có mấy cạnh?", luaChon: ["2", "3", "4", "5"], dung: "3" },
-        { de: "Số nào lớn nhất: 89, 98, 100, 99?", luaChon: ["89", "98", "100", "99"], dung: "100" }
-    ];
-
-    // 2. CÁC HÀM CHỨC NĂNG CHÍNH (Đăng nhập, Tạo đề, Chấm điểm)
-    function checkLogin() {
-        var n = document.getElementById('student-name').value.trim();
-        var c = document.getElementById('student-code').value.trim();
-        if (danhSachHocSinh[n] && danhSachHocSinh[n] === c) {
-            studentNameStored = n;
-            document.getElementById('login-screen').style.display = "none";
-            document.getElementById('main-content').style.display = "block";
-            taoDe();
-            batDauDemNguoc();
-        } else { alert("Sai thông tin rồi em ơi! ❌"); }
-    }
-
-    function batDauDemNguoc() {
-        timer = setInterval(function() {
-            if (daNopBai) return;
-            var p = Math.floor(giay / 60), g = giay % 60;
-            document.getElementById('dong-ho').innerHTML = "⏳ Thời gian còn lại: " + p + ":" + (g < 10 ? "0" + g : g);
-            if (giay-- <= 0) { clearInterval(timer); chamDiem(); }
-        }, 1000);
-    }
-
-    var danhSachHienTai = [];
-    function taoDe() {
-        var v = document.getElementById('vung-chua'); v.innerHTML = "";
-        danhSachHienTai = JSON.parse(JSON.stringify(danhSach)).sort(() => 0.5 - Math.random());
-        danhSachHienTai.forEach((item, i) => {
-            var html = <div class='khung' id='box${i}'><p style='font-weight:bold;'>📝 Câu ${i+1}: ${item.de}</p>;
-            item.luaChon.sort(() => 0.5 - Math.random()).forEach(lc => {
-                html += <label><input type='radio' name='cau${i}' value='${lc}'> ${lc}</label>;
-            });
-            html += <div class='loi-giai' id='note${i}'>💡 Đáp án đúng: ${item.dung}</div></div>;
+            html += `<div class='loi-giai' id='note${i}'>💡 Đáp án đúng: ${item.dung}</div></div>`;
             v.innerHTML += html;
         });
     }
@@ -246,24 +170,36 @@
         danhSachHienTai.forEach((item, i) => {
             var chon = Array.from(document.getElementsByName('cau'+i)).find(r => r.checked)?.value;
             var b = document.getElementById('box'+i);
-            if (chon === item.dung) { d++; b.classList.add('cau-dung'); }
-            else { b.classList.add('cau-sai'); document.getElementById('note'+i).style.display = "block"; }
+            if (chon === item.dung) { 
+                d++; 
+                b.classList.add('cau-dung'); 
+            } else { 
+                b.classList.add('cau-sai'); 
+                document.getElementById('note'+i).style.display = "block"; 
+            }
             Array.from(document.getElementsByName('cau'+i)).forEach(r => r.disabled = true);
         });
 
         var diem = Math.round((d/danhSach.length)*100)/10;
-        document.getElementById('ket-qua').innerHTML = <h2>Kết quả: ${diem} điểm</h2>;
+        var icon = diem >= 8 ? "🏆 Tuyệt vời!" : (diem >= 5 ? "👏 Khá lắm!" : "💪 Cố gắng lên!");
+        
+        // Trả lại giao diện tính điểm đẹp mắt của cậu
+        document.getElementById('ket-qua').innerHTML = `
+            <div style="background:#e9f5ee; padding:20px; border-radius:20px; border:2px solid #b7e4c7;">
+                <h2 style="margin:0; color:#1b4332;">${icon}</h2>
+                <p style="font-size:40px; font-weight:bold; color:#d00000; margin:10px 0;">💯 ${diem} ĐIỂM</p>
+                <p>Em đã đúng ${d}/${danhSach.length} câu. Kết quả đã được gửi cho thầy!</p>
+            </div>`;
         document.getElementById('btn-nop-bai').style.display = "none";
 
-        // Gửi dữ liệu về Sheet
+        // Gửi dữ liệu về Google Sheets
         fetch("https://script.google.com/macros/s/AKfycbzSoiKPu8jwc3z4oqwqLu0Gy_kMd-MukfhsvM--SB82WEpGs9bt3-1k6FtSKBYBjts/exec", {
             method: "POST", mode: "no-cors", body: JSON.stringify({hoTen: studentNameStored, soCauDung: d+"/"+danhSach.length, diemSo: diem})
         });
     }
 
-    // 3. LOGIC CHỐNG GIAN LẬN (Đặt ở cuối để không ảnh hưởng các hàm trên)
+    // 3. CHỐNG GIAN LẬN
     document.addEventListener("visibilitychange", function() {
-        // Chỉ phạt khi đã đăng nhập và chưa nộp bài
         if (document.visibilityState === 'hidden' && !daNopBai && studentNameStored !== "") {
             soLanViPham++;
             if (soLanViPham < GIOI_HAN_VI_PHAM) {
