@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <!-- 1. Thay đổi tên hiển thị trên tab trình duyệt -->
+    <!-- Cập nhật tên hiển thị trên tab trình duyệt -->
     <title>Học toán cùng Khánh</title>
     <style>
         :root {
@@ -91,7 +91,7 @@
 
 <div class="container">
     <div id="login-screen">
-        <!-- 2. Thay đổi tên ở giao diện đăng nhập -->
+        <!-- Thay đổi tên thương hiệu tại giao diện đăng nhập -->
         <h1>🌿 EzMath 🌿</h1>
         <p style="color: #666;">Chào mừng các em đến với thử thách hôm nay! ✨</p>
         <input type="text" id="student-name" class="input-login" placeholder="👤 Nhập họ và tên..."><br>
@@ -181,6 +181,7 @@
             </div>`;
         document.getElementById('btn-nop-bai').style.display = "none";
 
+        // Gửi dữ liệu về máy chủ (Google Sheets)
         fetch("https://script.google.com/macros/s/AKfycbzSoiKPu8jwc3z4oqwqLu0Gy_kMd-MukfhsvM--SB82WEpGs9bt3-1k6FtSKBYBjts/exec", {
             method: "POST", mode: "no-cors", body: JSON.stringify({hoTen: studentNameStored, soCauDung: d+"/"+danhSach.length, diemSo: diem})
         });
