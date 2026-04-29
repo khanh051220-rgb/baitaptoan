@@ -116,12 +116,11 @@
     var timer;
     var daNopBai = false;
     var soLanViPham = 0; 
-    const GIOI_HAN_VI_PHAM = 1; 
-    const SO_CAU_MOI_DE = 5; // Cậu muốn mỗi đề có bao nhiêu câu thì chỉnh ở đây nhé!
+    const GIOI_HAN_VI_PHAM = 2; 
+    const SO_CAU_MOI_DE = 5;
 
     var danhSachHocSinh = { "Nguyễn Văn An": "an123", "Trần Thị Bình": "binh456", "Khánh": "0512" };
     
-    // 2. NGÂN HÀNG CÂU HỎI LỚN
     var khoCauHoi = [
         { de: "15 + 25 bằng bao nhiêu?", luaChon: ["30", "35", "40", "45"], dung: "40" },
         { de: "Hình tam giác có mấy cạnh?", luaChon: ["2", "3", "4", "5"], dung: "3" },
@@ -135,13 +134,13 @@
         { de: "Số gồm 5 trăm và 5 đơn vị là?", luaChon: ["55", "550", "505", "5005"], dung: "505" }
     ];
 
-    var danhSachHienTai = [1,2,3,4,5,6,7,8,9,10]; // Chứa các câu được bốc ngẫu nhiên
+    var danhSachHienTai = []; 
 
-    // 3. GÁN SỰ KIỆN
+    // 2. GÁN SỰ KIỆN
     document.getElementById('btn-login').addEventListener('click', checkLogin);
     document.getElementById('btn-nop-bai').addEventListener('click', chamDiem);
 
-    // 4. CÁC HÀM XỬ LÝ
+    // 3. CÁC HÀM XỬ LÝ
     function checkLogin() {
         var n = document.getElementById('student-name').value.trim();
         var c = document.getElementById('student-code').value.trim();
@@ -173,18 +172,18 @@
         var v = document.getElementById('vung-chua'); 
         v.innerHTML = "";
         
-        // TRỘN VÀ BỐC NGẪU NHIÊN CÂU HỎI
         danhSachHienTai = khoCauHoi
-            .sort(() => 0.5 - Math.random()) // Trộn kho
-            .slice(0, SO_CAU_MOI_DE); // Bốc n câu
+            .sort(() => 0.5 - Math.random())
+            .slice(0, SO_CAU_MOI_DE);
 
         danhSachHienTai.forEach((item, i) => {
-            var html = <div class='khung' id='box${i}'><p style='font-weight:bold;'>📝 Câu ${i+1}: ${item.de}</p>;
+            // SỬA LỖI Ở ĐÂY: Dùng dấu backtick (`) thay vì ngoặc nhọn trực tiếp
+            var html = `<div class='khung' id='box${i}'><p style='font-weight:bold;'>📝 Câu ${i+1}: ${item.de}</p>`;
             let luaChonTron = [...item.luaChon].sort(() => 0.5 - Math.random());
             luaChonTron.forEach(lc => {
-                html += <label><input type='radio' name='cau${i}' value='${lc}'> ${lc}</label>;
+                html += `<label><input type='radio' name='cau${i}' value='${lc}'> ${lc}</label>`;
             });
-            html += <div class='loi-giai' id='note${i}'>💡 Đáp án đúng: ${item.dung}</div></div>;
+            html += `<div class='loi-giai' id='note${i}'>💡 Đáp án đúng: ${item.dung}</div></div>`;
             v.innerHTML += html;
         });
     }
@@ -210,7 +209,6 @@
             Array.from(inputs).forEach(r => r.disabled = true);
         });
 
-        // Tính điểm dựa trên số câu thực tế (danhSachHienTai.length)
         var diem = Math.round((d / danhSachHienTai.length) * 100) / 10;
         var icon = diem >= 8 ? "🏆 Tuyệt vời!" : (diem >= 5 ? "👏 Khá lắm!" : "💪 Cố gắng lên!");
         
@@ -222,13 +220,15 @@
             </div>`;
         document.getElementById('btn-nop-bai').style.display = "none";
 
-        // Gửi kết quả (giữ nguyên App Script của cậu)
+        // GỬI KẾT QUẢ VỀ GOOGLE SHEETS (Giữ nguyên link của cậu)
         fetch("https://script.google.com/macros/s/AKfycbzSoiKPu8jwc3z4oqwqLu0Gy_kMd-MukfhsvM--SB82WEpGs9bt3-1k6FtSKBYBjts/exec", {
-            method: "POST", mode: "no-cors", body: JSON.stringify({hoTen: studentNameStored, soCauDung: d+"/"+danhSachHienTai.length, diemSo: diem})
+            method: "POST", 
+            mode: "no-cors", 
+            body: JSON.stringify({hoTen: studentNameStored, soCauDung: d+"/"+danhSachHienTai.length, diemSo: diem})
         });
     }
 
-    // CHỐNG GIAN LẬN (Giữ nguyên)
+    // CHỐNG GIAN LẬN
     document.addEventListener("visibilitychange", function() {
         if (document.visibilityState === 'hidden' && !daNopBai && studentNameStored !== "") {
             soLanViPham++;
