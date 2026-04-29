@@ -249,4 +249,134 @@
     });
 </script>
 </body>
+<!-- Chèn thêm thẻ canvas này vào ngay sau thẻ <body> -->
+<canvas id="fireworksCanvas" style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:9999; display:none;"></canvas>
+
+<script>
+    // --- GIỮ NGUYÊN CÁC BIẾN TOÀN CỤC CŨ CỦA CẬU ---
+    // (khoCauHoi, danhSachHocSinh, studentNameStored...)
+
+    // 1. HÀM TẠO HIỆU ỨNG PHÁO HOA
+    function runFireworks() {
+        const canvas = document.getElementById('fireworksCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.style.display = "block";
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particles = [];
+        const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ff9f1c'];
+
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                this.velocity = {
+                    x: (Math.random() - 0.5) * 8,
+                    y: (Math.random() - 0.5) * 8
+                };
+                this.alpha = 1;
+                this.friction = 0.95;
+            }
+            draw() {
+                ctx.globalAlpha = this.alpha;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, 3, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+            update() {
+                this.velocity.x *= this.friction;
+                this.velocity.y *= this.friction;
+                this.x += this.velocity.x;
+                this.y += this.velocity.y;
+                this.alpha -= 0.01;
+            }
+        }
+
+        function createExplosion(x, y) {
+            for (let i = 0; i < 50; i++) {
+                particles.push(new Particle(x, y, colors[Math.floor(Math.random() * colors.length)]));
+            }
+        }
+
+        let animationId;
+        function animate() {
+            animationId = requestAnimationFrame(animate);
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            particles.forEach((p, i) => {
+                if (p.alpha > 0) {
+                    p.update();
+                    p.draw();
+                } else {
+                    particles.splice(i, 1);
+                }
+            });
+        }
+
+        // Tạo 5 đợt pháo hoa ngẫu nhiên trên màn hình
+        let count = 0;
+        const interval = setInterval(() => {
+            createExplosion(Math.random() * canvas.width, Math.random() * canvas.height);
+            count++;
+            if (count > 8) {
+                clearInterval(interval);
+                setTimeout(() => {
+                    cancelAnimationFrame(animationId);
+                    canvas.style.display = "none";
+                }, 2000);
+            }
+        }, 300);
+
+        animate();
+    }
+
+    // 2. CẬP NHẬT HÀM CHẤM ĐIỂM CỦA CẬU
+    function chamDiem() {
+        if (daNopBai) return; 
+        daNopBai = true; 
+        clearInterval(timer);
+        var d = 0;
+        
+        danhSachHienTai.forEach((item, i) => {
+            var inputs = document.getElementsByName('cau' + i);
+            var chon = Array.from(inputs).find(r => r.checked)?.value;
+            var b = document.getElementById('box' + i);
+            
+            if (chon === item.dung) { 
+                d++; 
+                b.classList.add('cau-dung'); 
+            } else { 
+                b.classList.add('cau-sai'); 
+                document.getElementById('note' + i).style.display = "block"; 
+            }
+            Array.from(inputs).forEach(r => r.disabled = true);
+        });
+
+        var diem = Math.round((d / danhSachHienTai.length) * 100) / 10;
+        
+        // KIỂM TRA ĐIỂM 10 ĐỂ BẮN PHÁO HOA
+        if (diem === 10) {
+            runFireworks();
+        }
+
+        var icon = diem >= 8 ? "🏆 Tuyệt vời!" : (diem >= 5 ? "👏 Khá lắm!" : "💪 Cố gắng lên!");
+        
+        document.getElementById('ket-qua').innerHTML = `
+            <div style="background:#e9f5ee; padding:20px; border-radius:20px; border:2px solid #b7e4c7;">
+                <h2 style="margin:0; color:#1b4332;">${icon}</h2>
+                <p style="font-size:40px; font-weight:bold; color:#d00000; margin:10px 0;">💯 ${diem} ĐIỂM</p>
+                <p>Em đã đúng ${d}/${danhSachHienTai.length} câu. Kết quả đã được gửi cho thầy!</p>
+            </div>`;
+        document.getElementById('btn-nop-bai').style.display = "none";
+
+        // Gửi kết quả qua fetch (giữ nguyên App Script)
+        fetch("https://script.google.com/macros/s/AKfycbzSoiKPu8jwc3z4oqwqLu0Gy_kMd-MukfhsvM--SB82WEpGs9bt3-1k6FtSKBYBjts/exec", {
+            method: "POST", mode: "no-cors", body: JSON.stringify({hoTen: studentNameStored, soCauDung: d+"/"+danhSachHienTai.length, diemSo: diem})
+        });
+    }
+</script>
 </html>
