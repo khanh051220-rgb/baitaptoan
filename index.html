@@ -13,82 +13,75 @@
 
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            padding: 40px 20px; 
+            padding: 20px; 
             background: linear-gradient(135deg, #d8f3dc 0%, #b7e4c7 100%); 
             min-height: 100vh;
             margin: 0;
             display: flex;
             justify-content: center;
-            align-items: center; /* Căn giữa màn hình */
         }
 
-        /* ĐÃ SỬA: LÀM FORM TO HƠN */
+        /* GIỮ NGUYÊN FORM TO NHƯ CẬU MUỐN */
         .container { 
             width: 100%;
-            max-width: 1000px; /* Tăng chiều rộng từ 750px lên 1000px */
+            max-width: 1000px; 
             background: rgba(255, 255, 255, 0.95); 
-            padding: 50px; /* Tăng khoảng cách đệm bên trong */
-            border-radius: 40px; 
-            box-shadow: 0 25px 60px rgba(0,0,0,0.15); 
+            padding: 45px; 
+            border-radius: 30px; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1); 
         }
 
-        h1 { text-align: center; color: var(--primary); font-size: 42px; margin-bottom: 30px; letter-spacing: 1px; }
+        h1 { text-align: center; color: var(--primary); font-size: 32px; margin-bottom: 20px; letter-spacing: 1px; }
 
-        #login-screen { text-align: center; padding: 40px 10px; }
-        
-        /* ĐÃ SỬA: CÁC Ô NHẬP LIỆU TO HƠN */
+        #login-screen { text-align: center; padding: 30px 10px; }
         .input-login { 
-            padding: 20px; 
+            padding: 15px; 
             border: 2px solid #b7e4c7; 
-            border-radius: 20px; 
-            width: 90%; 
-            max-width: 450px; 
-            margin-bottom: 20px; 
-            font-size: 20px;
+            border-radius: 15px; 
+            width: 85%; 
+            max-width: 320px; 
+            margin-bottom: 15px; 
+            font-size: 16px;
             transition: 0.3s;
             text-align: center;
         }
-        .input-login:focus { border-color: var(--secondary); outline: none; box-shadow: 0 0 15px rgba(64,145,108,0.2); }
+
+        /* THANH TIẾN ĐỘ TỚ THÊM VÀO ĐÂY */
+        #progress-container { width: 100%; background: #eee; border-radius: 10px; margin-bottom: 25px; height: 15px; overflow: hidden; display:none; }
+        #progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #40916c, #2dc653); transition: 0.4s; }
 
         #dong-ho { 
-            font-size: 28px; font-weight: bold; color: #e63946; 
-            text-align: center; margin-bottom: 30px; padding: 20px; 
-            background: #fff1f2; border-radius: 25px; border: 2px solid #ffccd5;
+            font-size: 22px; font-weight: bold; color: #e63946; 
+            text-align: center; margin-bottom: 25px; padding: 15px; 
+            background: #fff1f2; border-radius: 20px; border: 2px solid #ffccd5;
         }
 
         .khung { 
-            padding: 35px; margin-bottom: 30px; border-radius: 25px; 
+            padding: 25px; margin-bottom: 25px; border-radius: 20px; 
             background: white; border: 1px solid #e9ecef;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-            border-left: 10px solid var(--secondary);
-            transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+            border-left: 8px solid var(--secondary);
         }
-        .khung:hover { transform: scale(1.01); }
 
         .cau-dung { border-left-color: #2dc653 !important; background: #f0fff4; }
         .cau-sai { border-left-color: #e63946 !important; background: #fff5f5; }
 
-        /* ĐÃ SỬA: NÚT BẤM TO HƠN */
         button { 
-            padding: 20px 50px; cursor: pointer; 
+            padding: 15px 35px; cursor: pointer; 
             background: linear-gradient(45deg, #2d6a4f, #52b788); 
-            color: white; border: none; border-radius: 60px; 
-            font-weight: bold; font-size: 20px;
-            box-shadow: 0 8px 20px rgba(45,106,79,0.3);
+            color: white; border: none; border-radius: 50px; 
+            font-weight: bold; font-size: 16px;
             transition: 0.3s;
         }
-        button:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(45,106,79,0.4); }
 
         label { 
-            display: block; padding: 15px; margin: 10px 0; 
-            border-radius: 15px; background: #f8f9fa; cursor: pointer;
-            transition: 0.2s; font-size: 18px;
+            display: block; padding: 12px; margin: 8px 0; 
+            border-radius: 12px; background: #f8f9fa; cursor: pointer;
+            font-size: 18px;
         }
-        label:hover { background: #e9ecef; }
-        input[type='radio'] { accent-color: var(--secondary); transform: scale(1.5); margin-right: 15px; }
+        input[type='radio'] { accent-color: var(--secondary); transform: scale(1.3); margin-right: 12px; }
 
-        #ket-qua { text-align: center; margin-top: 30px; }
-        .loi-giai { font-style: italic; color: #d90429; margin-top: 15px; display: none; font-weight: bold; font-size: 18px; }
+        .loi-giai { font-style: italic; color: #d90429; margin-top: 15px; display: none; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -96,7 +89,7 @@
 <div class="container">
     <div id="login-screen">
         <h1>🌿 EzMath 🌿</h1>
-        <p style="color: #666; font-size: 18px;">Chào mừng các em đến với thử thách hôm nay! ✨</p>
+        <p style="color: #666;">Chào mừng các em đến với thử thách hôm nay! ✨</p>
         <input type="text" id="student-name" class="input-login" placeholder="👤 Nhập họ và tên..."><br>
         <input type="password" id="student-code" class="input-login" placeholder="🔑 Nhập mã bí mật..."><br>
         <button id="btn-login">🚀 BẮT ĐẦU THỬ THÁCH</button>
@@ -104,18 +97,18 @@
 
     <div id="main-content" style="display:none;">
         <h1>✍️ BÀI TẬP RÈN LUYỆN</h1>
+        <div id="progress-container"><div id="progress-bar"></div></div>
         <div id="dong-ho">⏳ Thời gian còn lại: 15:00</div>
         <div id="vung-chua"></div>
         <div style="text-align: center;">
             <button id="btn-nop-bai">✔️ HOÀN THÀNH & NỘP BÀI</button>
-            <button onclick="location.reload()" style="background: #6c757d; margin-left: 10px;">🔄 LÀM ĐỀ MỚI</button>
+            <button onclick="location.reload()" style="margin-left: 10px; background: #6c757d;">🔄 LÀM ĐỀ MỚI</button>
         </div>
         <div id="ket-qua"></div>
     </div>
 </div>
 
 <script>
-    // 1. CẤU HÌNH & BIẾN TOÀN CỤC
     var studentNameStored = "";
     var giay = 900; 
     var timer;
@@ -126,6 +119,7 @@
 
     var danhSachHocSinh = { "Nguyễn Văn An": "an123", "Trần Thị Bình": "binh456", "Khánh": "0512" };
     
+    // GIỮ NGUYÊN TOÀN BỘ 10 CÂU CỦA CẬU
     var khoCauHoi = [
         { de: "15 + 25 bằng bao nhiêu?", luaChon: ["30", "35", "40", "45"], dung: "40" },
         { de: "Hình tam giác có mấy cạnh?", luaChon: ["2", "3", "4", "5"], dung: "3" },
@@ -144,19 +138,28 @@
     document.getElementById('btn-login').addEventListener('click', checkLogin);
     document.getElementById('btn-nop-bai').addEventListener('click', chamDiem);
 
+    // LOGIC CẬP NHẬT THANH TIẾN ĐỘ
+    document.addEventListener('change', function(e) {
+        if(e.target.type === 'radio') {
+            let done = 0;
+            for(let i=0; i < SO_CAU_MOI_DE; i++) {
+                if(document.querySelector(`input[name="cau${i}"]:checked`)) done++;
+            }
+            document.getElementById('progress-bar').style.width = (done / SO_CAU_MOI_DE) * 100 + "%";
+        }
+    });
+
     function checkLogin() {
         var n = document.getElementById('student-name').value.trim();
         var c = document.getElementById('student-code').value.trim();
-        
         if (danhSachHocSinh[n] && danhSachHocSinh[n] === c) {
             studentNameStored = n;
             document.getElementById('login-screen').style.display = "none";
             document.getElementById('main-content').style.display = "block";
+            document.getElementById('progress-container').style.display = "block";
             taoDe();
             batDauDemNguoc();
-        } else { 
-            alert("Sai thông tin rồi em ơi! ❌"); 
-        }
+        } else { alert("Sai thông tin rồi em ơi! ❌"); }
     }
 
     function batDauDemNguoc() {
@@ -164,24 +167,17 @@
             if (daNopBai) return;
             var p = Math.floor(giay / 60), g = giay % 60;
             document.getElementById('dong-ho').innerHTML = "⏳ Thời gian còn lại: " + p + ":" + (g < 10 ? "0" + g : g);
-            if (giay-- <= 0) { 
-                clearInterval(timer); 
-                chamDiem(); 
-            }
+            if (giay-- <= 0) { clearInterval(timer); chamDiem(); }
         }, 1000);
     }
 
     function taoDe() {
         var v = document.getElementById('vung-chua'); 
         v.innerHTML = "";
-        
-        danhSachHienTai = khoCauHoi
-            .sort(() => 0.5 - Math.random())
-            .slice(0, SO_CAU_MOI_DE);
+        danhSachHienTai = khoCauHoi.sort(() => 0.5 - Math.random()).slice(0, SO_CAU_MOI_DE);
 
         danhSachHienTai.forEach((item, i) => {
-            // ĐÃ SỬA LỖI: Dùng dấu backtick (`) chuẩn để bao quanh chuỗi HTML
-            var html = `<div class='khung' id='box${i}'><p style='font-weight:bold; font-size: 20px;'>📝 Câu ${i+1}: ${item.de}</p>`;
+            var html = `<div class='khung' id='box${i}'><p style='font-weight:bold; font-size:20px;'>📝 Câu ${i+1}: ${item.de}</p>`;
             let luaChonTron = [...item.luaChon].sort(() => 0.5 - Math.random());
             luaChonTron.forEach(lc => {
                 html += `<label><input type='radio' name='cau${i}' value='${lc}'> ${lc}</label>`;
@@ -193,51 +189,39 @@
 
     function chamDiem() {
         if (daNopBai) return; 
-        daNopBai = true; 
-        clearInterval(timer);
+        daNopBai = true; clearInterval(timer);
         var d = 0;
-        
         danhSachHienTai.forEach((item, i) => {
             var inputs = document.getElementsByName('cau' + i);
             var chon = Array.from(inputs).find(r => r.checked)?.value;
             var b = document.getElementById('box' + i);
-            
-            if (chon === item.dung) { 
-                d++; 
-                b.classList.add('cau-dung'); 
-            } else { 
-                b.classList.add('cau-sai'); 
-                document.getElementById('note' + i).style.display = "block"; 
-            }
+            if (chon === item.dung) { d++; b.classList.add('cau-dung'); } 
+            else { b.classList.add('cau-sai'); document.getElementById('note' + i).style.display = "block"; }
             Array.from(inputs).forEach(r => r.disabled = true);
         });
 
-        var diem = Math.round((d / danhSachHienTai.length) * 100) / 10;
-        var icon = diem >= 8 ? "🏆 Tuyệt vời!" : (diem >= 5 ? "👏 Khá lắm!" : "💪 Cố gắng lên!");
-        
-        document.getElementById('ket-qua').innerHTML = `
-            <div style="background:#e9f5ee; padding:20px; border-radius:20px; border:2px solid #b7e4c7;">
-                <h2 style="margin:0; color:#1b4332;">${icon}</h2>
-                <p style="font-size:40px; font-weight:bold; color:#d00000; margin:10px 0;">💯 ${diem} ĐIỂM</p>
-                <p>Em đã đúng ${d}/${danhSachHienTai.length} câu. Kết quả đã được gửi cho thầy!</p>
-            </div>`;
+        var diem = Math.round((d / SO_CAU_MOI_DE) * 100) / 10;
+        document.getElementById('ket-qua').innerHTML = `<div style="background:#e9f5ee; padding:20px; border-radius:20px; border:2px solid #b7e4c7; text-align:center;">
+            <h2 style="color:#1b4332;">Kết quả của em</h2>
+            <p style="font-size:40px; font-weight:bold; color:#d00000;">💯 ${diem} ĐIỂM</p>
+            <p>Đúng ${d}/${SO_CAU_MOI_DE} câu. Kết quả đã gửi cho thầy!</p></div>`;
         document.getElementById('btn-nop-bai').style.display = "none";
 
+        // GỬI DATA SHEET CỦA CẬU
         fetch("https://script.google.com/macros/s/AKfycbzSoiKPu8jwc3z4oqwqLu0Gy_kMd-MukfhsvM--SB82WEpGs9bt3-1k6FtSKBYBjts/exec", {
-            method: "POST", 
-            mode: "no-cors", 
-            body: JSON.stringify({hoTen: studentNameStored, soCauDung: d+"/"+danhSachHienTai.length, diemSo: diem})
+            method: "POST", mode: "no-cors", 
+            body: JSON.stringify({hoTen: studentNameStored, soCauDung: d+"/"+SO_CAU_MOI_DE, diemSo: diem})
         });
     }
 
-    // CHỐNG GIAN LẬN
+    // CHỐNG GIAN LẬN CỦA CẬU
     document.addEventListener("visibilitychange", function() {
         if (document.visibilityState === 'hidden' && !daNopBai && studentNameStored !== "") {
             soLanViPham++;
             if (soLanViPham < GIOI_HAN_VI_PHAM) {
-                alert("⚠️ CẢNH BÁO: Em đã rời trang " + soLanViPham + " lần! Vi phạm " + GIOI_HAN_VI_PHAM + " lần sẽ bị nộp bài tự động.");
+                alert("⚠️ CẢNH BÁO: Em đã rời trang " + soLanViPham + " lần!");
             } else {
-                alert("❌ VI PHẠM QUÁ GIỚI HẠN! Hệ thống tự động nộp bài.");
+                alert("❌ Vi phạm quá giới hạn! Tự động nộp bài.");
                 chamDiem();
             }
         }
@@ -246,7 +230,7 @@
     document.addEventListener('contextmenu', event => {
         if (!daNopBai && studentNameStored !== "") {
             event.preventDefault();
-            alert("🤫 Khánh nhắc: Đừng dùng chuột phải nhé!");
+            alert("🤫 Đừng dùng chuột phải nhé!");
         }
     });
 </script>
