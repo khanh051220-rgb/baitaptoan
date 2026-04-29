@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Lớp Toán của Khánh</title>
+    <title>Học Toán cùng Khánh</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; background-color: #f0f9f4; color: #2d6a4f; }
         .container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
@@ -51,14 +51,14 @@
     var timer;
     var daNopBai = false;
 
-    // --- MÃ HỌC SINH ---
+    // --- 1. DANH SÁCH MÃ HỌC SINH ---
     var danhSachHocSinh = {
         "Nguyễn Văn An": "an123",
         "Trần Thị Bình": "binh456",
         "Khánh": "0512" 
     };
 
-    // --- CÂU HỎI ---
+    // --- 2. DANH SÁCH CÂU HỎI ---
     var danhSach = [
         { de: "Câu 1: 15 + 25 bằng bao nhiêu?", luaChon: ["30", "35", "40", "45"], dung: "40" },
         { de: "Câu 2: Hình tam giác có mấy cạnh?", luaChon: ["2", "3", "4", "5"], dung: "3" },
@@ -69,7 +69,6 @@
         var nameInput = document.getElementById('student-name').value.trim();
         var codeInput = document.getElementById('student-code').value.trim();
         
-        // Kiểm tra xem tên có tồn tại trong danh sách không
         var maChuan = danhSachHocSinh[nameInput];
 
         if (nameInput === "" || codeInput === "") {
@@ -112,11 +111,11 @@
         danhSachHienTai = JSON.parse(JSON.stringify(danhSach)).sort(() => 0.5 - Math.random());
         danhSachHienTai.forEach((item, i) => {
             var opts = item.luaChon.sort(() => 0.5 - Math.random());
-            var html = <div class='khung' id='box${i}'><b>${item.de}</b>;
+            var html = "<div class='khung' id='box" + i + "'><b>" + item.de + "</b>";
             opts.forEach(opt => {
-                html += <p><label><input type='radio' name='cau${i}' value='${opt}'> ${opt}</label></p>;
+                html += "<p><label><input type='radio' name='cau" + i + "' value='" + opt + "'> " + opt + "</label></p>";
             });
-            html += <div class='loi-giai' id='note${i}'>➡ Đáp án: ${item.dung}</div></div>;
+            html += "<div class='loi-giai' id='note" + i + "'>➡ Đáp án: " + item.dung + "</div></div>";
             vungChua.innerHTML += html;
         });
     }
