@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Web Toan Hoc - Chấm Chi Tiết</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; background-color: #f4f7f6; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .khung { border: 1px solid #ddd; padding: 15px; margin-bottom: 15px; border-radius: 8px; border-left: 6px solid #007bff; position: relative; }
+        h1 { text-align: center; color: #333; }
+        button { padding: 12px 25px; cursor: pointer; background: #007bff; color: white; border: none; border-radius: 5px; font-weight: bold; margin: 5px; }
+        #ket-qua { text-align: center; color: #d93025; font-size: 24px; margin-top: 20px; }
+        
+        /* Màu sắc khi chấm điểm */
+        .cau-dung { border-left-color: #28a745; background-color: #f1fdf4; }
+        .cau-sai { border-left-color: #d93025; background-color: #fff5f5; }
+        .loi-giai { font-style: italic; color: #d93025; margin-top: 10px; display: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Hệ Thống Bài Tập Toán</h1>
+    <div id="vung-chua"></div>
+    <div style="text-align: center;">
+        <button onclick="chamDiem()">Nộp bài & Xem lỗi sai</button>
+        <button onclick="taoDe()" style="background: #28a745;">Đổi mã đề (Trộn câu)</button>
+    </div>
+    <h2 id="ket-qua"></h2>
+</div>
+
+<script>
+    var danhSach = [
+        {
+            de: "Tính giá trị của: 12 + 8",
+            luaChon: ["15", "18", "20", "22"],
+            dung: "20"
+        },
+        {
+            de: "Hình tròn có bao nhiêu cạnh?",
+            luaChon: ["0", "1", "3", "4"],
+            dung: "0"
+        },
+        {
+            de: "Số liền sau của số 99 là?",
+            luaChon: ["98", "100", "101", "90"],
+            dung: "100"
+        }
+    ];
+
+    var danhSachHienTai = [];
+
+    function taoDe() {
+        var vungChua = document.getElementById('vung-chua');
+        vungChua.innerHTML = "";
+        document.getElementById('ket-qua').innerHTML = "";
+        
+        danhSachHienTai = [...danhSach];
+        danhSachHienTai.sort(function() { return 0.5 - Math.random() });
+
+        for (var i = 0; i < danhSachHienTai.length; i++) {
+            var item = danhSachHienTai[i];
+            var optionsHtml = "";
+            var optionsCopy = [...item.luaChon];
+            optionsCopy.sort(function() { return 0.5 - Math.random() });
+
+            for (var j = 0; j < optionsCopy.length; j++) {
+                var opt = optionsCopy[j];
+                optionsHtml += "<p><label><input type='radio' name='cau" + i + "' value='" + opt + "'> " + opt + "</label></p>";
+            }
+
+            vungChua.innerHTML += `
+                <div class='khung' id='box${i}'>
+                    <b>Câu ${i+1}: ${item.de}</b>
+                    ${optionsHtml}
+                    <div class='loi-giai' id='note${i}'>➡ Đáp án đúng là: ${item.dung}</div>
+                </div>`;
+        }
+    }
+
+    function chamDiem() {
+        var diem = 0;
+        for (var i = 0; i < danhSachHienTai.length; i++) {
+            var inputs = document.getElementsByName('cau' + i);
+            var chon = "";
+            for (var j = 0; j < inputs.length; j++) {
+                if (inputs[j].checked) chon = inputs[j].value;
+            }
+
+            var khungCauHoi = document.getElementById('box' + i);
+            var dongLoiGiai = document.getElementById('note' + i);
+
+            if (chon == danhSachHienTai[i].dung) {
+                diem++;
+                khungCauHoi.className = "khung cau-dung";
+                dongLoiGiai.style.display = "none"; // Đúng thì không cần hiện đáp án
+            } else {
+                khungCauHoi.className = "khung cau-sai";
+                dongLoiGiai.style.display = "block"; // Sai thì hiện đáp án đúng ra
+            }
+        }
+        document.getElementById('ket-qua').innerHTML = "KẾT QUẢ: " + diem + "/" + danhSach.length;
+        window.scrollTo(0, 0); // Quay lên đầu trang để xem điểm
+    }
+
+    window.onload = taoDe;
+</script>
+
+</body>
+</html>
