@@ -100,7 +100,7 @@
         }, 1000);
     }
 
-   var danhSachHienTai = [];
+  var danhSachHienTai = [];
     
     function taoDe() {
         if (daNopBai) return;
@@ -115,7 +115,7 @@
             var html = "<div class='khung' id='box" + i + "'>";
             html += "<p style='font-weight:bold;'>" + item.de + "</p>";
             
-            // Trộn các lựa chọn A, B, C, D
+            // Trộn các lựa chọn A, B, C, D để học sinh không nhìn bài nhau được
             var luaChonTron = item.luaChon.sort(function() { return 0.5 - Math.random() });
             
             for (var j = 0; j < luaChonTron.length; j++) {
@@ -138,7 +138,7 @@
             var chon = "";
             for (var k = 0; k < ins.length; k++) {
                 if (ins[k].checked) chon = ins[k].value;
-                ins[k].disabled = true; // Khóa không cho chọn lại
+                ins[k].disabled = true; 
             }
 
             var b = document.getElementById('box' + i);
@@ -156,7 +156,7 @@
         var diemHe10 = (d / tongCau) * 10;
         diemHe10 = Math.round(diemHe10 * 100) / 100;
 
-        // HIỂN THỊ KẾT QUẢ
+        // HIỂN THỊ KẾT QUẢ TRÊN WEB
         document.getElementById('ket-qua').innerHTML = 
             "<div style='line-height: 1.6;'>" +
                 "Đúng: <b style='color: #2d6a4f;'>" + d + "/" + tongCau + "</b> câu<br>" +
@@ -167,8 +167,8 @@
 
         document.getElementById('btn-nop-bai').style.display = "none";
 
-        // GỬI ĐIỂM VỀ GOOGLE SHEETS
-        var urlWebScript = "https://script.google.com/macros/s/AKfycbza9JMoLu3KyknfMSzFFcJL6ZHa_NXUm-vL9jbq--Eebw4yT4LMbzlNQYCwyx96qdo/exec"; 
+        // GỬI ĐIỂM VỀ GOOGLE SHEETS (THAY LINK CỦA CẬU VÀO ĐÂY)
+        var urlWebScript = "https://script.google.com/macros/s/XXX/exec"; 
         
         var duLieu = {
             hoTen: studentNameStored,
@@ -184,8 +184,9 @@
     }
 
     function lamLai() {
-        location.reload(); // Tải lại trang để làm bài mới hoàn toàn
+        location.reload(); 
     }
 </script>
 </body>
+</html>
 </html>
