@@ -2,22 +2,16 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Khánh</title>
+    <title>Lớp Toán của Khánh</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; background-color: #f0f9f4; color: #2d6a4f; }
         .container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
         h1 { text-align: center; color: #2d6a4f; font-size: 28px; margin-bottom: 30px; }
-        
         #login-screen { text-align: center; padding: 40px 10px; }
         #main-content { display: none; } 
         .input-login { padding: 12px; border: 2px solid #b7e4c7; border-radius: 10px; width: 80%; max-width: 300px; margin-bottom: 10px; outline: none; font-size: 16px; text-align: center; }
         .input-login:focus { border-color: #52b788; }
-
-        #dong-ho { 
-            font-size: 22px; font-weight: bold; color: #d93025; text-align: center; 
-            margin-bottom: 20px; padding: 10px; background: #fff5f5; border-radius: 10px; border: 1px solid #ff8787;
-        }
-
+        #dong-ho { font-size: 22px; font-weight: bold; color: #d93025; text-align: center; margin-bottom: 20px; padding: 10px; background: #fff5f5; border-radius: 10px; border: 1px solid #ff8787; }
         .khung { padding: 20px; margin-bottom: 20px; border-radius: 15px; background: #ffffff; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border-left: 8px solid #b7e4c7; }
         .cau-dung { border-left-color: #74c69d !important; background-color: #f7fffb; }
         .cau-sai { border-left-color: #ff8787 !important; background-color: #fff5f5; }
@@ -57,67 +51,53 @@
     var timer;
     var daNopBai = false;
 
-    // --- [KHU VỰC 1]: QUẢN LÝ MÃ HỌC SINH ---
+    // --- MÃ HỌC SINH ---
     var danhSachHocSinh = {
         "Nguyễn Văn An": "an123",
         "Trần Thị Bình": "binh456",
         "Khánh": "0512" 
     };
 
-    // --- [KHU VỰC 2]: DANH SÁCH CÂU HỎI (CẬU DÁN HẾT VÀO ĐÂY) ---
+    // --- CÂU HỎI ---
     var danhSach = [
-        { 
-            de: "Câu 1: 15 + 25 bằng bao nhiêu?", 
-            luaChon: ["30", "35", "40", "45"], 
-            dung: "40" 
-        },
-        { 
-            de: "Câu 2: Hình tam giác có mấy cạnh?", 
-            luaChon: ["2", "3", "4", "5"], 
-            dung: "3" 
-        },
-        { 
-            de: "Câu 3: Số nào lớn nhất trong các số sau?", 
-            luaChon: ["89", "98", "100", "99"], 
-            dung: "100" 
-        }
-        // Cậu cứ tiếp tục dán các câu hỏi khác xuống dưới này...
+        { de: "Câu 1: 15 + 25 bằng bao nhiêu?", luaChon: ["30", "35", "40", "45"], dung: "40" },
+        { de: "Câu 2: Hình tam giác có mấy cạnh?", luaChon: ["2", "3", "4", "5"], dung: "3" },
+        { de: "Câu 3: Số nào lớn nhất trong các số sau?", luaChon: ["89", "98", "100", "99"], dung: "100" }
     ];
 
-    // --- [KHU VỰC 3]: CÁC HÀM XỬ LÝ (KHÔNG CẦN SỬA) ---
     function checkLogin() {
-        var nameValue = document.getElementById('student-name').value.trim();
-        var codeValue = document.getElementById('student-code').value.trim();
-        var maChuan = danhSachHocSinh[nameValue];
+        var nameInput = document.getElementById('student-name').value.trim();
+        var codeInput = document.getElementById('student-code').value.trim();
+        
+        // Kiểm tra xem tên có tồn tại trong danh sách không
+        var maChuan = danhSachHocSinh[nameInput];
 
-        if (nameValue.length < 2) {
-            alert("Em vui lòng nhập đầy đủ Họ và Tên!");
+        if (nameInput === "" || codeInput === "") {
+            alert("Em vui lòng nhập đủ Tên và Mã!");
             return;
         }
 
-        if (maChuan && maChuan === codeValue) {
-            studentNameStored = nameValue;
+        if (maChuan && maChuan === codeInput) {
+            studentNameStored = nameInput;
             document.getElementById('login-screen').style.display = "none";
             document.getElementById('main-content').style.display = "block";
-            document.getElementById('header-title').innerText = "Chào " + studentNameStored + ", chúc em làm bài tốt!";
+            document.getElementById('header-title').innerText = "Chào " + studentNameStored + "!";
             taoDe();
             batDauDemNguoc();
         } else {
-            alert("Tên hoặc Mã không đúng rồi! Em kiểm tra lại nhé.");
+            alert("Tên hoặc Mã không đúng rồi!");
         }
     }
 
     function batDauDemNguoc() {
         timer = setInterval(function() {
-            if (daNopBai) { clearInterval(timer); return; }
+            if (daNopBai) return;
             var phut = Math.floor(giay / 60);
             var giayLe = giay % 60;
-            if (giayLe < 10) giayLe = "0" + giayLe;
-            document.getElementById('dong-ho').innerHTML = "Thời gian còn lại: " + phut + ":" + giayLe;
+            document.getElementById('dong-ho').innerHTML = "Thời gian còn lại: " + phut + ":" + (giayLe < 10 ? "0" + giayLe : giayLe);
             if (giay <= 0) {
                 clearInterval(timer);
-                document.getElementById('dong-ho').innerHTML = "HẾT GIỜ!";
-                alert("Đã hết thời gian làm bài!");
+                alert("Hết giờ!");
                 chamDiem();
             }
             giay--;
@@ -125,10 +105,48 @@
     }
 
     var danhSachHienTai = [];
-
     function taoDe() {
         if (daNopBai) return;
         var vungChua = document.getElementById('vung-chua');
         vungChua.innerHTML = "";
-        document.getElementById('ket-qua').innerHTML = "";
-        danhSachHienTa
+        danhSachHienTai = JSON.parse(JSON.stringify(danhSach)).sort(() => 0.5 - Math.random());
+        danhSachHienTai.forEach((item, i) => {
+            var opts = item.luaChon.sort(() => 0.5 - Math.random());
+            var html = <div class='khung' id='box${i}'><b>${item.de}</b>;
+            opts.forEach(opt => {
+                html += <p><label><input type='radio' name='cau${i}' value='${opt}'> ${opt}</label></p>;
+            });
+            html += <div class='loi-giai' id='note${i}'>➡ Đáp án: ${item.dung}</div></div>;
+            vungChua.innerHTML += html;
+        });
+    }
+
+    function chamDiem() {
+        if (daNopBai) return;
+        daNopBai = true;
+        clearInterval(timer);
+        var diem = 0;
+        danhSachHienTai.forEach((item, i) => {
+            var inputs = document.getElementsByName('cau' + i);
+            var chon = "";
+            inputs.forEach(input => {
+                if (input.checked) chon = input.value;
+                input.disabled = true;
+            });
+            var box = document.getElementById('box' + i);
+            if (chon === item.dung) {
+                diem++;
+                box.className = "khung cau-dung";
+            } else {
+                box.className = "khung cau-sai";
+                document.getElementById('note' + i).style.display = "block";
+            }
+        });
+        document.getElementById('ket-qua').innerHTML = "Điểm của em: " + diem + "/" + danhSach.length;
+        document.getElementById('btn-nop-bai').style.display = "none";
+        document.getElementById('btn-doi-de').innerText = "Làm lại";
+        document.getElementById('btn-doi-de').onclick = () => location.reload();
+    }
+</script>
+</body>
+</html>
