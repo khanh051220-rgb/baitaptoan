@@ -110,26 +110,38 @@
 </div>
 
 <script>
-    // 1. BIẾN TOÀN CỤC
+    // 1. CẤU HÌNH & BIẾN TOÀN CỤC
     var studentNameStored = "";
     var giay = 900; 
     var timer;
     var daNopBai = false;
     var soLanViPham = 0; 
     const GIOI_HAN_VI_PHAM = 3; 
+    const SO_CAU_MOI_DE = 5; // Cậu muốn mỗi đề có bao nhiêu câu thì chỉnh ở đây nhé!
 
     var danhSachHocSinh = { "Nguyễn Văn An": "an123", "Trần Thị Bình": "binh456", "Khánh": "0512" };
-    var danhSach = [
+    
+    // 2. NGÂN HÀNG CÂU HỎI LỚN
+    var khoCauHoi = [
         { de: "15 + 25 bằng bao nhiêu?", luaChon: ["30", "35", "40", "45"], dung: "40" },
         { de: "Hình tam giác có mấy cạnh?", luaChon: ["2", "3", "4", "5"], dung: "3" },
-        { de: "Số nào lớn nhất: 89, 98, 100, 99?", luaChon: ["89", "98", "100", "99"], dung: "100" }
+        { de: "Số nào lớn nhất: 89, 98, 100, 99?", luaChon: ["89", "98", "100", "99"], dung: "100" },
+        { de: "Kết quả của phép tính 7 x 8 là?", luaChon: ["54", "56", "64", "49"], dung: "56" },
+        { de: "Số nào là số chẵn nhỏ nhất có hai chữ số?", luaChon: ["10", "12", "02", "11"], dung: "10" },
+        { de: "Một hình vuông có cạnh 5cm. Chu vi là?", luaChon: ["10cm", "20cm", "25cm", "15cm"], dung: "20cm" },
+        { de: "Số liền trước của 1000 là?", luaChon: ["999", "1001", "990", "900"], dung: "999" },
+        { de: "3 giờ bằng bao nhiêu phút?", luaChon: ["120 phút", "150 phút", "180 phút", "200 phút"], dung: "180 phút" },
+        { de: "Kết quả của 100 - 45 là?", luaChon: ["45", "55", "65", "35"], dung: "55" },
+        { de: "Số gồm 5 trăm và 5 đơn vị là?", luaChon: ["55", "550", "505", "5005"], dung: "505" }
     ];
 
-    // 2. GÁN SỰ KIỆN KHI TRANG TẢI XONG
+    var danhSachHienTai = []; // Chứa các câu được bốc ngẫu nhiên
+
+    // 3. GÁN SỰ KIỆN
     document.getElementById('btn-login').addEventListener('click', checkLogin);
     document.getElementById('btn-nop-bai').addEventListener('click', chamDiem);
 
-    // 3. CÁC HÀM XỬ LÝ
+    // 4. CÁC HÀM XỬ LÝ
     function checkLogin() {
         var n = document.getElementById('student-name').value.trim();
         var c = document.getElementById('student-code').value.trim();
@@ -157,12 +169,15 @@
         }, 1000);
     }
 
-    var danhSachHienTai = [];
     function taoDe() {
         var v = document.getElementById('vung-chua'); 
         v.innerHTML = "";
-        danhSachHienTai = JSON.parse(JSON.stringify(danhSach)).sort(() => 0.5 - Math.random());
         
+        // TRỘN VÀ BỐC NGẪU NHIÊN CÂU HỎI
+        danhSachHienTai = khoCauHoi
+            .sort(() => 0.5 - Math.random()) // Trộn kho
+            .slice(0, SO_CAU_MOI_DE); // Bốc n câu
+
         danhSachHienTai.forEach((item, i) => {
             var html = `<div class='khung' id='box${i}'><p style='font-weight:bold;'>📝 Câu ${i+1}: ${item.de}</p>`;
             let luaChonTron = [...item.luaChon].sort(() => 0.5 - Math.random());
@@ -195,23 +210,25 @@
             Array.from(inputs).forEach(r => r.disabled = true);
         });
 
-        var diem = Math.round((d / danhSach.length) * 100) / 10;
+        // Tính điểm dựa trên số câu thực tế (danhSachHienTai.length)
+        var diem = Math.round((d / danhSachHienTai.length) * 100) / 10;
         var icon = diem >= 8 ? "🏆 Tuyệt vời!" : (diem >= 5 ? "👏 Khá lắm!" : "💪 Cố gắng lên!");
         
         document.getElementById('ket-qua').innerHTML = `
             <div style="background:#e9f5ee; padding:20px; border-radius:20px; border:2px solid #b7e4c7;">
                 <h2 style="margin:0; color:#1b4332;">${icon}</h2>
                 <p style="font-size:40px; font-weight:bold; color:#d00000; margin:10px 0;">💯 ${diem} ĐIỂM</p>
-                <p>Em đã đúng ${d}/${danhSach.length} câu. Kết quả đã được gửi cho thầy!</p>
+                <p>Em đã đúng ${d}/${danhSachHienTai.length} câu. Kết quả đã được gửi cho thầy!</p>
             </div>`;
         document.getElementById('btn-nop-bai').style.display = "none";
 
+        // Gửi kết quả (giữ nguyên App Script của cậu)
         fetch("https://script.google.com/macros/s/AKfycbzSoiKPu8jwc3z4oqwqLu0Gy_kMd-MukfhsvM--SB82WEpGs9bt3-1k6FtSKBYBjts/exec", {
-            method: "POST", mode: "no-cors", body: JSON.stringify({hoTen: studentNameStored, soCauDung: d+"/"+danhSach.length, diemSo: diem})
+            method: "POST", mode: "no-cors", body: JSON.stringify({hoTen: studentNameStored, soCauDung: d+"/"+danhSachHienTai.length, diemSo: diem})
         });
     }
 
-    // CHỐNG GIAN LẬN
+    // CHỐNG GIAN LẬN (Giữ nguyên)
     document.addEventListener("visibilitychange", function() {
         if (document.visibilityState === 'hidden' && !daNopBai && studentNameStored !== "") {
             soLanViPham++;
