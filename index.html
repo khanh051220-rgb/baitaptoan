@@ -1,41 +1,60 @@
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Web Toan Hoc - Chấm Chi Tiết</title>
-    <styl<style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; background-color: #f0f9f4; }
-        .container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
-        h1 { text-align: center; color: #2d6a4f; font-size: 28px; }
-        .khung { border: none; padding: 20px; margin-bottom: 20px; border-radius: 15px; background: #ffffff; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border-left: 8px solid #b7e4c7; }
-        button { padding: 12px 25px; cursor: pointer; background: #52b788; color: white; border: none; border-radius: 50px; font-weight: bold; margin: 5px; transition: 0.3s; }
+    <title>Hệ Thống Bài Tập Toán</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            padding: 20px; 
+            background-color: #f0f9f4; 
+            color: #2d6a4f;
+        }
+        .container { 
+            max-width: 800px; 
+            margin: auto; 
+            background: white; 
+            padding: 30px; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
+        }
+        h1 { text-align: center; color: #2d6a4f; font-size: 28px; margin-bottom: 30px; }
+        .khung { 
+            padding: 20px; 
+            margin-bottom: 20px; 
+            border-radius: 15px; 
+            background: #ffffff; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
+            border-left: 8px solid #b7e4c7; 
+        }
+        .cau-dung { border-left-color: #74c69d !important; background-color: #f7fffb; }
+        .cau-sai { border-left-color: #ff8787 !important; background-color: #fff5f5; }
+        .loi-giai { font-style: italic; color: #d93025; margin-top: 10px; display: none; font-weight: bold; }
+        button { 
+            padding: 12px 25px; 
+            cursor: pointer; 
+            background: #52b788; 
+            color: white; 
+            border: none; 
+            border-radius: 50px; 
+            font-weight: bold; 
+            margin: 10px 5px; 
+            transition: 0.3s; 
+        }
         button:hover { background: #40916c; transform: translateY(-2px); }
-        .cau-dung { border-left-color: #74c69d; background-color: #f7fffb; }
-        .cau-sai { border-left-color: #ff8787; background-color: #fff5f5; }
-        input[type='radio'] { accent-color: #52b788; }
-    </style>
-e>
-        body { font-family: sans-serif; padding: 20px; background-color: #f4f7f6; }
-        .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .khung { border: 1px solid #ddd; padding: 15px; margin-bottom: 15px; border-radius: 8px; border-left: 6px solid #007bff; position: relative; }
-        h1 { text-align: center; color: #333; }
-        button { padding: 12px 25px; cursor: pointer; background: #007bff; color: white; border: none; border-radius: 5px; font-weight: bold; margin: 5px; }
-        #ket-qua { text-align: center; color: #d93025; font-size: 24px; margin-top: 20px; }
-        
-        /* Màu sắc khi chấm điểm */
-        .cau-dung { border-left-color: #28a745; background-color: #f1fdf4; }
-        .cau-sai { border-left-color: #d93025; background-color: #fff5f5; }
-        .loi-giai { font-style: italic; color: #d93025; margin-top: 10px; display: none; }
+        input[type='radio'] { accent-color: #52b788; transform: scale(1.2); margin-right: 10px; }
+        label { cursor: pointer; }
+        #ket-qua { text-align: center; color: #2d6a4f; font-size: 24px; margin-top: 20px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Hệ Thống Bài Tập Toán</h1>
+    <h1>🌿 Hệ Thống Bài Tập Toán 🌿</h1>
     <div id="vung-chua"></div>
     <div style="text-align: center;">
         <button onclick="chamDiem()">Nộp bài & Xem lỗi sai</button>
-        <button onclick="taoDe()" style="background: #28a745;">Đổi mã đề (Trộn câu)</button>
+        <button onclick="taoDe()" style="background: #95d5b2; color: #1b4332;">Đổi mã đề</button>
     </div>
     <h2 id="ket-qua"></h2>
 </div>
@@ -43,19 +62,19 @@ e>
 <script>
     var danhSach = [
         {
-            de: "Tính giá trị của: 12 + 8",
-            luaChon: ["15", "18", "20", "22"],
-            dung: "20"
+            de: "Câu 1: 5 + 5 bằng mấy?",
+            luaChon: ["8", "10", "12", "15"],
+            dung: "10"
         },
         {
-            de: "Hình tròn có bao nhiêu cạnh?",
-            luaChon: ["0", "1", "3", "4"],
-            dung: "0"
+            de: "Câu 2: 2 nhân 3 bằng mấy?",
+            luaChon: ["5", "6", "7", "8"],
+            dung: "6"
         },
         {
-            de: "Số liền sau của số 99 là?",
-            luaChon: ["98", "100", "101", "90"],
-            dung: "100"
+            de: "Câu 3: Hình vuông có mấy cạnh?",
+            luaChon: ["8", "4", "5", "6"],
+            dung: "4"
         }
     ];
 
@@ -65,26 +84,23 @@ e>
         var vungChua = document.getElementById('vung-chua');
         vungChua.innerHTML = "";
         document.getElementById('ket-qua').innerHTML = "";
-        
         danhSachHienTai = [...danhSach];
         danhSachHienTai.sort(function() { return 0.5 - Math.random() });
 
         for (var i = 0; i < danhSachHienTai.length; i++) {
             var item = danhSachHienTai[i];
             var optionsHtml = "";
-            var optionsCopy = [...item.luaChon];
-            optionsCopy.sort(function() { return 0.5 - Math.random() });
+            var opts = [...item.luaChon].sort(function() { return 0.5 - Math.random() });
 
-            for (var j = 0; j < optionsCopy.length; j++) {
-                var opt = optionsCopy[j];
-                optionsHtml += "<p><label><input type='radio' name='cau" + i + "' value='" + opt + "'> " + opt + "</label></p>";
+            for (var j = 0; j < opts.length; j++) {
+                optionsHtml += <p><label><input type="radio" name="cau${i}" value="${opts[j]}"> ${opts[j]}</label></p>;
             }
 
             vungChua.innerHTML += `
-                <div class='khung' id='box${i}'>
+                <div class="khung" id="box${i}">
                     <b>Câu ${i+1}: ${item.de}</b>
                     ${optionsHtml}
-                    <div class='loi-giai' id='note${i}'>➡ Đáp án đúng là: ${item.dung}</div>
+                    <div class="loi-giai" id="note${i}">➡ Đáp án đúng là: ${item.dung}</div>
                 </div>`;
         }
     }
@@ -97,25 +113,20 @@ e>
             for (var j = 0; j < inputs.length; j++) {
                 if (inputs[j].checked) chon = inputs[j].value;
             }
-
-            var khungCauHoi = document.getElementById('box' + i);
-            var dongLoiGiai = document.getElementById('note' + i);
-
+            var box = document.getElementById('box' + i);
+            var note = document.getElementById('note' + i);
             if (chon == danhSachHienTai[i].dung) {
                 diem++;
-                khungCauHoi.className = "khung cau-dung";
-                dongLoiGiai.style.display = "none"; // Đúng thì không cần hiện đáp án
+                box.className = "khung cau-dung";
+                note.style.display = "none";
             } else {
-                khungCauHoi.className = "khung cau-sai";
-                dongLoiGiai.style.display = "block"; // Sai thì hiện đáp án đúng ra
+                box.className = "khung cau-sai";
+                note.style.display = "block";
             }
         }
         document.getElementById('ket-qua').innerHTML = "KẾT QUẢ: " + diem + "/" + danhSach.length;
-        window.scrollTo(0, 0); // Quay lên đầu trang để xem điểm
     }
-
     window.onload = taoDe;
 </script>
-
 </body>
 </html>
