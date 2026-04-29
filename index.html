@@ -13,17 +13,9 @@
         .input-login { padding: 12px; border: 2px solid #b7e4c7; border-radius: 10px; width: 80%; max-width: 300px; margin-bottom: 10px; outline: none; font-size: 16px; text-align: center; }
         .input-login:focus { border-color: #52b788; }
 
-        /* Style cho đồng hồ */
         #dong-ho { 
-            font-size: 22px; 
-            font-weight: bold; 
-            color: #d93025; 
-            text-align: center; 
-            margin-bottom: 20px; 
-            padding: 10px;
-            background: #fff5f5;
-            border-radius: 10px;
-            border: 1px solid #ff8787;
+            font-size: 22px; font-weight: bold; color: #d93025; text-align: center; 
+            margin-bottom: 20px; padding: 10px; background: #fff5f5; border-radius: 10px; border: 1px solid #ff8787;
         }
 
         .khung { padding: 20px; margin-bottom: 20px; border-radius: 15px; background: #ffffff; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border-left: 8px solid #b7e4c7; }
@@ -49,9 +41,7 @@
 
     <div id="main-content">
         <h1 id="header-title">🌿 HỆ THỐNG BÀI TẬP 🌿</h1>
-        
         <div id="dong-ho">Thời gian còn lại: 15:00</div>
-
         <div id="vung-chua"></div>
         <div style="text-align: center;">
             <button id="btn-nop-bai" onclick="chamDiem()">Nộp bài & Xem lỗi sai</button>
@@ -63,4 +53,82 @@
 
 <script>
     var studentNameStored = "";
-    var giay = 900; // 900 giây = 15 phút.
+    var giay = 900; // 15 phút
+    var timer;
+    var daNopBai = false;
+
+    // --- [KHU VỰC 1]: QUẢN LÝ MÃ HỌC SINH ---
+    var danhSachHocSinh = {
+        "Nguyễn Văn An": "an123",
+        "Trần Thị Bình": "binh456",
+        "Khánh": "0512" 
+    };
+
+    // --- [KHU VỰC 2]: DANH SÁCH CÂU HỎI (CẬU DÁN HẾT VÀO ĐÂY) ---
+    var danhSach = [
+        { 
+            de: "Câu 1: 15 + 25 bằng bao nhiêu?", 
+            luaChon: ["30", "35", "40", "45"], 
+            dung: "40" 
+        },
+        { 
+            de: "Câu 2: Hình tam giác có mấy cạnh?", 
+            luaChon: ["2", "3", "4", "5"], 
+            dung: "3" 
+        },
+        { 
+            de: "Câu 3: Số nào lớn nhất trong các số sau?", 
+            luaChon: ["89", "98", "100", "99"], 
+            dung: "100" 
+        }
+        // Cậu cứ tiếp tục dán các câu hỏi khác xuống dưới này...
+    ];
+
+    // --- [KHU VỰC 3]: CÁC HÀM XỬ LÝ (KHÔNG CẦN SỬA) ---
+    function checkLogin() {
+        var nameValue = document.getElementById('student-name').value.trim();
+        var codeValue = document.getElementById('student-code').value.trim();
+        var maChuan = danhSachHocSinh[nameValue];
+
+        if (nameValue.length < 2) {
+            alert("Em vui lòng nhập đầy đủ Họ và Tên!");
+            return;
+        }
+
+        if (maChuan && maChuan === codeValue) {
+            studentNameStored = nameValue;
+            document.getElementById('login-screen').style.display = "none";
+            document.getElementById('main-content').style.display = "block";
+            document.getElementById('header-title').innerText = "Chào " + studentNameStored + ", chúc em làm bài tốt!";
+            taoDe();
+            batDauDemNguoc();
+        } else {
+            alert("Tên hoặc Mã không đúng rồi! Em kiểm tra lại nhé.");
+        }
+    }
+
+    function batDauDemNguoc() {
+        timer = setInterval(function() {
+            if (daNopBai) { clearInterval(timer); return; }
+            var phut = Math.floor(giay / 60);
+            var giayLe = giay % 60;
+            if (giayLe < 10) giayLe = "0" + giayLe;
+            document.getElementById('dong-ho').innerHTML = "Thời gian còn lại: " + phut + ":" + giayLe;
+            if (giay <= 0) {
+                clearInterval(timer);
+                document.getElementById('dong-ho').innerHTML = "HẾT GIỜ!";
+                alert("Đã hết thời gian làm bài!");
+                chamDiem();
+            }
+            giay--;
+        }, 1000);
+    }
+
+    var danhSachHienTai = [];
+
+    function taoDe() {
+        if (daNopBai) return;
+        var vungChua = document.getElementById('vung-chua');
+        vungChua.innerHTML = "";
+        document.getElementById('ket-qua').innerHTML = "";
+        danhSachHienTa
