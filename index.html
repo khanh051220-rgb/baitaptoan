@@ -59,10 +59,24 @@
             border-left: 8px solid var(--secondary);
             transition: 0.3s;
         }
-        .khung:hover { transform: scale(1.02); }
+        .khung:hover { transform: scale(1.01); }
 
         .cau-dung { border-left-color: #2dc653 !important; background: #f0fff4; }
-        .cau-sai { border-left-color: #e63946 !important; background: #fff5f5; }
+        
+        /* Đã sửa: Đưa CSS vào đúng vị trí bên trong thẻ style */
+        .cau-sai { 
+            border-left-color: #e63946 !important; 
+            background: #fff5f5; 
+            animation: shake 0.5s; 
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
 
         button { 
             padding: 15px 35px; cursor: pointer; 
@@ -84,15 +98,11 @@
 
         #ket-qua { text-align: center; margin-top: 30px; }
         .loi-giai { font-style: italic; color: #d90429; margin-top: 15px; display: none; font-weight: bold; }
+        
+        /* Thanh tiến độ đẹp hơn */
+        #progress-container { width: 100%; background: #eee; border-radius: 10px; margin-bottom: 20px; overflow: hidden; }
+        #progress-bar { width: 0%; height: 12px; background: linear-gradient(90deg, #40916c, #2dc653); transition: 0.5s ease; }
     </style>
-    @keyframes shake {
-    0% { transform: translateX(0); }
-    25% { transform: translateX(-5px); }
-    50% { transform: translateX(5px); }
-    75% { transform: translateX(-5px); }
-    100% { transform: translateX(0); }
-}
-.cau-sai { animation: shake 0.5s; }
 </head>
 <body>
 
@@ -107,10 +117,9 @@
 
     <div id="main-content" style="display:none;">
         <h1>✍️ BÀI TẬP RÈN LUYỆN</h1>
-        <!-- Thêm vào ngay sau <h1>✍️ BÀI TẬP RÈN LUYỆN</h1> -->
-<div style="width: 100%; background: #eee; border-radius: 10px; margin-bottom: 20px;">
-    <div id="progress-bar" style="width: 0%; height: 10px; background: var(--secondary); border-radius: 10px; transition: 0.5s;"></div>
-</div>
+        <div id="progress-container">
+            <div id="progress-bar"></div>
+        </div>
         <div id="dong-ho">⏳ Thời gian còn lại: 15:00</div>
         <div id="vung-chua"></div>
         <div style="text-align: center;">
@@ -122,17 +131,6 @@
 </div>
 
 <script>
-    // Thêm hàm này để cập nhật thanh tiến độ khi người dùng click chọn đáp án
-document.addEventListener('change', function(e) {
-    if(e.target.type === 'radio') {
-        let soCauDaLam = 0;
-        for(let i=0; i < SO_CAU_MOI_DE; i++) {
-            if(document.querySelector(`input[name="cau${i}"]:checked`)) soCauDaLam++;
-        }
-        let phanTram = (soCauDaLam / SO_CAU_MOI_DE) * 100;
-        document.getElementById('progress-bar').style.width = phanTram + "%";
-    }
-});
     // 1. CẤU HÌNH & BIẾN TOÀN CỤC
     var studentNameStored = "";
     var giay = 900; 
@@ -162,6 +160,18 @@ document.addEventListener('change', function(e) {
     // 2. GÁN SỰ KIỆN
     document.getElementById('btn-login').addEventListener('click', checkLogin);
     document.getElementById('btn-nop-bai').addEventListener('click', chamDiem);
+
+    // Cập nhật thanh tiến độ
+    document.addEventListener('change', function(e) {
+        if(e.target.type === 'radio') {
+            let soCauDaLam = 0;
+            for(let i=0; i < SO_CAU_MOI_DE; i++) {
+                if(document.querySelector(`input[name="cau${i}"]:checked`)) soCauDaLam++;
+            }
+            let phanTram = (soCauDaLam / SO_CAU_MOI_DE) * 100;
+            document.getElementById('progress-bar').style.width = phanTram + "%";
+        }
+    });
 
     // 3. CÁC HÀM XỬ LÝ
     function checkLogin() {
@@ -200,7 +210,6 @@ document.addEventListener('change', function(e) {
             .slice(0, SO_CAU_MOI_DE);
 
         danhSachHienTai.forEach((item, i) => {
-            // SỬA LỖI Ở ĐÂY: Dùng dấu backtick (`) thay vì ngoặc nhọn trực tiếp
             var html = `<div class='khung' id='box${i}'><p style='font-weight:bold;'>📝 Câu ${i+1}: ${item.de}</p>`;
             let luaChonTron = [...item.luaChon].sort(() => 0.5 - Math.random());
             luaChonTron.forEach(lc => {
@@ -243,7 +252,6 @@ document.addEventListener('change', function(e) {
             </div>`;
         document.getElementById('btn-nop-bai').style.display = "none";
 
-        // GỬI KẾT QUẢ VỀ GOOGLE SHEETS (Giữ nguyên link của cậu)
         fetch("https://script.google.com/macros/s/AKfycbzSoiKPu8jwc3z4oqwqLu0Gy_kMd-MukfhsvM--SB82WEpGs9bt3-1k6FtSKBYBjts/exec", {
             method: "POST", 
             mode: "no-cors", 
