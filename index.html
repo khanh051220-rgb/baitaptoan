@@ -139,9 +139,24 @@
                 document.getElementById('note' + i).style.display = "block";
             }
         }
-        document.getElementById('ket-qua').innerHTML = "Điểm của em: " + d + "/" + danhSach.length;
+        // 1. Tính toán điểm số hệ 10
+        var tongCau = danhSach.length;
+        var diemHe10 = (d / tongCau) * 10; 
+        diemHe10 = Math.round(diemHe10 * 100) / 100; // Làm tròn 2 chữ số
+
+        // 2. Hiển thị cả "Số câu đúng" và "Điểm số"
+        document.getElementById('ket-qua').innerHTML = 
+            "<div style='line-height: 1.6;'>" +
+                "Đúng: <b style='color: #2d6a4f;'>" + d + "/" + tongCau + "</b> câu<br>" +
+                "<span style='font-size: 28px; color: #d93025; font-weight: bold;'>" +
+                    "ĐIỂM SỐ: " + diemHe10 + 
+                "</span>" +
+            "</div>";
+
+        // 3. Ẩn nút nộp bài
         document.getElementById('btn-nop-bai').style.display = "none";
     }
+
 
     function lamLai() {
         location.reload();
