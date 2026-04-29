@@ -2,6 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
+    <!-- 1. Thay đổi tên hiển thị trên tab trình duyệt -->
     <title>Học toán cùng Khánh</title>
     <style>
         :root {
@@ -32,7 +33,6 @@
 
         h1 { text-align: center; color: var(--primary); font-size: 32px; margin-bottom: 20px; letter-spacing: 1px; }
 
-        /* Login Screen Decoration */
         #login-screen { text-align: center; padding: 30px 10px; }
         .input-login { 
             padding: 15px; 
@@ -47,14 +47,12 @@
         }
         .input-login:focus { border-color: var(--secondary); outline: none; box-shadow: 0 0 10px rgba(64,145,108,0.2); }
 
-        /* Timer Decoration */
         #dong-ho { 
             font-size: 22px; font-weight: bold; color: #e63946; 
             text-align: center; margin-bottom: 25px; padding: 15px; 
             background: #fff1f2; border-radius: 20px; border: 2px solid #ffccd5;
         }
 
-        /* Question Box Decoration */
         .khung { 
             padding: 25px; margin-bottom: 25px; border-radius: 20px; 
             background: white; border: 1px solid #e9ecef;
@@ -67,7 +65,6 @@
         .cau-dung { border-left-color: #2dc653 !important; background: #f0fff4; }
         .cau-sai { border-left-color: #e63946 !important; background: #fff5f5; }
 
-        /* Button Style */
         button { 
             padding: 15px 35px; cursor: pointer; 
             background: linear-gradient(45deg, #2d6a4f, #52b788); 
@@ -78,7 +75,6 @@
         }
         button:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(45,106,79,0.4); }
 
-        /* Radio Styling */
         label { 
             display: block; padding: 12px; margin: 8px 0; 
             border-radius: 12px; background: #f8f9fa; cursor: pointer;
@@ -95,7 +91,8 @@
 
 <div class="container">
     <div id="login-screen">
-        <h1>🌿 LỚP TOÁN THẦY KHÁNH 🌿</h1>
+        <!-- 2. Thay đổi tên ở giao diện đăng nhập -->
+        <h1>🌿 EzMath 🌿</h1>
         <p style="color: #666;">Chào mừng các em đến với thử thách hôm nay! ✨</p>
         <input type="text" id="student-name" class="input-login" placeholder="👤 Nhập họ và tên..."><br>
         <input type="password" id="student-code" class="input-login" placeholder="🔑 Nhập mã bí mật..."><br>
@@ -184,7 +181,6 @@
             </div>`;
         document.getElementById('btn-nop-bai').style.display = "none";
 
-        // GỬI ĐIỂM VỀ GOOGLE SHEETS
         fetch("https://script.google.com/macros/s/AKfycbzSoiKPu8jwc3z4oqwqLu0Gy_kMd-MukfhsvM--SB82WEpGs9bt3-1k6FtSKBYBjts/exec", {
             method: "POST", mode: "no-cors", body: JSON.stringify({hoTen: studentNameStored, soCauDung: d+"/"+danhSach.length, diemSo: diem})
         });
