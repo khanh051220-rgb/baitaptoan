@@ -2,46 +2,139 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Lớp Toán của Khánh</title>
+    <title>Lớp Toán của Thầy Khánh</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; background-color: #f0f9f4; color: #2d6a4f; }
-        .container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
-        h1 { text-align: center; color: #2d6a4f; font-size: 28px; margin-bottom: 30px; }
+        :root {
+            --primary-color: #2d6a4f;
+            --secondary-color: #52b788;
+            --bg-gradient: linear-gradient(135deg, #d8f3dc 0%, #b7e4c7 100%);
+        }
+
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            padding: 20px; 
+            background: var(--bg-gradient); 
+            color: var(--primary-color); 
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container { 
+            width: 100%;
+            max-width: 800px; 
+            background: rgba(255, 255, 255, 0.95); 
+            padding: 30px; 
+            border-radius: 30px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
+        }
+
+        h1 { text-align: center; color: var(--primary-color); font-size: 32px; margin-bottom: 20px; }
+
         #login-screen { text-align: center; padding: 40px 10px; }
         #main-content { display: none; } 
-        .input-login { padding: 12px; border: 2px solid #b7e4c7; border-radius: 10px; width: 80%; max-width: 300px; margin-bottom: 10px; outline: none; font-size: 16px; text-align: center; }
-        .input-login:focus { border-color: #52b788; }
-        #dong-ho { font-size: 22px; font-weight: bold; color: #d93025; text-align: center; margin-bottom: 20px; padding: 10px; background: #fff5f5; border-radius: 10px; border: 1px solid #ff8787; }
-        .khung { padding: 20px; margin-bottom: 20px; border-radius: 15px; background: #ffffff; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border-left: 8px solid #b7e4c7; }
-        .cau-dung { border-left-color: #74c69d !important; background-color: #f7fffb; }
-        .cau-sai { border-left-color: #ff8787 !important; background-color: #fff5f5; }
-        .loi-giai { font-style: italic; color: #d93025; margin-top: 10px; display: none; font-weight: bold; }
-        button { padding: 12px 25px; cursor: pointer; background: #52b788; color: white; border: none; border-radius: 50px; font-weight: bold; margin: 10px 5px; transition: 0.3s; }
-        button:hover { background: #40916c; transform: translateY(-2px); }
-        input[type='radio'] { accent-color: #52b788; transform: scale(1.2); margin-right: 10px; }
-        label { cursor: pointer; display: block; padding: 5px 0; }
-        #ket-qua { text-align: center; color: #2d6a4f; font-size: 24px; margin-top: 20px; border-top: 2px dashed #b7e4c7; padding-top: 20px; }
+
+        .input-login { 
+            padding: 15px; 
+            border: 2px solid #b7e4c7; 
+            border-radius: 15px; 
+            width: 80%; 
+            max-width: 300px; 
+            margin-bottom: 15px; 
+            outline: none; 
+            font-size: 16px; 
+            text-align: center; 
+            transition: 0.3s;
+        }
+
+        .input-login:focus { border-color: var(--secondary-color); box-shadow: 0 0 10px rgba(82, 183, 136, 0.2); }
+
+        #dong-ho { 
+            font-size: 22px; 
+            font-weight: bold; 
+            color: #d93025; 
+            text-align: center; 
+            margin-bottom: 25px; 
+            padding: 15px; 
+            background: #fff5f5; 
+            border-radius: 20px; 
+            border: 2px solid #ff8787; 
+        }
+
+        .khung { 
+            padding: 25px; 
+            margin-bottom: 20px; 
+            border-radius: 20px; 
+            background: #ffffff; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+            border-left: 10px solid #b7e4c7; 
+            transition: transform 0.2s;
+        }
+
+        .khung:hover { transform: translateY(-3px); }
+        .cau-dung { border-left-color: #74c69d !important; background-color: #f7fffb; border: 1px solid #74c69d; }
+        .cau-sai { border-left-color: #ff8787 !important; background-color: #fff5f5; border: 1px solid #ff8787; }
+
+        .loi-giai { font-style: italic; color: #d93025; margin-top: 15px; display: none; font-weight: bold; }
+
+        button { 
+            padding: 15px 30px; 
+            cursor: pointer; 
+            background: linear-gradient(45deg, #40916c, #52b788); 
+            color: white; 
+            border: none; 
+            border-radius: 50px; 
+            font-weight: bold; 
+            font-size: 16px;
+            margin: 10px 5px; 
+            transition: 0.3s; 
+            box-shadow: 0 4px 15px rgba(64, 145, 108, 0.3);
+        }
+
+        button:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(64, 145, 108, 0.4); }
+
+        label { 
+            cursor: pointer; 
+            display: block; 
+            padding: 10px 15px; 
+            margin: 5px 0; 
+            border-radius: 10px; 
+            transition: 0.2s;
+            background: #f8fdfa;
+        }
+
+        label:hover { background: #e8f5ed; }
+        input[type='radio'] { accent-color: var(--secondary-color); transform: scale(1.3); margin-right: 12px; }
+
+        #ket-qua { 
+            text-align: center; 
+            color: var(--primary-color); 
+            margin-top: 25px; 
+            border-top: 3px dashed var(--secondary-color); 
+            padding-top: 25px; 
+        }
     </style>
 </head>
 <body>
 <div class="container">
     <div id="login-screen">
-        <h1>🌿 LỚP TOÁN 🌿</h1>
-        <p>Nhập Họ Tên và Mã được cấp</p>
-        <input type="text" id="student-name" class="input-login" placeholder="Nhập tên của em..."><br>
-        <input type="password" id="student-code" class="input-login" placeholder="Nhập mã học sinh..."><br>
-        <button onclick="checkLogin()">Vào làm bài</button>
+        <h1>🌿 LỚP TOÁN THẦY KHÁNH 🌿</h1>
+        <p>✨ Nhập Họ Tên và Mã bí mật để bắt đầu ✨</p>
+        <input type="text" id="student-name" class="input-login" placeholder="👤 Tên của em..."><br>
+        <input type="password" id="student-code" class="input-login" placeholder="🔑 Mã bí mật..."><br>
+        <button onclick="checkLogin()">🚀 VÀO LÀM BÀI NGAY</button>
     </div>
 
     <div id="main-content">
-        <h1 id="header-title">🌿 HỆ THỐNG BÀI TẬP 🌿</h1>
-        <div id="dong-ho">Thời gian còn lại: 15:00</div>
+        <h1 id="header-title">✍️ HỆ THỐNG BÀI TẬP</h1>
+        <div id="dong-ho">⏳ Thời gian còn lại: 15:00</div>
         <div id="vung-chua"></div>
         <div style="text-align: center;">
-            <button id="btn-nop-bai" onclick="chamDiem()">Nộp bài & Xem lỗi sai</button>
-            <button id="btn-doi-de" onclick="lamLai()">Làm lại bài mới</button>
+            <button id="btn-nop-bai" onclick="chamDiem()">✔️ NỘP BÀI & XEM KẾT QUẢ</button>
+            <button id="btn-doi-de" onclick="lamLai()">🔄 LÀM LẠI ĐỀ MỚI</button>
         </div>
-        <h2 id="ket-qua"></h2>
+        <div id="ket-qua"></div>
     </div>
 </div>
 
@@ -77,11 +170,11 @@
             studentNameStored = n;
             document.getElementById('login-screen').style.display = "none";
             document.getElementById('main-content').style.display = "block";
-            document.getElementById('header-title').innerText = "Chào " + studentNameStored + "!";
+            document.getElementById('header-title').innerText = "Chào " + studentNameStored + "! 👋";
             taoDe();
             batDauDemNguoc();
         } else {
-            alert("Tên hoặc mã sai!");
+            alert("Tên hoặc mã sai rồi em ơi! ❌");
         }
     }
 
@@ -90,38 +183,36 @@
             if (daNopBai) return;
             var p = Math.floor(giay / 60);
             var g = giay % 60;
-            document.getElementById('dong-ho').innerHTML = "Thời gian còn lại: " + p + ":" + (g < 10 ? "0" + g : g);
+            document.getElementById('dong-ho').innerHTML = "⏳ Thời gian còn lại: " + p + ":" + (g < 10 ? "0" + g : g);
             if (giay <= 0) {
                 clearInterval(timer);
-                alert("Hết giờ!");
+                alert("Hết giờ rồi! ⏰");
                 chamDiem();
             }
             giay--;
         }, 1000);
     }
 
-  var danhSachHienTai = [];
+    var danhSachHienTai = [];
     
     function taoDe() {
         if (daNopBai) return;
         var v = document.getElementById('vung-chua');
         v.innerHTML = "";
         
-        // Trộn câu hỏi ngẫu nhiên
         danhSachHienTai = JSON.parse(JSON.stringify(danhSach)).sort(function() { return 0.5 - Math.random() });
 
         for (var i = 0; i < danhSachHienTai.length; i++) {
             var item = danhSachHienTai[i];
             var html = "<div class='khung' id='box" + i + "'>";
-            html += "<p style='font-weight:bold;'>" + item.de + "</p>";
+            html += "<p style='font-weight:bold; font-size:18px;'>📝 " + item.de + "</p>";
             
-            // Trộn các lựa chọn A, B, C, D để học sinh không nhìn bài nhau được
             var luaChonTron = item.luaChon.sort(function() { return 0.5 - Math.random() });
             
             for (var j = 0; j < luaChonTron.length; j++) {
                 html += "<label><input type='radio' name='cau" + i + "' value='" + luaChonTron[j] + "'> " + luaChonTron[j] + "</label>";
             }
-            html += "<div class='loi-giai' id='note" + i + "'>Đáp án đúng: " + item.dung + "</div>";
+            html += "<div class='loi-giai' id='note" + i + "'>💡 Đáp án đúng là: " + item.dung + "</div>";
             html += "</div>";
             v.innerHTML += html;
         }
@@ -151,23 +242,24 @@
             }
         }
 
-        // TÍNH ĐIỂM HỆ 10
         var tongCau = danhSach.length;
         var diemHe10 = (d / tongCau) * 10;
         diemHe10 = Math.round(diemHe10 * 100) / 100;
 
-        // HIỂN THỊ KẾT QUẢ TRÊN WEB
+        var icon = diemHe10 >= 8 ? "🏆" : (diemHe10 >= 5 ? "👏" : "💪");
+
         document.getElementById('ket-qua').innerHTML = 
-            "<div style='line-height: 1.6;'>" +
+            "<div style='background: #e9f5ee; padding: 20px; border-radius: 20px;'>" +
+                "<h3>" + icon + " KẾT QUẢ CỦA EM</h3>" +
                 "Đúng: <b style='color: #2d6a4f;'>" + d + "/" + tongCau + "</b> câu<br>" +
-                "<span style='font-size: 28px; color: #d93025; font-weight: bold;'>" +
-                    "ĐIỂM SỐ: " + diemHe10 + 
+                "<span style='font-size: 35px; color: #d93025; font-weight: bold;'>" +
+                    "💯 ĐIỂM: " + diemHe10 + 
                 "</span>" +
+                "<p style='color: #666; font-size: 14px;'>Dữ liệu đã được gửi về cho Thầy Khánh!</p>" +
             "</div>";
 
         document.getElementById('btn-nop-bai').style.display = "none";
 
-        // GỬI ĐIỂM VỀ GOOGLE SHEETS (THAY LINK CỦA CẬU VÀO ĐÂY)
         var urlWebScript = "https://script.google.com/macros/s/AKfycbzSoiKPu8jwc3z4oqwqLu0Gy_kMd-MukfhsvM--SB82WEpGs9bt3-1k6FtSKBYBjts/exec"; 
         
         var duLieu = {
