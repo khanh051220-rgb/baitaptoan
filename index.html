@@ -100,38 +100,47 @@
         }, 1000);
     }
 
-    var danhSachHienTai = [];
+   var danhSachHienTai = [];
+    
     function taoDe() {
         if (daNopBai) return;
         var v = document.getElementById('vung-chua');
         v.innerHTML = "";
-        danhSachHienTai = JSON.parse(JSON.stringify(danhSach)).sort(function(){return 0.5 - Math.random()});
+        
+        // Trộn câu hỏi ngẫu nhiên
+        danhSachHienTai = JSON.parse(JSON.stringify(danhSach)).sort(function() { return 0.5 - Math.random() });
+
         for (var i = 0; i < danhSachHienTai.length; i++) {
             var item = danhSachHienTai[i];
-            var opts = item.luaChon.sort(function(){return 0.5 - Math.random()});
-            var html = "<div class='khung' id='box" + i + "'><b>" + item.de + "</b>";
-            for (var j = 0; j < opts.length; j++) {
-                html += "<p><label><input type='radio' name='cau" + i + "' value='" + opts[j] + "'> " + opts[j] + "</label></p>";
+            var html = "<div class='khung' id='box" + i + "'>";
+            html += "<p style='font-weight:bold;'>" + item.de + "</p>";
+            
+            // Trộn các lựa chọn A, B, C, D
+            var luaChonTron = item.luaChon.sort(function() { return 0.5 - Math.random() });
+            
+            for (var j = 0; j < luaChonTron.length; j++) {
+                html += "<label><input type='radio' name='cau" + i + "' value='" + luaChonTron[j] + "'> " + luaChonTron[j] + "</label>";
             }
-            html += "<div class='loi-giai' id='note" + i + "'>➡ Đáp án: " + item.dung + "</div></div>";
+            html += "<div class='loi-giai' id='note" + i + "'>Đáp án đúng: " + item.dung + "</div>";
+            html += "</div>";
             v.innerHTML += html;
         }
     }
 
-    
-        }
-        unction chamDiem() {
+    function chamDiem() {
         if (daNopBai) return;
         daNopBai = true;
         clearInterval(timer);
         var d = 0;
+
         for (var i = 0; i < danhSachHienTai.length; i++) {
             var ins = document.getElementsByName('cau' + i);
             var chon = "";
             for (var k = 0; k < ins.length; k++) {
                 if (ins[k].checked) chon = ins[k].value;
-                ins[k].disabled = true;
+                ins[k].disabled = true; // Khóa không cho chọn lại
             }
+
             var b = document.getElementById('box' + i);
             if (chon === danhSachHienTai[i].dung) {
                 d++;
@@ -142,10 +151,12 @@
             }
         }
 
+        // TÍNH ĐIỂM HỆ 10
         var tongCau = danhSach.length;
-        var diemHe10 = (d / tongCau) * 10; 
-        diemHe10 = Math.round(diemHe10 * 100) / 100; 
+        var diemHe10 = (d / tongCau) * 10;
+        diemHe10 = Math.round(diemHe10 * 100) / 100;
 
+        // HIỂN THỊ KẾT QUẢ
         document.getElementById('ket-qua').innerHTML = 
             "<div style='line-height: 1.6;'>" +
                 "Đúng: <b style='color: #2d6a4f;'>" + d + "/" + tongCau + "</b> câu<br>" +
@@ -156,8 +167,8 @@
 
         document.getElementById('btn-nop-bai').style.display = "none";
 
-        // --- ĐOẠN CODE GỬI ĐIỂM LÊN GOOGLE SHEETS ---
-        var urlWebScript = "https://script.google.com/macros/s/AKfycbwDixN8K5PyO-c3VuSSHWb2XXCDpbt6kAi5xPngOB8Li3EdyfzPBeUnK4Lj8hK4MnU/exec"; // Thay link ở bước 2 vào đây
+        // GỬI ĐIỂM VỀ GOOGLE SHEETS
+        var urlWebScript = "DÁN_LINK_WEB_APP_CỦA_CẬU_VÀO_ĐÂY"; 
         
         var duLieu = {
             hoTen: studentNameStored,
@@ -167,17 +178,16 @@
 
         fetch(urlWebScript, {
             method: "POST",
-            mode: "no-cors", // Để không bị chặn bảo mật
+            mode: "no-cors",
             body: JSON.stringify(duLieu)
-        }).then(() => {
-            console.log("Đã lưu điểm thành công!");
-        }).catch((error) => {
-            console.error("Lỗi gửi điểm:", error);
         });
     }
+
     function lamLai() {
-        location.reload();
+        location.reload(); // Tải lại trang để làm bài mới hoàn toàn
     }
 </script>
+</body>
+</html>
 </body>
 </html>
