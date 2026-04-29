@@ -118,7 +118,9 @@
         }
     }
 
-    function chamDiem() {
+    
+        }
+        unction chamDiem() {
         if (daNopBai) return;
         daNopBai = true;
         clearInterval(timer);
@@ -139,12 +141,11 @@
                 document.getElementById('note' + i).style.display = "block";
             }
         }
-        // 1. Tính toán điểm số hệ 10
+
         var tongCau = danhSach.length;
         var diemHe10 = (d / tongCau) * 10; 
-        diemHe10 = Math.round(diemHe10 * 100) / 100; // Làm tròn 2 chữ số
+        diemHe10 = Math.round(diemHe10 * 100) / 100; 
 
-        // 2. Hiển thị cả "Số câu đúng" và "Điểm số"
         document.getElementById('ket-qua').innerHTML = 
             "<div style='line-height: 1.6;'>" +
                 "Đúng: <b style='color: #2d6a4f;'>" + d + "/" + tongCau + "</b> câu<br>" +
@@ -153,11 +154,27 @@
                 "</span>" +
             "</div>";
 
-        // 3. Ẩn nút nộp bài
         document.getElementById('btn-nop-bai').style.display = "none";
+
+        // --- ĐOẠN CODE GỬI ĐIỂM LÊN GOOGLE SHEETS ---
+        var urlWebScript = "https://script.google.com/macros/s/AKfycbwDixN8K5PyO-c3VuSSHWb2XXCDpbt6kAi5xPngOB8Li3EdyfzPBeUnK4Lj8hK4MnU/exec"; // Thay link ở bước 2 vào đây
+        
+        var duLieu = {
+            hoTen: studentNameStored,
+            soCauDung: d + "/" + tongCau,
+            diemSo: diemHe10
+        };
+
+        fetch(urlWebScript, {
+            method: "POST",
+            mode: "no-cors", // Để không bị chặn bảo mật
+            body: JSON.stringify(duLieu)
+        }).then(() => {
+            console.log("Đã lưu điểm thành công!");
+        }).catch((error) => {
+            console.error("Lỗi gửi điểm:", error);
+        });
     }
-
-
     function lamLai() {
         location.reload();
     }
