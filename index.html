@@ -126,7 +126,7 @@
 </div>
 
 <script>
-    // 1. BIẾN TOÀN CỤC
+    // 1. BIẾN TOÀN CỤC (Giữ nguyên cấu trúc của cậu)
     var studentNameStored = "";
     var giay = 900; 
     var timer;
@@ -136,7 +136,6 @@
     const SO_CAU_MOI_DE = 5;
 
     var danhSachHocSinh = { "Nguyễn Văn An": "an123", "Trần Thị Bình": "binh456", "Khánh": "0512" };
-    
     var khoCauHoi = [
         { de: "15 + 25 bằng bao nhiêu?", luaChon: ["30", "35", "40", "45"], dung: "40" },
         { de: "Hình tam giác có mấy cạnh?", luaChon: ["2", "3", "4", "5"], dung: "3" },
@@ -149,14 +148,13 @@
         { de: "Kết quả của 100 - 45 là?", luaChon: ["45", "55", "65", "35"], dung: "55" },
         { de: "Số gồm 5 trăm và 5 đơn vị là?", luaChon: ["55", "550", "505", "5005"], dung: "505" }
     ];
-
     var danhSachHienTai = [];
 
-    // 2. SỰ KIỆN
+    // 2. GÁN SỰ KIỆN
     document.getElementById('btn-login').addEventListener('click', checkLogin);
     document.getElementById('btn-nop-bai').addEventListener('click', chamDiem);
 
-    // 3. HÀM XỬ LÝ CHÍNH
+    // 3. CÁC HÀM XỬ LÝ (Login, Timer, Tạo đề)
     function checkLogin() {
         var n = document.getElementById('student-name').value.trim();
         var c = document.getElementById('student-code').value.trim();
@@ -166,9 +164,7 @@
             document.getElementById('main-content').style.display = "block";
             taoDe();
             batDauDemNguoc();
-        } else { 
-            alert("Sai thông tin rồi em ơi! ❌"); 
-        }
+        } else { alert("Sai thông tin rồi em ơi! ❌"); }
     }
 
     function batDauDemNguoc() {
@@ -176,10 +172,7 @@
             if (daNopBai) return;
             var p = Math.floor(giay / 60), g = giay % 60;
             document.getElementById('dong-ho').innerHTML = "⏳ Thời gian còn lại: " + p + ":" + (g < 10 ? "0" + g : g);
-            if (giay-- <= 0) { 
-                clearInterval(timer); 
-                chamDiem(); 
-            }
+            if (giay-- <= 0) { clearInterval(timer); chamDiem(); }
         }, 1000);
     }
 
@@ -187,7 +180,6 @@
         var v = document.getElementById('vung-chua'); 
         v.innerHTML = "";
         danhSachHienTai = khoCauHoi.sort(() => 0.5 - Math.random()).slice(0, SO_CAU_MOI_DE);
-
         danhSachHienTai.forEach((item, i) => {
             var html = `<div class='khung' id='box${i}'><p style='font-weight:bold;'>📝 Câu ${i+1}: ${item.de}</p>`;
             let luaChonTron = [...item.luaChon].sort(() => 0.5 - Math.random());
@@ -199,33 +191,23 @@
         });
     }
 
+    // 4. HÀM CHẤM ĐIỂM & KÍCH HOẠT PHÁO HOA
     function chamDiem() {
         if (daNopBai) return; 
         daNopBai = true; 
         clearInterval(timer);
         var d = 0;
-        
         danhSachHienTai.forEach((item, i) => {
             var inputs = document.getElementsByName('cau' + i);
             var chon = Array.from(inputs).find(r => r.checked)?.value;
             var b = document.getElementById('box' + i);
-            
-            if (chon === item.dung) { 
-                d++; 
-                b.classList.add('cau-dung'); 
-            } else { 
-                b.classList.add('cau-sai'); 
-                document.getElementById('note' + i).style.display = "block"; 
-            }
+            if (chon === item.dung) { d++; b.classList.add('cau-dung'); } 
+            else { b.classList.add('cau-sai'); document.getElementById('note' + i).style.display = "block"; }
             Array.from(inputs).forEach(r => r.disabled = true);
         });
 
         var diem = Math.round((d / danhSachHienTai.length) * 10);
-        
-        // --- HIỆU ỨNG PHÁO HOA KHI ĐIỂM 10 ---
-        if (diem === 10) {
-            runFireworks();
-        }
+        if (diem === 10) runFireworks(); // Gọi pháo hoa nếu đạt 10 điểm
 
         var icon = diem >= 8 ? "🏆 Tuyệt vời!" : (diem >= 5 ? "👏 Khá lắm!" : "💪 Cố gắng lên!");
         document.getElementById('ket-qua').innerHTML = `
@@ -237,7 +219,7 @@
         document.getElementById('btn-nop-bai').style.display = "none";
     }
 
-    // 4. LOGIC PHÁO HOA (CANVAS)
+    // 5. LOGIC PHÁO HOA ĐÃ SỬA LỖI
     function runFireworks() {
         const canvas = document.getElementById('fireworksCanvas');
         const ctx = canvas.getContext('2d');
@@ -251,50 +233,62 @@
         class Particle {
             constructor(x, y, color) {
                 this.x = x; this.y = y; this.color = color;
-                this.velocity = { x: (Math.random() - 0.5) * 12, y: (Math.random() - 0.5) * 12 };
-                this.alpha = 1; this.friction = 0.95;
+                // Vận tốc ngẫu nhiên để pháo nổ tròn
+                this.velocity = { x: (Math.random() - 0.5) * 10, y: (Math.random() - 0.5) * 10 };
+                this.alpha = 1; 
+                this.friction = 0.95; // Lực ma sát làm hạt chậm lại
             }
             draw() {
+                ctx.save();
                 ctx.globalAlpha = this.alpha;
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, 3, 0, Math.PI * 2);
                 ctx.fillStyle = this.color;
                 ctx.fill();
+                ctx.restore();
             }
             update() {
                 this.velocity.x *= this.friction;
                 this.velocity.y *= this.friction;
-                this.x += this.velocity.x; this.y += this.velocity.y;
-                this.alpha -= 0.012;
+                this.x += this.velocity.x;
+                this.y += this.velocity.y;
+                this.alpha -= 0.015; // Hạt mờ dần
             }
         }
 
         function animate() {
             if (canvas.style.display === "none") return;
             requestAnimationFrame(animate);
+            
+            // Tạo hiệu ứng mờ dần cho vết cũ thay vì clear trắng hoàn toàn
             ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
             particles.forEach((p, i) => {
-                if (p.alpha > 0) { p.update(); p.draw(); } 
-                else { particles.splice(i, 1); }
+                if (p.alpha > 0) {
+                    p.update();
+                    p.draw();
+                } else {
+                    particles.splice(i, 1);
+                }
             });
         }
 
+        // Tạo 10 đợt nổ ngẫu nhiên
         let count = 0;
         const interval = setInterval(() => {
             const x = Math.random() * canvas.width;
-            const y = Math.random() * (canvas.height / 2);
-            for (let i = 0; i < 60; i++) {
+            const y = Math.random() * (canvas.height / 2); // Nổ ở nửa trên màn hình
+            for (let i = 0; i < 40; i++) {
                 particles.push(new Particle(x, y, colors[Math.floor(Math.random() * colors.length)]));
             }
             count++;
-            if (count > 10) {
-                clearInterval(interval);
-                setTimeout(() => { canvas.style.display = "none"; }, 3000);
-            }
+            if (count >= 10) clearInterval(interval);
         }, 400);
+
         animate();
+
+        // Tự động ẩn canvas sau khi pháo hoa kết thúc
+        setTimeout(() => { canvas.style.display = "none"; }, 7000);
     }
 </script>
-</body>
-</html>
