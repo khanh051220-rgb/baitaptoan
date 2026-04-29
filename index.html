@@ -2,11 +2,18 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Web Toán Học - Khánh</title>
+    <title>Khánh</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; background-color: #f0f9f4; color: #2d6a4f; }
         .container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
         h1 { text-align: center; color: #2d6a4f; font-size: 28px; margin-bottom: 30px; }
+        
+        /* Giao diện Đăng nhập */
+        #login-screen { text-align: center; padding: 40px 10px; }
+        #main-content { display: none; } 
+        #student-name { padding: 12px; border: 2px solid #b7e4c7; border-radius: 10px; width: 80%; max-width: 300px; margin-bottom: 15px; outline: none; font-size: 16px; text-align: center; }
+        #student-name:focus { border-color: #52b788; }
+
         .khung { padding: 20px; margin-bottom: 20px; border-radius: 15px; background: #ffffff; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border-left: 8px solid #b7e4c7; }
         .cau-dung { border-left-color: #74c69d !important; background-color: #f7fffb; }
         .cau-sai { border-left-color: #ff8787 !important; background-color: #fff5f5; }
@@ -15,26 +22,39 @@
         button:hover { background: #40916c; transform: translateY(-2px); }
         input[type='radio'] { accent-color: #52b788; transform: scale(1.2); margin-right: 10px; }
         label { cursor: pointer; display: block; padding: 5px 0; }
-        #ket-qua { text-align: center; color: #2d6a4f; font-size: 24px; margin-top: 20px; }
+        #ket-qua { text-align: center; color: #2d6a4f; font-size: 24px; margin-top: 20px; border-top: 2px dashed #b7e4c7; padding-top: 20px; }
     </style>
 </head>
 <body>
 <div class="container">
-    <h1>🌿 HỆ THỐNG BÀI TẬP TOÁN 🌿</h1>
-    <div id="vung-chua"></div>
-    <div style="text-align: center;">
-        <button onclick="chamDiem()">Nộp bài & Xem lỗi sai</button>
-        <button onclick="taoDe()" style="background: #95d5b2; color: #1b4332;">Đổi mã đề (Trộn câu)</button>
+    <div id="login-screen">
+        <h1>🌿 LỚP TOÁN 🌿</h1>
+        <p>Vui lòng nhập Họ và Tên để bắt đầu làm bài</p>
+        <input type="text" id="student-name" placeholder="Nhập tên của em...">
+        <br>
+        <button onclick="checkLogin()">Vào làm bài</button>
     </div>
-    <h2 id="ket-qua"></h2>
+
+    <div id="main-content">
+        <h1 id="header-title">🌿 HỆ THỐNG BÀI TẬP 🌿</h1>
+        <div id="vung-chua"></div>
+        <div style="text-align: center;">
+            <button onclick="chamDiem()">Nộp bài & Xem lỗi sai</button>
+            <button onclick="taoDe()" style="background: #95d5b2; color: #1b4332;">Đổi mã đề (Trộn câu)</button>
+        </div>
+        <h2 id="ket-qua"></h2>
+    </div>
 </div>
 
 <script>
-    var danhSach = [{ 
+    var studentNameStored = "";
+    var danhSach = [
+        { 
             de: "Nội dung câu hỏi mới của bạn ở đây?", 
             luaChon: ["Đáp án A", "Đáp án B", "Đáp án C", "Đáp án D"], 
             dung: "Đáp án đúng (viết y hệt lựa chọn)" 
-        },{ 
+        },
+        { 
             de: "Nội dung câu hỏi mới của bạn ở đây?", 
             luaChon: ["Đáp án A", "Đáp án B", "Đáp án C", "Đáp án D"], 
             dung: "Đáp án đúng (viết y hệt lựa chọn)" 
@@ -43,6 +63,19 @@
         { de: "Câu 2: Hình tam giác có mấy cạnh?", luaChon: ["2", "3", "4", "5"], dung: "3" },
         { de: "Câu 3: Số nào lớn nhất trong các số sau?", luaChon: ["89", "98", "100", "99"], dung: "100" }
     ];
+
+    function checkLogin() {
+        var nameValue = document.getElementById('student-name').value;
+        if (nameValue.trim().length < 2) {
+            alert("Em vui lòng nhập đầy đủ Họ và Tên nhé!");
+            return;
+        }
+        studentNameStored = nameValue;
+        document.getElementById('login-screen').style.display = "none";
+        document.getElementById('main-content').style.display = "block";
+        document.getElementById('header-title').innerText = "Chào " + studentNameStored + ", chúc em làm bài tốt!";
+        taoDe();
+    }
 
     var danhSachHienTai = [];
 
@@ -90,9 +123,8 @@
                 note.style.display = "block";
             }
         }
-        document.getElementById('ket-qua').innerHTML = "KẾT QUẢ: " + diem + "/" + danhSach.length + " CÂU ĐÚNG";
+        document.getElementById('ket-qua').innerHTML = "KẾT QUẢ CỦA " + studentNameStored.toUpperCase() + ": " + diem + "/" + danhSach.length + " CÂU ĐÚNG";
     }
-    window.onload = taoDe;
 </script>
 </body>
 </html>
