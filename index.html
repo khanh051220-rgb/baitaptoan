@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Học Toán cùng Khánh</title>
+    <title>Lớp Toán của Khánh</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; background-color: #f0f9f4; color: #2d6a4f; }
         .container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
@@ -39,7 +39,7 @@
         <div id="vung-chua"></div>
         <div style="text-align: center;">
             <button id="btn-nop-bai" onclick="chamDiem()">Nộp bài & Xem lỗi sai</button>
-            <button id="btn-doi-de" onclick="taoDe()" style="background: #95d5b2; color: #1b4332;">Đổi mã đề (Trộn câu)</button>
+            <button id="btn-doi-de" onclick="lamLai()">Làm lại bài mới</button>
         </div>
         <h2 id="ket-qua"></h2>
     </div>
@@ -47,18 +47,16 @@
 
 <script>
     var studentNameStored = "";
-    var giay = 900; // 15 phút
+    var giay = 900; 
     var timer;
     var daNopBai = false;
 
-    // --- 1. DANH SÁCH MÃ HỌC SINH ---
     var danhSachHocSinh = {
         "Nguyễn Văn An": "an123",
         "Trần Thị Bình": "binh456",
         "Khánh": "0512" 
     };
 
-    // --- 2. DANH SÁCH CÂU HỎI ---
     var danhSach = [
         { de: "Câu 1: 15 + 25 bằng bao nhiêu?", luaChon: ["30", "35", "40", "45"], dung: "40" },
         { de: "Câu 2: Hình tam giác có mấy cạnh?", luaChon: ["2", "3", "4", "5"], dung: "3" },
@@ -66,34 +64,33 @@
     ];
 
     function checkLogin() {
-        var nameInput = document.getElementById('student-name').value.trim();
-        var codeInput = document.getElementById('student-code').value.trim();
-        
-        var maChuan = danhSachHocSinh[nameInput];
+        var n = document.getElementById('student-name').value.trim();
+        var c = document.getElementById('student-code').value.trim();
+        var m = danhSachHocSinh[n];
 
-        if (nameInput === "" || codeInput === "") {
-            alert("Em vui lòng nhập đủ Tên và Mã!");
+        if (!n || !c) {
+            alert("Vui lòng nhập đủ thông tin!");
             return;
         }
 
-        if (maChuan && maChuan === codeInput) {
-            studentNameStored = nameInput;
+        if (m && m === c) {
+            studentNameStored = n;
             document.getElementById('login-screen').style.display = "none";
             document.getElementById('main-content').style.display = "block";
             document.getElementById('header-title').innerText = "Chào " + studentNameStored + "!";
             taoDe();
             batDauDemNguoc();
         } else {
-            alert("Tên hoặc Mã không đúng rồi!");
+            alert("Tên hoặc mã sai!");
         }
     }
 
     function batDauDemNguoc() {
         timer = setInterval(function() {
             if (daNopBai) return;
-            var phut = Math.floor(giay / 60);
-            var giayLe = giay % 60;
-            document.getElementById('dong-ho').innerHTML = "Thời gian còn lại: " + phut + ":" + (giayLe < 10 ? "0" + giayLe : giayLe);
+            var p = Math.floor(giay / 60);
+            var g = giay % 60;
+            document.getElementById('dong-ho').innerHTML = "Thời gian còn lại: " + p + ":" + (g < 10 ? "0" + g : g);
             if (giay <= 0) {
                 clearInterval(timer);
                 alert("Hết giờ!");
@@ -106,45 +103,48 @@
     var danhSachHienTai = [];
     function taoDe() {
         if (daNopBai) return;
-        var vungChua = document.getElementById('vung-chua');
-        vungChua.innerHTML = "";
-        danhSachHienTai = JSON.parse(JSON.stringify(danhSach)).sort(() => 0.5 - Math.random());
-        danhSachHienTai.forEach((item, i) => {
-            var opts = item.luaChon.sort(() => 0.5 - Math.random());
+        var v = document.getElementById('vung-chua');
+        v.innerHTML = "";
+        danhSachHienTai = JSON.parse(JSON.stringify(danhSach)).sort(function(){return 0.5 - Math.random()});
+        for (var i = 0; i < danhSachHienTai.length; i++) {
+            var item = danhSachHienTai[i];
+            var opts = item.luaChon.sort(function(){return 0.5 - Math.random()});
             var html = "<div class='khung' id='box" + i + "'><b>" + item.de + "</b>";
-            opts.forEach(opt => {
-                html += "<p><label><input type='radio' name='cau" + i + "' value='" + opt + "'> " + opt + "</label></p>";
-            });
+            for (var j = 0; j < opts.length; j++) {
+                html += "<p><label><input type='radio' name='cau" + i + "' value='" + opts[j] + "'> " + opts[j] + "</label></p>";
+            }
             html += "<div class='loi-giai' id='note" + i + "'>➡ Đáp án: " + item.dung + "</div></div>";
-            vungChua.innerHTML += html;
-        });
+            v.innerHTML += html;
+        }
     }
 
     function chamDiem() {
         if (daNopBai) return;
         daNopBai = true;
         clearInterval(timer);
-        var diem = 0;
-        danhSachHienTai.forEach((item, i) => {
-            var inputs = document.getElementsByName('cau' + i);
+        var d = 0;
+        for (var i = 0; i < danhSachHienTai.length; i++) {
+            var ins = document.getElementsByName('cau' + i);
             var chon = "";
-            inputs.forEach(input => {
-                if (input.checked) chon = input.value;
-                input.disabled = true;
-            });
-            var box = document.getElementById('box' + i);
-            if (chon === item.dung) {
-                diem++;
-                box.className = "khung cau-dung";
+            for (var k = 0; k < ins.length; k++) {
+                if (ins[k].checked) chon = ins[k].value;
+                ins[k].disabled = true;
+            }
+            var b = document.getElementById('box' + i);
+            if (chon === danhSachHienTai[i].dung) {
+                d++;
+                b.className = "khung cau-dung";
             } else {
-                box.className = "khung cau-sai";
+                b.className = "khung cau-sai";
                 document.getElementById('note' + i).style.display = "block";
             }
-        });
-        document.getElementById('ket-qua').innerHTML = "Điểm của em: " + diem + "/" + danhSach.length;
+        }
+        document.getElementById('ket-qua').innerHTML = "Điểm của em: " + d + "/" + danhSach.length;
         document.getElementById('btn-nop-bai').style.display = "none";
-        document.getElementById('btn-doi-de').innerText = "Làm lại";
-        document.getElementById('btn-doi-de').onclick = () => location.reload();
+    }
+
+    function lamLai() {
+        location.reload();
     }
 </script>
 </body>
