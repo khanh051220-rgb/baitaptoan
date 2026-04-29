@@ -116,7 +116,7 @@
     var timer;
     var daNopBai = false;
     var soLanViPham = 0; 
-    const GIOI_HAN_VI_PHAM = 3; 
+    const GIOI_HAN_VI_PHAM = 1; 
     const SO_CAU_MOI_DE = 5; // Cậu muốn mỗi đề có bao nhiêu câu thì chỉnh ở đây nhé!
 
     var danhSachHocSinh = { "Nguyễn Văn An": "an123", "Trần Thị Bình": "binh456", "Khánh": "0512" };
@@ -135,7 +135,7 @@
         { de: "Số gồm 5 trăm và 5 đơn vị là?", luaChon: ["55", "550", "505", "5005"], dung: "505" }
     ];
 
-    var danhSachHienTai = []; // Chứa các câu được bốc ngẫu nhiên
+    var danhSachHienTai = [1,2,3,4,5,6,7,8,9,10]; // Chứa các câu được bốc ngẫu nhiên
 
     // 3. GÁN SỰ KIỆN
     document.getElementById('btn-login').addEventListener('click', checkLogin);
