@@ -66,7 +66,7 @@
             color: white; border: none; border-radius: 50px; 
             font-weight: bold; font-size: 16px;
             position: relative;
-            z-index: 10005; /* Đảm bảo nút luôn nằm trên Watermark để bấm được */
+            z-index: 10005; 
         }
 
         label { display: block; padding: 12px; margin: 8px 0; border-radius: 12px; background: #f8f9fa; cursor: pointer; font-size: 18px; }
@@ -77,16 +77,16 @@
             display: none; background: #fdf2f2; padding: 12px; border-radius: 10px; line-height: 1.5;
         }
 
-        /* --- WATERMARK OVERLAY --- */
+        /* --- WATERMARK OVERLAY (ĐÃ ĐIỀU CHỈNH THƯA HƠN) --- */
         #watermark-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 9999; /* Nằm dưới nút bấm nhưng trên nội dung */
-            pointer-events: none; /* Quan trọng: cho phép click xuyên qua để chọn đáp án */
-            opacity: 0.2; /* Độ đậm 20% */
+            z-index: 9999;
+            pointer-events: none;
+            opacity: 0.15; /* Giảm nhẹ độ đậm để bớt rối mắt */
             display: none;
             background-repeat: repeat;
         }
@@ -150,17 +150,17 @@
         if (danhSachHocSinh[n] === c) {
             studentNameStored = n;
             
-            // --- TẠO LẠI WATERMARK ---
             const canvas = document.createElement('canvas');
-            canvas.width = 120; // Khoảng cách nhỏ hơn để chữ dày hơn
-            canvas.height = 80; 
+            // Tăng kích thước canvas để các chữ thưa ra
+            canvas.width = 280; 
+            canvas.height = 180; 
             const ctx = canvas.getContext('2d');
-            ctx.font = 'bold 14px Segoe UI'; // Chữ đậm
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.7)'; // Mực đậm
+            ctx.font = 'bold 15px Segoe UI';
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.5)'; // Độ đậm mực vừa phải
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.translate(canvas.width / 2, canvas.height / 2);
-            ctx.rotate(-Math.PI / 6); 
+            ctx.rotate(-Math.PI / 8); 
             ctx.fillText(n, 0, 0);
 
             const overlay = document.getElementById('watermark-overlay');
