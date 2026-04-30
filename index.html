@@ -73,7 +73,6 @@
         label { display: block; padding: 12px; margin: 8px 0; border-radius: 12px; background: #f8f9fa; cursor: pointer; font-size: 18px; }
         input[type='radio'] { accent-color: var(--secondary); transform: scale(1.3); margin-right: 12px; }
         
-        /* Phần lời giải được làm nổi bật hơn một chút */
         .loi-giai { 
             font-style: normal; 
             color: #d90429; 
@@ -83,6 +82,15 @@
             padding: 12px;
             border-radius: 10px;
             line-height: 1.5;
+        }
+
+        /* Thêm CSS cho ảnh trong lời giải */
+        .loi-giai img {
+            max-width: 100%;
+            height: auto;
+            margin-top: 10px;
+            border-radius: 8px;
+            border: 1px solid #ffccd5;
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
@@ -118,18 +126,18 @@
     const GIOI_HAN_VI_PHAM = 2, SO_CAU_MOI_DE = 5;
     var danhSachHocSinh = { "Nguyễn Văn An": "an123", "Trần Thị Bình": "binh456", "Khánh": "0512" };
     
-    // Đã thêm lời giải cho từng câu
     var khoCauHoi = [
-        { de: "15 + 25 bằng bao nhiêu?", luaChon: ["30", "35", "40", "45"], dung: "40", giaiThich: "Thực hiện phép cộng: 15 + 25 = 40." },
-        { de: "Hình tam giác có mấy cạnh?", luaChon: ["2", "3", "4", "5"], dung: "3", giaiThich: "Hình tam giác là hình có 3 cạnh." },
-        { de: "Số nào lớn nhất: 89, 98, 100, 99?", luaChon: ["89", "98", "100", "99"], dung: "100", giaiThich: "So sánh các số, 100 là số có 3 chữ số nên lớn nhất." },
-        { de: "Kết quả của phép tính 7 x 8 là?", luaChon: ["54", "56", "64", "49"], dung: "56", giaiThich: "Theo bảng cửu chương: 7 x 8 = 56." },
-        { de: "Số nào là số chẵn nhỏ nhất có hai chữ số?", luaChon: ["10", "12", "02", "11"], dung: "10", giaiThich: "Số có 2 chữ số bé nhất là 10, và nó là số chẵn." },
-        { de: "Một hình vuông có cạnh 5cm. Chu vi là?", luaChon: ["10cm", "20cm", "25cm", "15cm"], dung: "20cm", giaiThich: "Chu vi hình vuông = cạnh x 4 = 5 x 4 = 20cm." },
-        { de: "Số liền trước của 1000 là?", luaChon: ["999", "1001", "990", "900"], dung: "999", giaiThich: "Số liền trước = số đã cho - 1. Ta có: 1000 - 1 = 999." },
-        { de: "3 giờ bằng bao nhiêu phút?", luaChon: ["120 phút", "150 phút", "180 phút", "200 phút"], dung: "180 phút", giaiThich: "1 giờ = 60 phút. 3 giờ = 60 x 3 = 180 phút." },
-        { de: "Kết quả của 100 - 45 là?", luaChon: ["45", "55", "65", "35"], dung: "55", giaiThich: "Phép trừ: 100 - 45 = 55." },
-        { de: "Số gồm 5 trăm và 5 đơn vị là?", luaChon: ["55", "550", "505", "5005"], dung: "505", giaiThich: "5 trăm (500) và 5 đơn vị (5) viết là 505." }
+        { de: "15 + 25 bằng bao nhiêu?", luaChon: ["30", "35", "40", "45"], dung: "40", giaiThich: "Thực hiện phép cộng: 15 + 25 = 40.", anh: "" },
+        { de: "Hình tam giác có mấy cạnh?", luaChon: ["2", "3", "4", "5"], dung: "3", giaiThich: "Hình tam giác là hình có 3 cạnh.", anh: "" },
+        { de: "Số nào lớn nhất: 89, 98, 100, 99?", luaChon: ["89", "98", "100", "99"], dung: "100", giaiThich: "So sánh các số, 100 là số có 3 chữ số nên lớn nhất.", anh: "" },
+        { de: "Kết quả của phép tính 7 x 8 là?", luaChon: ["54", "56", "64", "49"], dung: "56", giaiThich: "Theo bảng cửu chương: 7 x 8 = 56.", anh: "" },
+        { de: "Số nào là số chẵn nhỏ nhất có hai chữ số?", luaChon: ["10", "12", "02", "11"], dung: "10", giaiThich: "Số có 2 chữ số bé nhất là 10, và nó là số chẵn.", anh: "" },
+        // Ví dụ một câu có ảnh minh họa
+        { de: "Một hình vuông có cạnh 5cm. Chu vi là?", luaChon: ["10cm", "20cm", "25cm", "15cm"], dung: "20cm", giaiThich: "Chu vi hình vuông = cạnh x 4 = 5 x 4 = 20cm.", anh: "https://vungoi.vn/lop-3/ly-thuyet-chu-vi-hinh-vuong-s5af95da063f130590a599723.html/image.png" },
+        { de: "Số liền trước của 1000 là?", luaChon: ["999", "1001", "990", "900"], dung: "999", giaiThich: "Số liền trước = số đã cho - 1. Ta có: 1000 - 1 = 999.", anh: "" },
+        { de: "3 giờ bằng bao nhiêu phút?", luaChon: ["120 phút", "150 phút", "180 phút", "200 phút"], dung: "180 phút", giaiThich: "1 giờ = 60 phút. 3 giờ = 60 x 3 = 180 phút.", anh: "" },
+        { de: "Kết quả của 100 - 45 là?", luaChon: ["45", "55", "65", "35"], dung: "55", giaiThich: "Phép trừ: 100 - 45 = 55.", anh: "" },
+        { de: "Số gồm 5 trăm và 5 đơn vị là?", luaChon: ["55", "550", "505", "5005"], dung: "505", giaiThich: "5 trăm (500) và 5 đơn vị (5) viết là 505.", anh: "" }
     ];
 
     var danhSachHienTai = []; 
@@ -179,10 +187,14 @@
             item.luaChon.forEach(lc => {
                 html += `<label><input type='radio' name='cau${i}' value='${lc}'> ${lc}</label>`;
             });
-            // Thêm nội dung giải thích vào thẻ loi-giai
+            
+            // Xử lý hiển thị ảnh: Nếu có link ảnh thì tạo thẻ img, nếu không thì để trống
+            var hienAnh = item.anh !== "" ? `<br><img src="${item.anh}">` : "";
+
             html += `<div class='loi-giai' id='note${i}'>
                         <b>💡 Đáp án đúng: ${item.dung}</b><br>
                         <i>📖 Giải thích: ${item.giaiThich}</i>
+                        ${hienAnh}
                      </div></div>`;
             v.innerHTML += html;
         });
@@ -197,8 +209,6 @@
         danhSachHienTai.forEach((item, i) => {
             var chon = Array.from(document.getElementsByName('cau' + i)).find(r => r.checked)?.value;
             var b = document.getElementById('box' + i);
-            
-            // Luôn hiện lời giải chi tiết cho tất cả các câu sau khi nộp
             document.getElementById('note' + i).style.display = "block"; 
 
             if (chon === item.dung) { 
@@ -210,13 +220,8 @@
         });
 
         var diem = Math.round((d / SO_CAU_MOI_DE) * 100) / 10;
-        
-        if (diem >= 8) {
-            banPhaoHoa();
-        }
-
+        if (diem >= 8) { banPhaoHoa(); }
         var icon = diem >= 8 ? "🏆 Tuyệt vời!" : (diem >= 5 ? "👏 Khá lắm!" : "💪 Cố gắng lên!");
-        
         document.getElementById('ket-qua').innerHTML = `<div style="background:#e9f5ee; padding:20px; border-radius:20px; border:2px solid #b7e4c7; text-align:center;">
             <h2 style="color:#1b4332;">${icon}</h2>
             <p style="font-size:40px; font-weight:bold; color:#d00000;">💯 ${diem} ĐIỂM</p>
@@ -261,11 +266,7 @@
                 if (chon === item.dung) { d++; }
             });
             var diemTamThoi = Math.round((d / SO_CAU_MOI_DE) * 100) / 10;
-            var data = JSON.stringify({
-                hoTen: studentNameStored + " (Thoát ngang)", 
-                soCauDung: d + "/" + SO_CAU_MOI_DE, 
-                diemSo: diemTamThoi
-            });
+            var data = JSON.stringify({ hoTen: studentNameStored + " (Thoát ngang)", soCauDung: d + "/" + SO_CAU_MOI_DE, diemSo: diemTamThoi });
             var url = "https://script.google.com/macros/s/AKfycbz4IPNx4fkDGi_oy3K15LSqIhB8ZtfmfN3Q_kKNIb7KKGrBjqkl8yKT2FusSjeVNlw/exec";
             if (navigator.sendBeacon) { navigator.sendBeacon(url, data); } 
             else { fetch(url, { method: "POST", mode: "no-cors", keepalive: true, body: data }); }
