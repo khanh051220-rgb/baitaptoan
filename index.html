@@ -61,6 +61,7 @@
             cursor: pointer;
             transition: 0.3s;
             background: #eee;
+            object-fit: cover;
         }
         .avatar-option.selected {
             border-color: var(--accent);
@@ -77,7 +78,7 @@
             padding: 10px;
             border-radius: 50px;
         }
-        .header-profile img { width: 40px; height: 40px; border-radius: 50%; }
+        .header-profile img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
         /* ----------------------- */
 
         #progress-container { width: 100%; background: #eee; border-radius: 10px; margin-bottom: 25px; height: 15px; overflow: hidden; display:none; }
@@ -121,12 +122,12 @@
         <p>Chọn một avatar thật ngầu nhen các em! ✨</p>
         
         <div class="avatar-picker">
-    <img src="https://img5.thuthuatphanmem.vn/uploads/2021/11/08/anh-gau-truc-cute_082040722.jpg" class="avatar-option selected" data-seed="https://img5.thuthuatphanmem.vn/uploads/2021/11/08/anh-gau-truc-cute_082040722.jpg">
-    <img src="https://i.pinimg.com/originals/6d/dc/3f/6ddc3f9a79c891e0efd6042624e08f51.png" class="avatar-option" data-seed="https://i.pinimg.com/originals/6d/dc/3f/6ddc3f9a79c891e0efd6042624e08f51.png">
-    <img src="https://i.pinimg.com/originals/9a/c3/55/9ac355832f81c37f4964583c22bee6a0.jpg" class="avatar-option" data-seed="https://i.pinimg.com/originals/9a/c3/55/9ac355832f81c37f4964583c22bee6a0.jpg">
-    <img src="https://antimatter.vn/wp-content/uploads/2022/03/anh-anime-nam-chibi-meo-cute.jpg" class="avatar-option" data-seed="https://antimatter.vn/wp-content/uploads/2022/03/anh-anime-nam-chibi-meo-cute.jpg">
-    <img src="https://png.pngtree.com/png-clipart/20210314/original/pngtree-math-clipart-balloon-cartoon-math-symbol-png-image_6086532.jpg" class="avatar-option" data-seed="https://png.pngtree.com/png-clipart/20210314/original/pngtree-math-clipart-balloon-cartoon-math-symbol-png-image_6086532.jpg">
-</div>
+            <img src="https://img5.thuthuatphanmem.vn/uploads/2021/11/08/anh-gau-truc-cute_082040722.jpg" class="avatar-option selected" data-seed="https://img5.thuthuatphanmem.vn/uploads/2021/11/08/anh-gau-truc-cute_082040722.jpg">
+            <img src="https://i.pinimg.com/originals/6d/dc/3f/6ddc3f9a79c891e0efd6042624e08f51.png" class="avatar-option" data-seed="https://i.pinimg.com/originals/6d/dc/3f/6ddc3f9a79c891e0efd6042624e08f51.png">
+            <img src="https://i.pinimg.com/originals/9a/c3/55/9ac355832f81c37f4964583c22bee6a0.jpg" class="avatar-option" data-seed="https://i.pinimg.com/originals/9a/c3/55/9ac355832f81c37f4964583c22bee6a0.jpg">
+            <img src="https://antimatter.vn/wp-content/uploads/2022/03/anh-anime-nam-chibi-meo-cute.jpg" class="avatar-option" data-seed="https://antimatter.vn/wp-content/uploads/2022/03/anh-anime-nam-chibi-meo-cute.jpg">
+            <img src="https://png.pngtree.com/png-clipart/20210314/original/pngtree-math-clipart-balloon-cartoon-math-symbol-png-image_6086532.jpg" class="avatar-option" data-seed="https://png.pngtree.com/png-clipart/20210314/original/pngtree-math-clipart-balloon-cartoon-math-symbol-png-image_6086532.jpg">
+        </div>
         <input type="text" id="student-name" class="input-login" placeholder="👤 Nhập họ và tên..."><br>
         <input type="password" id="student-code" class="input-login" placeholder="🔑 Nhập mã bí mật..."><br>
         <button id="btn-login">🚀 BẮT ĐẦU THỬ THÁCH</button>
@@ -151,7 +152,8 @@
 
 <script>
     var studentNameStored = "", giay = 900, timer, daNopBai = false, soLanViPham = 0;
-    var currentSeed = "Felix"; // Seed mặc định
+    // Lấy link ảnh đầu tiên làm mặc định thay vì dùng chữ "Felix"
+    var currentSeed = "https://img5.thuthuatphanmem.vn/uploads/2021/11/08/anh-gau-truc-cute_082040722.jpg"; 
     const GIOI_HAN_VI_PHAM = 2, SO_CAU_MOI_DE = 5;
     var danhSachHocSinh = { "Nguyễn Văn An": "an123", "Trần Thị Bình": "binh456", "Khánh": "0512" };
     
@@ -203,8 +205,8 @@
             document.getElementById('main-content').style.display = "block";
             document.getElementById('progress-container').style.display = "block";
             
-            // Hiện tên và avatar lên đầu bài
-            document.getElementById('user-img').src = `https://api.dicebear.com/8.x/adventurer/svg?seed=${currentSeed}`;
+            // SỬA TẠI ĐÂY: Hiển thị trực tiếp link ảnh đã chọn, không qua DiceBear nữa
+            document.getElementById('user-img').src = currentSeed;
             document.getElementById('user-name').innerText = studentNameStored;
 
             taoDe();
@@ -258,9 +260,10 @@
 
         var icon = diem >= 8 ? "🏆 Tuyệt vời!" : (diem >= 5 ? "👏 Khá lắm!" : "💪 Cố gắng lên!");
         
+        // SỬA TẠI ĐÂY: Hiển thị đúng avatar trong bảng kết quả
         document.getElementById('ket-qua').innerHTML = `
             <div style='background:#e9f5ee; padding:20px; border-radius:20px; border:2px solid #b7e4c7; text-align:center;'>
-                <img src="https://api.dicebear.com/8.x/adventurer/svg?seed=${currentSeed}" style="width:80px; border-radius:50%; border:3px solid var(--secondary); margin-bottom:10px;">
+                <img src="${currentSeed}" style="width:80px; height:80px; object-fit:cover; border-radius:50%; border:3px solid var(--secondary); margin-bottom:10px;">
                 <h2 style='color:#1b4332;'>${icon}</h2>
                 <p style='font-size:40px; font-weight:bold; color:#d00000;'>💯 ${diem} ĐIỂM</p>
                 <p>Đúng ${d}/${SO_CAU_MOI_DE} câu. Đã gửi cho thầy!</p>
