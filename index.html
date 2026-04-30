@@ -391,6 +391,14 @@ document.onkeydown = function(e) {
         debugger; 
     }
 }, 100);
+    // 3. Vô hiệu hóa việc nhấn phím F12 (Chốt hạ cuối cùng)
+document.onkeydown = function(e) {
+    if (e.keyCode == 123) {
+        return false;
+    }
+};
+
+// Kết hợp với cái setInterval debugger phía trên là bộ đôi hoàn hảo nhen!
 </script>
 </body>
 </html>
