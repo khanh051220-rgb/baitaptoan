@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Học toán cùng Khánh - Bản Đầy Đủ</title>
+    <title>Học toán cùng Khánh - Bản Full Tính Năng</title>
     <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/188/188333.png">
     <style>
         :root { --primary: #1b4332; --secondary: #40916c; --light: #d8f3dc; --accent: #ff9f1c; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; background: linear-gradient(135deg, #d8f3dc 0%, #b7e4c7 100%); min-height: 100vh; margin: 0; display: flex; justify-content: center; }
         .container { width: 95%; max-width: 1000px; background: rgba(255, 255, 255, 0.95); padding: 45px; border-radius: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.1); }
-        h1 { text-align: center; color: var(--primary); font-size: 32px; margin-bottom: 20px; letter-spacing: 1px; }
+        h1 { text-align: center; color: var(--primary); font-size: 32px; margin-bottom: 20px; }
         #login-screen { text-align: center; padding: 30px 10px; }
         .input-login { padding: 15px; border: 2px solid #b7e4c7; border-radius: 15px; width: 85%; max-width: 350px; margin-bottom: 15px; font-size: 16px; text-align: center; }
         #progress-container { width: 100%; background: #eee; border-radius: 10px; margin-bottom: 25px; height: 15px; overflow: hidden; display:none; }
@@ -19,11 +19,9 @@
         .cau-dung { border-left-color: #2dc653 !important; background: #f0fff4; }
         .cau-sai { border-left-color: #e63946 !important; background: #fff5f5; }
         button { padding: 15px 35px; cursor: pointer; background: linear-gradient(45deg, #2d6a4f, #52b788); color: white; border: none; border-radius: 50px; font-weight: bold; font-size: 16px; box-shadow: 0 4px 15px rgba(45,106,79,0.3); }
-        button:active { transform: scale(0.98); }
-        label { display: block; padding: 12px; margin: 8px 0; border-radius: 12px; background: #f8f9fa; cursor: pointer; font-size: 18px; transition: 0.2s; }
-        label:hover { background: #e9ecef; }
+        label { display: block; padding: 12px; margin: 8px 0; border-radius: 12px; background: #f8f9fa; cursor: pointer; font-size: 18px; }
         input[type='radio'] { accent-color: var(--secondary); transform: scale(1.3); margin-right: 12px; }
-        .loi-giai { font-style: italic; color: #d90429; margin-top: 15px; display: none; font-weight: bold; border-top: 1px dashed #ffccd5; padding-top: 10px; }
+        .loi-giai { font-style: italic; color: #d90429; margin-top: 15px; display: none; font-weight: bold; }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 </head>
@@ -32,34 +30,34 @@
 <div class="container">
     <div id="login-screen">
         <h1>🌿 EzMath Pro 🌿</h1>
-        <p>Chào mừng các em! Nhập thông tin để bắt đầu thử thách ✨</p>
+        <p>Chào mừng các em! Hãy nhập thông tin và sẵn sàng nhé ✨</p>
         <input type="text" id="student-name" class="input-login" placeholder="👤 Nhập họ và tên...">
         <input type="password" id="student-code" class="input-login" placeholder="🔑 Nhập mã bí mật...">
         <br>
-        <button id="btn-login">🚀 BẮT ĐẦU LÀM BÀI</button>
+        <button id="btn-login">🚀 BẮT ĐẦU THỬ THÁCH</button>
     </div>
 
     <div id="main-content" style="display:none;">
-        <h1>✍️ BÀI TẬP RÈN LUYỆN</h1>
+        <h1 id="tieu-de-bai">✍️ BÀI TẬP RÈN LUYỆN</h1>
         <div id="progress-container"><div id="progress-bar"></div></div>
         <div id="dong-ho">⏳ Thời gian còn lại: 15:00</div>
         <div id="vung-chua"></div>
         <div style="text-align: center; margin-top: 30px;">
             <button id="btn-nop-bai">✔️ HOÀN THÀNH & NỘP BÀI</button>
         </div>
-        <div id="ket-qua" style="margin-top: 30px;"></div>
+        <div id="ket-qua"></div>
     </div>
 </div>
 
 <script>
-    // --- 1. KHỞI TẠO ÂM THANH (Dùng đối tượng để kiểm soát tốt hơn) ---
+    // --- 1. KHỞI TẠO ÂM THANH ---
     const soundClick = new Audio('https://www.soundjay.com/buttons/sounds/button-16.mp3');
     const soundSuccess = new Audio('https://www.soundjay.com/human/sounds/applause-01.mp3');
 
-    // --- 2. BIẾN TOÀN CỤC ---
+    // --- 2. BIẾN TOÀN CỤC & KHO CÂU HỎI ---
     var studentNameStored = "", giay = 900, timer, daNopBai = false, soLanViPham = 0;
     const GIOI_HAN_VI_PHAM = 2, SO_CAU_MOI_DE = 10;
-    var danhSachHocSinh = { "Nguyễn Văn An": "an123", "Trần Thị Bình": "binh456", "Khánh": "0512" };
+    var danhSachHocSinh = { "Nguyễn Văn An": "an123", "Khánh": "0512" };
     
     var khoCauHoi = [
         { de: "15 + 25 bằng bao nhiêu?", luaChon: ["30", "35", "40", "45"], dung: "40" },
@@ -75,15 +73,14 @@
     ];
     var danhSachHienTai = [];
 
-    // --- 3. HÀM MỞ KHÓA ÂM THANH (Dành cho điện thoại) ---
+    // Mở khóa âm thanh di động
     function unlockAudio() {
         soundClick.play().then(() => { soundClick.pause(); soundClick.currentTime = 0; });
         soundSuccess.play().then(() => { soundSuccess.pause(); soundSuccess.currentTime = 0; });
     }
 
-    // --- 4. XỬ LÝ ĐĂNG NHẬP ---
     document.getElementById('btn-login').addEventListener('click', function() {
-        unlockAudio(); // Mở khóa âm thanh ngay khi người dùng tương tác
+        unlockAudio();
         var n = document.getElementById('student-name').value.trim();
         var c = document.getElementById('student-code').value.trim();
         if (danhSachHocSinh[n] === c) {
@@ -93,30 +90,37 @@
             document.getElementById('progress-container').style.display = "block";
             taoDe();
             batDauDemNguoc();
-        } else { alert("Thông tin đăng nhập không chính xác! ❌"); }
+        } else { alert("Sai thông tin rồi em ơi! ❌"); }
     });
 
-    // --- 5. TẠO ĐỀ THI ---
+    // --- 3. TÍNH NĂNG TRỘN NGẪU NHIÊN CÂU HỎI ---
     function taoDe() {
         var v = document.getElementById('vung-chua'); 
         v.innerHTML = "";
+        
+        // Trộn ngẫu nhiên toàn bộ kho câu hỏi
         danhSachHienTai = khoCauHoi.sort(() => 0.5 - Math.random()).slice(0, SO_CAU_MOI_DE);
+        
         danhSachHienTai.forEach((item, i) => {
-            var html = `<div class='khung' id='box${i}'><p style='font-weight:bold; font-size:20px;'>📝 Câu ${i+1}: ${item.de}</p>`;
-            item.luaChon.forEach(lc => {
-                html += `<label><input type='radio' name='cau${i}' value='${lc}' onchange='updateProgress()'> ${lc}</label>`;
+            // Trộn cả thứ tự các lựa chọn trong từng câu hỏi
+            var xaoTronLuaChon = [...item.luaChon].sort(() => 0.5 - Math.random());
+            
+            var html = `<div class='khung' id='box${i}'>
+                <p style='font-weight:bold; font-size:20px;'>📝 Câu ${i+1}: ${item.de}</p>`;
+            
+            xaoTronLuaChon.forEach(lc => {
+                html += `<label><input type='radio' name='cau${i}' value='${lc}' onchange='updateClick()'> ${lc}</label>`;
             });
+            
             html += `<div class='loi-giai' id='note${i}'>💡 Đáp án đúng: ${item.dung}</div></div>`;
             v.innerHTML += html;
         });
     }
 
-    // --- 6. PHÁT TIẾNG CLICK & CẬP NHẬT TIẾN ĐỘ ---
-    window.updateProgress = function() {
-        // Phát âm thanh
+    window.updateClick = function() {
         soundClick.currentTime = 0;
-        soundClick.play().catch(() => {});
-
+        soundClick.play().catch(e => {}); 
+        
         let done = 0;
         for(let i=0; i < SO_CAU_MOI_DE; i++) {
             if(document.querySelector(`input[name="cau${i}"]:checked`)) done++;
@@ -124,7 +128,7 @@
         document.getElementById('progress-bar').style.width = (done / SO_CAU_MOI_DE) * 100 + "%";
     }
 
-    // --- 7. CHẤM ĐIỂM & NỘP BÀI ---
+    // --- 4. CHẤM ĐIỂM & BẢO MẬT ---
     function chamDiem() {
         if (daNopBai) return; 
         daNopBai = true; 
@@ -135,39 +139,30 @@
             var chon = Array.from(document.getElementsByName('cau' + i)).find(r => r.checked)?.value;
             var b = document.getElementById('box' + i);
             if (chon === item.dung) { 
-                d++; 
-                b.classList.add('cau-dung'); 
+                d++; b.classList.add('cau-dung'); 
             } else { 
-                b.classList.add('cau-sai'); 
-                document.getElementById('note' + i).style.display = "block"; 
+                b.classList.add('cau-sai'); document.getElementById('note' + i).style.display = "block"; 
             }
         });
 
         var diem = Math.round((d / SO_CAU_MOI_DE) * 100) / 10;
-        
         if (diem >= 8) {
-            soundSuccess.play().catch(() => {});
+            soundSuccess.play().catch(e => {});
             confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
         }
 
-        var icon = diem >= 8 ? "🏆 Tuyệt vời!" : (diem >= 5 ? "👏 Khá lắm!" : "💪 Cố gắng lên!");
-        document.getElementById('ket-qua').innerHTML = `
-            <div style="background:#e9f5ee; padding:20px; border-radius:20px; border:2px solid #b7e4c7; text-align:center;">
-                <h2 style="color:#1b4332;">${icon}</h2>
-                <p style="font-size:40px; font-weight:bold; color:#d00000;">💯 ${diem} ĐIỂM</p>
-                <p>Đúng ${d}/${SO_CAU_MOI_DE} câu. Kết quả đã được lưu!</p>
-            </div>`;
+        document.getElementById('ket-qua').innerHTML = `<div style="text-align:center; padding:20px; border-radius:20px; border:2px solid #b7e4c7;">
+            <h2>💯 Kết quả: ${diem}/10</h2><p>Học sinh: ${studentNameStored}</p></div>`;
         
-        // Gửi dữ liệu đi
-        fetch("https://script.google.com/macros/s/AKfycbzSoiKPu8jwc3z4oqwqLu0Gy_kMd-MukfhsvM--SB82WEpGs9bt3-1k6FtSKBYBjts/exec", {
+        // Gửi dữ liệu về Google Sheets (thay link của cậu vào đây)
+        fetch("URL_GOOGLE_SHEET_CỦA_CẬU", {
             method: "POST", mode: "no-cors", 
-            body: JSON.stringify({hoTen: studentNameStored, soCauDung: d+"/"+SO_CAU_MOI_DE, diemSo: diem})
+            body: JSON.stringify({hoTen: studentNameStored, diemSo: diem, soCauDung: d + "/" + SO_CAU_MOI_DE})
         });
     }
 
     document.getElementById('btn-nop-bai').addEventListener('click', chamDiem);
 
-    // --- 8. ĐẾM NGƯỢC THỜI GIAN ---
     function batDauDemNguoc() {
         timer = setInterval(function() {
             if (daNopBai) return;
@@ -177,25 +172,18 @@
         }, 1000);
     }
 
-    // --- 9. HỆ THỐNG BẢO MẬT (ANTI-CHEAT) ---
+    // --- BẢO MẬT: CHỐNG RỜI TRANG & CHỐNG CHUỘT PHẢI ---
     document.addEventListener("visibilitychange", function() {
         if (document.visibilityState === 'hidden' && !daNopBai && studentNameStored !== "") {
             soLanViPham++;
-            if (soLanViPham < GIOI_HAN_VI_PHAM) alert("⚠️ CẢNH BÁO: Không được rời khỏi trang làm bài! Lần " + soLanViPham);
-            else { alert("Bạn vi phạm quá nhiều lần, hệ thống tự động nộp bài!"); chamDiem(); }
+            if (soLanViPham < GIOI_HAN_VI_PHAM) alert("⚠️ Cảnh báo: Đừng thoát ra ngoài! (Lần " + soLanViPham + ")");
+            else { alert("Vi phạm nhiều lần, hệ thống tự động nộp bài!"); chamDiem(); }
         }
     });
 
     document.addEventListener('contextmenu', event => {
-        if (!daNopBai && studentNameStored !== "") { event.preventDefault(); alert("🤫 Không sử dụng chuột phải!"); }
-    });
-
-    window.addEventListener("beforeunload", function (e) {
-        if (studentNameStored && !daNopBai) {
-            e.preventDefault(); e.returnValue = "Kết quả sẽ không được lưu nếu bạn thoát!"; 
-        }
+        if (!daNopBai && studentNameStored !== "") { event.preventDefault(); alert("🤫 Không được copy bài đâu!"); }
     });
 </script>
-
 </body>
 </html>
