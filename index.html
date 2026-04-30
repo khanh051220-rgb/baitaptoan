@@ -73,6 +73,64 @@
         input[type='radio'] { accent-color: var(--secondary); transform: scale(1.3); margin-right: 12px; }
         .loi-giai { font-style: italic; color: #d90429; margin-top: 15px; display: none; font-weight: bold; }
     </style>
+    function chamDiem() {
+    if (daNopBai) return; 
+    daNopBai = true; 
+    clearInterval(timer);
+    var d = 0;
+    
+    // Giữ nguyên logic chấm điểm của Khánh
+    danhSachHienTai.forEach((item, i) => {
+        var chon = Array.from(document.getElementsByName('cau' + i)).find(r => r.checked)?.value;
+        var b = document.getElementById('box' + i);
+        if (chon === item.dung) { d++; b.classList.add('cau-dung'); } 
+        else { b.classList.add('cau-sai'); document.getElementById('note' + i).style.display = "block"; }
+    });
+
+    var diem = Math.round((d / SO_CAU_MOI_DE) * 100) / 10;
+    
+    // Ý TƯỞNG MỚI: Kích hoạt pháo hoa nếu điểm giỏi
+    if (diem >= 8) {
+        banPhaoHoa();
+    }
+
+    // Hiển thị kết quả (Giữ nguyên giao diện của Khánh)
+    var icon = diem >= 8 ? "🏆 Tuyệt vời!" : (diem >= 5 ? "👏 Khá lắm!" : "💪 Cố gắng lên!");
+    document.getElementById('ket-qua').innerHTML = `
+        <div style="background:#e9f5ee; padding:20px; border-radius:20px; border:2px solid #b7e4c7; text-align:center;">
+            <h2 style="color:#1b4332;">${icon}</h2>
+            <p style="font-size:40px; font-weight:bold; color:#d00000;">💯 ${diem} ĐIỂM</p>
+        </div>`;
+    
+    // Giữ nguyên fetch gửi dữ liệu về Sheets của Khánh...
+}
+
+// Hàm bổ trợ để bắn pháo hoa
+function banPhaoHoa() {
+    var duration = 3 * 1000; // Bắn trong 3 giây
+    var end = Date.now() + duration;
+
+    (function frame() {
+        confetti({
+            particleCount: 3,
+            angle: 60,
+            spread: 55,
+            origin: { x: 0 },
+            colors: ['#40916c', '#ff9f1c', '#1b4332']
+        });
+        confetti({
+            particleCount: 3,
+            angle: 120,
+            spread: 55,
+            origin: { x: 1 },
+            colors: ['#40916c', '#ff9f1c', '#1b4332']
+        });
+
+        if (Date.now() < end) {
+            requestAnimationFrame(frame);
+        }
+    }());
+}
 </head>
 <body>
 
@@ -167,18 +225,32 @@
         });
     }
 
-    function chamDiem() {
+   function chamDiem() {
         if (daNopBai) return; 
-        daNopBai = true; clearInterval(timer);
+        daNopBai = true; 
+        clearInterval(timer);
         var d = 0;
+        
         danhSachHienTai.forEach((item, i) => {
             var chon = Array.from(document.getElementsByName('cau' + i)).find(r => r.checked)?.value;
             var b = document.getElementById('box' + i);
-            if (chon === item.dung) { d++; b.classList.add('cau-dung'); } 
-            else { b.classList.add('cau-sai'); document.getElementById('note' + i).style.display = "block"; }
+            if (chon === item.dung) { 
+                d++; 
+                b.classList.add('cau-dung'); 
+            } else { 
+                b.classList.add('cau-sai'); 
+                document.getElementById('note' + i).style.display = "block"; 
+            }
         });
 
         var diem = Math.round((d / SO_CAU_MOI_DE) * 100) / 10;
+        
+        // --- PHẦN THÊM MỚI: KIỂM TRA ĐIỂM ĐỂ BẮN PHÁO HOA ---
+        if (diem >= 8) {
+            banPhaoHoa();
+        }
+        // --------------------------------------------------
+
         var icon = diem >= 8 ? "🏆 Tuyệt vời!" : (diem >= 5 ? "👏 Khá lắm!" : "💪 Cố gắng lên!");
         
         document.getElementById('ket-qua').innerHTML = `<div style="background:#e9f5ee; padding:20px; border-radius:20px; border:2px solid #b7e4c7; text-align:center;">
@@ -190,6 +262,33 @@
             method: "POST", mode: "no-cors", 
             body: JSON.stringify({hoTen: studentNameStored, soCauDung: d+"/"+SO_CAU_MOI_DE, diemSo: diem})
         });
+    }
+
+    // HÀM TẠO HIỆU ỨNG PHÁO HOA (MỚI)
+    function banPhaoHoa() {
+        var duration = 3 * 1000;
+        var end = Date.now() + duration;
+
+        (function frame() {
+            confetti({
+                particleCount: 5,
+                angle: 60,
+                spread: 55,
+                origin: { x: 0, y: 0.8 },
+                colors: ['#40916c', '#ff9f1c', '#2d6a4f']
+            });
+            confetti({
+                particleCount: 5,
+                angle: 120,
+                spread: 55,
+                origin: { x: 1, y: 0.8 },
+                colors: ['#40916c', '#ff9f1c', '#2d6a4f']
+            });
+
+            if (Date.now() < end) {
+                requestAnimationFrame(frame);
+            }
+        }());
     }
 
     document.addEventListener("visibilitychange", function() {
@@ -204,5 +303,3 @@
         if (!daNopBai && studentNameStored !== "") { event.preventDefault(); alert("🤫 Không dùng chuột phải!"); }
     });
 </script>
-</body>
-</html>
