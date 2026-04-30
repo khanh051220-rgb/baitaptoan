@@ -115,6 +115,7 @@
 <body>
     <audio id="sound-click" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
     <audio id="sound-success" src="https://www.soundjay.com/human/sounds/applause-01.mp3"></audio>
+    <audio id="sound-denied" src="https://www.soundjay.com/buttons/sounds/beep-05.mp3"></audio>
 
 <div class="container">
     <div id="login-screen">
@@ -323,6 +324,34 @@
             return "Hệ thống sẽ ghi nhận điểm 0 nếu bạn thoát bây giờ!";
         }
     });
+    // 1. CHẶN PHÍM TẮT XEM CODE
+document.addEventListener('keydown', function(e) {
+    // Chặn F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
+    if (
+        e.keyCode === 123 || 
+        (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) || 
+        (e.ctrlKey && e.keyCode === 85)
+    ) {
+        document.getElementById('sound-denied').play();
+        alert("⚠️ Ui da! Đừng soi code của thầy mà, lo làm bài đi em ơi!");
+        e.preventDefault();
+        return false;
+    }
+});
+
+// 2. CHIÊU "ĐUỔI KHÉO" TRONG CONSOLE (Dành cho bạn nào lỡ mở được)
+setInterval(function() {
+    // Xóa sạch dấu vết cũ
+    console.clear();
+    
+    // Hiện thông báo cực ngầu
+    console.log("%c🛑 DỪNG LẠI NGAY!", "color: red; font-size: 40px; font-weight: bold; -webkit-text-stroke: 1px black;");
+    console.log("%cThầy biết em đang định làm gì đó nhen...", "font-size: 20px; color: #ff9f1c; font-style: italic;");
+    console.log("%cThay vì soi code, hãy tập trung làm bài để đạt điểm 10 nào! 💪", "font-size: 16px; color: #1b4332;");
+    
+    // Một chút "hù dọa" vui vẻ
+    console.log("%cLog: Phát hiện hành vi truy cập trái phép... Đang gửi thông báo cho thầy Khánh... Đã gửi! 📡", "color: gray;");
+}, 2000);
 </script>
 </body>
 </html>
