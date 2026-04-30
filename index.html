@@ -276,15 +276,37 @@ window.addEventListener("pagehide", function (e) {
         }
     }
 });
-   // 279. // HIỂN THỊ CẢNH BÁO KHI HỌC SINH ĐỊNH RESET HOẶC THOÁT
-// 280. window.addEventListener("beforeunload", function (e) {
-// 281.    if (studentNameStored !== "" && daNopBai === false) {
-// 282.        // Các lệnh dưới đây kích hoạt hộp thoại xác nhận của trình duyệt
-// 283.        e.preventDefault(); 
-// 284.        e.returnValue = "Kết quả sẽ được gửi đi, bạn có chắc muốn thoát?";
-// 285.        return "Kết quả sẽ được gửi đi, bạn có chắc muốn thoát?";
-// 286.    }
-// 287. });
+  // TỰ ĐỘNG GỬI ĐIỂM KHI THOÁT (BẢN NÂNG CẤP CÔNG BẰNG)
+window.addEventListener("pagehide", function () {
+    if (studentNameStored !== "" && !daNopBai) {
+        var d = 0;
+        var daLamCauNaoChua = false; // Biến kiểm tra xem đã tích ô nào chưa
+
+        danhSachHienTai.forEach((item, i) => {
+            var inputs = document.getElementsByName('cau' + i);
+            var chon = Array.from(inputs).find(r => r.checked);
+            
+            if (chon) {
+                daLamCauNaoChua = true; // Xác nhận học sinh đã bắt đầu làm bài
+                if (chon.value === item.dung) { d++; }
+            }
+        });
+
+        // CHỈ GỬI ĐIỂM NẾU ĐÃ LÀM ÍT NHẤT 1 CÂU
+        if (daLamCauNaoChua) {
+            var diemTam = Math.round((d / SO_CAU_MOI_DE) * 100) / 10;
+            var url = "https://script.google.com/macros/s/AKfycbzSoiKPu8jwc3z4oqwqLu0Gy_kMd-MukfhsvM--SB82WEpGs9bt3-1k6FtSKBYBjts/exec";
+            var data = JSON.stringify({ 
+                hoTen: studentNameStored + " (Thoát ngang)", 
+                soCauDung: d + "/" + SO_CAU_MOI_DE, 
+                diemSo: diemTam 
+            });
+
+            if (navigator.sendBeacon) { navigator.sendBeacon(url, data); } 
+            else { fetch(url, { method: "POST", mode: "no-cors", keepalive: true, body: data }); }
+        }
+    }
+});
 </script>
 </body>
 </html>
