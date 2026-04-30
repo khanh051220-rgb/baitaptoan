@@ -1,222 +1,271 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <title>Học toán cùng Khánh</title>
-    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/188/188333.png">
-    <style>
-        /* ĐỊNH NGHĨA BIẾN MÀU SẮC */
-        :root {
-            --primary: #1b4332;
-            --secondary: #40916c;
-            --light: #d8f3dc;
-            --accent: #ff9f1c;
-            --bg-gradient: linear-gradient(135deg, #d8f3dc 0%, #b7e4c7 100%);
-            --container-bg: rgba(255, 255, 255, 0.95);
-            --text-main: #1b4332;
-            --khung-bg: white;
-            --label-bg: #f8f9fa;
-        }
+    <meta charset="UTF-8">
+    <title>Học toán cùng Khánh</title>
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/188/188333.png">
+    <style>
+        /* ĐỊNH NGHĨA BIẾN MÀU SẮC */
+        :root {
+            --primary: #1b4332;
+            --secondary: #40916c;
+            --light: #d8f3dc;
+            --accent: #ff9f1c;
+            /* Các biến bổ sung để hỗ trợ Dark Mode */
+            --bg-gradient: linear-gradient(135deg, #d8f3dc 0%, #b7e4c7 100%);
+            --container-bg: rgba(255, 255, 255, 0.95);
+            --text-main: #1b4332;
+            --khung-bg: white;
+            --label-bg: #f8f9fa;
+        }
 
-        /* CẤU HÌNH DARK MODE */
-        body.dark-mode {
-            --primary: #74c69d;
-            --secondary: #52b788;
-            --bg-gradient: linear-gradient(135deg, #0d1b1e 0%, #1b4332 100%);
-            --container-bg: #1a1a1a;
-            --text-main: #e8f5e9;
-            --khung-bg: #2d2d2d;
-            --label-bg: #3d3d3d;
-        }
+        /* --- PHẦN THÊM MỚI: CẤU HÌNH DARK MODE --- */
+        body.dark-mode {
+            --primary: #74c69d;
+            --secondary: #52b788;
+            --bg-gradient: linear-gradient(135deg, #0d1b1e 0%, #1b4332 100%);
+            --container-bg: #1a1a1a;
+            --text-main: #e8f5e9;
+            --khung-bg: #2d2d2d;
+            --label-bg: #3d3d3d;
+        }
 
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            padding: 20px; 
-            background: var(--bg-gradient); 
-            color: var(--text-main); 
-            min-height: 100vh;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center; 
-            transition: all 0.3s ease;
-        }
+        /* GIAO DIỆN TỔNG THỂ */
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            padding: 20px; 
+            background: var(--bg-gradient); /* Chuyển sang dùng biến */
+            color: var(--text-main);      /* Chuyển sang dùng biến */
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center; 
+            transition: background 0.3s, color 0.3s;
+        }
 
-        .container { 
-            width: 95%;
-            max-width: 1000px; 
-            background: var(--container-bg); 
-            padding: 45px; 
-            border-radius: 30px; 
-            box-shadow: 0 20px 50px rgba(0,0,0,0.1); 
-        }
+        .container { 
+            width: 95%;
+            max-width: 1000px; 
+            background: var(--container-bg); /* Chuyển sang dùng biến */
+            padding: 45px; 
+            border-radius: 30px; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1); 
+            transition: background 0.3s;
+        }
 
-        h1 { text-align: center; color: var(--primary); font-size: 32px; }
+        h1 { text-align: center; color: var(--primary); font-size: 32px; margin-bottom: 20px; letter-spacing: 1px; }
 
-        /* MÀN HÌNH ĐĂNG NHẬP */
-        #login-screen { text-align: center; padding: 30px 10px; }
-        .input-login { 
-            padding: 15px; 
-            border: 2px solid #b7e4c7; 
-            border-radius: 15px; 
-            width: 85%; max-width: 350px; 
-            margin-bottom: 15px; 
-            background: var(--khung-bg);
-            color: var(--text-main);
-            outline: none;
-        }
+        /* MÀN HÌNH ĐĂNG NHẬP */
+        #login-screen { text-align: center; padding: 30px 10px; }
+        .input-login { 
+            padding: 15px; 
+            border: 2px solid #b7e4c7; 
+            border-radius: 15px; 
+            width: 85%; 
+            max-width: 350px; 
+            margin-bottom: 15px; 
+            font-size: 16px;
+            text-align: center;
+            outline: none;
+            background: var(--khung-bg); /* Chuyển sang dùng biến */
+            color: var(--text-main);     /* Chuyển sang dùng biến */
+        }
+        .input-login:focus { border-color: var(--secondary); }
 
-        #btn-theme {
-            margin-top: 15px;
-            background: var(--secondary);
-            border-radius: 50px;
-            width: 60px; height: 60px;
-            font-size: 24px;
-            border: none; cursor: pointer; color: white;
-        }
+        /* --- NÚT DARK MODE DƯỚI NÚT BẮT ĐẦU --- */
+        #btn-theme {
+            margin-top: 15px;
+            background: var(--secondary);
+            border-radius: 50px;
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            cursor: pointer;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
 
-        /* KHUNG CÂU HỎI */
-        .khung { 
-            padding: 25px; margin-bottom: 25px; border-radius: 20px; 
-            background: var(--khung-bg); border: 1px solid #e9ecef;
-            border-left: 10px solid var(--secondary);
-        }
+        /* THANH TIẾN ĐỘ & ĐỒNG HỒ */
+        #progress-container { width: 100%; background: #eee; border-radius: 10px; margin-bottom: 25px; height: 15px; overflow: hidden; display:none; }
+        #progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #40916c, #2dc653); transition: 0.4s; }
 
-        .cau-dung { border-left-color: #2dc653 !important; background: #f0fff4 !important; color: #1b4332; }
-        .cau-sai { border-left-color: #e63946 !important; background: #fff5f5 !important; color: #1b4332; }
+        #dong-ho { 
+            font-size: 22px; font-weight: bold; color: #e63946; 
+            text-align: center; margin-bottom: 25px; padding: 15px; 
+            background: #fff1f2; border-radius: 20px; border: 2px solid #ffccd5;
+        }
 
-        label { display: block; padding: 12px; margin: 8px 0; border-radius: 12px; background: var(--label-bg); cursor: pointer; }
-        
-        .loi-giai { 
-            color: #d90429; margin-top: 15px; display: none; 
-            background: #fdf2f2; padding: 12px; border-radius: 10px;
-        }
+        /* KHUNG CÂU HỎI */
+        .khung { 
+            padding: 25px; margin-bottom: 25px; border-radius: 20px; 
+            background: var(--khung-bg); /* Chuyển sang dùng biến */
+            border: 1px solid #e9ecef;
+            border-left: 10px solid var(--secondary);
+        }
 
-        #dong-ho { 
-            font-size: 22px; font-weight: bold; color: #e63946; 
-            text-align: center; margin-bottom: 25px; padding: 15px; 
-            background: #fff1f2; border-radius: 20px;
-        }
-    </style>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+        .cau-dung { border-left-color: #2dc653 !important; background: #f0fff4 !important; color: #1b4332; }
+        .cau-sai { border-left-color: #e63946 !important; background: #fff5f5 !important; color: #1b4332; }
+
+        button { 
+            padding: 15px 35px; cursor: pointer; 
+            background: linear-gradient(45deg, #2d6a4f, #52b788); 
+            color: white; border: none; border-radius: 50px; 
+            font-weight: bold; font-size: 16px;
+            transition: transform 0.2s;
+        }
+        button:active { transform: scale(0.95); }
+
+        label { display: block; padding: 12px; margin: 8px 0; border-radius: 12px; background: var(--label-bg); cursor: pointer; font-size: 18px; }
+        input[type='radio'] { accent-color: var(--secondary); transform: scale(1.3); margin-right: 12px; }
+        
+        .loi-giai { 
+            font-style: normal; 
+            color: #d90429; 
+            margin-top: 15px; 
+            display: none; 
+            background: #fdf2f2;
+            padding: 12px;
+            border-radius: 10px;
+            line-height: 1.5;
+        }
+
+        .phan-loai-tag {
+            color: var(--secondary);
+            font-size: 16px;
+            margin-left: 5px;
+            background: #e8f5e9;
+            padding: 2px 8px;
+            border-radius: 5px;
+        }
+    </style>
+    <!-- Thư viện hiệu ứng pháo hoa -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 </head>
 <body>
-    <audio id="sound-click" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
-    <audio id="sound-success" src="https://www.soundjay.com/human/sounds/applause-01.mp3"></audio>
+    <audio id="sound-click" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
+    <audio id="sound-success" src="https://www.soundjay.com/human/sounds/applause-01.mp3"></audio>
 
 <div class="container">
-    <div id="login-screen">
-        <h1>🌿 EzMath 🌿</h1>
-        <input type="text" id="student-name" class="input-login" placeholder="👤 Nhập họ và tên...">
-        <input type="password" id="student-code" class="input-login" placeholder="🔑 Nhập mã bí mật...">
-        <br><button id="btn-login">🚀 BẮT ĐẦU THỬ THÁCH</button>
-        <br><button id="btn-theme">☀️</button>
-    </div>
+    <!-- Màn hình Đăng nhập -->
+    <div id="login-screen">
+        <h1>🌿 EzMath 🌿</h1>
+        <p>Chào mừng các em đến với thử thách hôm nay! ✨</p>
+        <input type="text" id="student-name" class="input-login" placeholder="👤 Nhập họ và tên..."><br>
+        <input type="password" id="student-code" class="input-login" placeholder="🔑 Nhập mã bí mật..."><br>
+        <button id="btn-login">🚀 BẮT ĐẦU THỬ THÁCH</button><br>
+        
+        <!-- NÚT CHUYỂN CHẾ ĐỘ SÁNG TỐI Ở ĐÂY -->
+        <button id="btn-theme" title="Chuyển chế độ Sáng/Tối">☀️</button>
+    </div>
 
-    <div id="main-content" style="display:none;">
-        <h1>✍️ BÀI TẬP RÈN LUYỆN</h1>
-        <div id="dong-ho">⏳ Thời gian còn lại: 15:00</div>
-        <div id="vung-chua"></div>
-        <div style="text-align: center;">
-            <button id="btn-nop-bai">✔️ HOÀN THÀNH & NỘP BÀI</button>
-        </div>
-        <div id="ket-qua" style="text-align:center; margin-top:20px;"></div>
-    </div>
+    <!-- Nội dung chính (Ẩn khi chưa đăng nhập) -->
+    <div id="main-content" style="display:none;">
+        <h1>✍️ BÀI TẬP RÈN LUYỆN</h1>
+        <div id="progress-container"><div id="progress-bar"></div></div>
+        <div id="dong-ho">⏳ Thời gian còn lại: 15:00</div>
+        <div id="vung-chua"></div>
+        <div style="text-align: center;">
+            <button id="btn-nop-bai">✔️ HOÀN THÀNH & NỘP BÀI</button>
+            <button onclick="location.reload()" style="margin-left: 10px; background: #6c757d;">🔄 LÀM ĐỀ MỚI</button>
+        </div>
+        <div id="ket-qua"></div>
+    </div>
 </div>
 
 <script>
-    // --- DARK MODE ---
-    const btnTheme = document.getElementById('btn-theme');
-    btnTheme.addEventListener('click', () => {
-        document.body.classList.toggle('dark-mode');
-        btnTheme.innerText = document.body.classList.contains('dark-mode') ? '🌙' : '☀️';
-        document.getElementById('sound-click').play();
-    });
+    // --- PHẦN THÊM MỚI: LOGIC CHUYỂN CHẾ ĐỘ ---
+    const btnTheme = document.getElementById('btn-theme');
+    btnTheme.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        // Đổi hình mặt trời/mặt trăng
+        if (document.body.classList.contains('dark-mode')) {
+            btnTheme.innerText = '🌙';
+        } else {
+            btnTheme.innerText = '☀️';
+        }
+        document.getElementById('sound-click').play();
+    });
 
-    // --- LOGIC CHỐNG RESET ---
-    window.addEventListener('beforeunload', function (e) {
-        if (!daNopBai && studentNameStored !== "") {
-            e.preventDefault();
-            e.returnValue = ''; // Hiển thị thông báo xác nhận của trình duyệt
-        }
-    });
+    // --- GIỮ NGUYÊN TOÀN BỘ LOGIC CŨ CỦA CẬU ---
+    var studentNameStored = "", giay = 900, timer, daNopBai = false, soLanViPham = 0;
+    const GIOI_HAN_VI_PHAM = 2, SO_CAU_MOI_DE = 5;
+    var danhSachHocSinh = { "Nguyễn Văn An": "an123", "Trần Thị Bình": "binh456", "Khánh": "0512" };
+    
+    var khoCauHoi = [
+        { de: "15 + 25 bằng bao nhiêu?", luaChon: ["30", "35", "40", "45"], dung: "40", giaiThich: "Thực hiện phép cộng: 15 + 25 = 40.", anh: "", phanLoai: "NB" },
+        { de: "Hình tam giác có mấy cạnh?", luaChon: ["2", "3", "4", "5"], dung: "3", giaiThich: "Hình tam giác là hình có 3 cạnh.", anh: "", phanLoai: "NB" },
+        { de: "Số nào lớn nhất: 89, 98, 100, 99?", luaChon: ["89", "98", "100", "99"], dung: "100", giaiThich: "So sánh các số, 100 là số có 3 chữ số nên lớn nhất.", anh: "", phanLoai: "TH" },
+        { de: "Kết quả của phép tính 7 x 8 là?", luaChon: ["54", "56", "64", "49"], dung: "56", giaiThich: "Theo bảng cửu chương: 7 x 8 = 56.", anh: "", phanLoai: "TH" },
+        { de: "Số nào là số chẵn nhỏ nhất có hai chữ số?", luaChon: ["10", "12", "02", "11"], dung: "10", giaiThich: "Số có 2 chữ số bé nhất là 10, và nó là số chẵn.", anh: "", phanLoai: "VD" }
+    ];
 
-    var studentNameStored = "", giay = 900, timer, daNopBai = false;
-    const SO_CAU_MOI_DE = 5;
-    var danhSachHocSinh = { "Nguyễn Văn An": "an123", "Trần Thị Bình": "binh456", "Khánh": "0512" };
-    
-    var khoCauHoi = [
-        { de: "15 + 25 bằng bao nhiêu?", luaChon: ["30", "35", "40", "45"], dung: "40", giaiThich: "15 + 25 = 40.", phanLoai: "NB" },
-        { de: "Hình tam giác có mấy cạnh?", luaChon: ["2", "3", "4", "5"], dung: "3", giaiThich: "Hình tam giác có 3 cạnh.", phanLoai: "NB" },
-        { de: "Số nào lớn nhất: 89, 98, 100, 99?", luaChon: ["89", "98", "100", "99"], dung: "100", giaiThich: "100 là số lớn nhất.", phanLoai: "TH" },
-        { de: "7 x 8 bằng bao nhiêu?", luaChon: ["54", "56", "64", "49"], dung: "56", giaiThich: "7 x 8 = 56.", phanLoai: "TH" },
-        { de: "Số chẵn nhỏ nhất có 2 chữ số?", luaChon: ["10", "12", "02", "11"], dung: "10", giaiThich: "Số 10.", phanLoai: "VD" }
-    ];
+    var danhSachHienTai = []; 
 
-    var danhSachHienTai = []; 
+    document.getElementById('btn-login').addEventListener('click', checkLogin);
+    document.getElementById('btn-nop-bai').addEventListener('click', chamDiem);
 
-    document.getElementById('btn-login').addEventListener('click', function() {
-        var n = document.getElementById('student-name').value.trim();
-        var c = document.getElementById('student-code').value.trim();
-        if (danhSachHocSinh[n] === c) {
-            studentNameStored = n;
-            document.getElementById('login-screen').style.display = "none";
-            document.getElementById('main-content').style.display = "block";
-            taoDe();
-            batDauDemNguoc();
-        } else { alert("Sai thông tin rồi em ơi! ❌"); }
-    });
+    function checkLogin() {
+        var n = document.getElementById('student-name').value.trim();
+        var c = document.getElementById('student-code').value.trim();
+        if (danhSachHocSinh[n] === c) {
+            studentNameStored = n;
+            document.getElementById('login-screen').style.display = "none";
+            document.getElementById('main-content').style.display = "block";
+            document.getElementById('progress-container').style.display = "block";
+            document.body.style.alignItems = "flex-start";
+            taoDe();
+            batDauDemNguoc();
+        } else { alert("Sai thông tin rồi em ơi! ❌"); }
+    }
 
-    function taoDe() {
-        var v = document.getElementById('vung-chua'); 
-        v.innerHTML = "";
-        danhSachHienTai = khoCauHoi.sort(() => 0.5 - Math.random()).slice(0, SO_CAU_MOI_DE);
-        danhSachHienTai.forEach((item, i) => {
-            var html = `<div class='khung' id='box${i}'><p><b>Câu ${i+1}: ${item.de}</b></p>`;
-            item.luaChon.forEach(lc => {
-                html += `<label><input type='radio' name='cau${i}' value='${lc}'> ${lc}</label>`;
-            });
-            html += `<div class='loi-giai' id='note${i}'><b>Đáp án: ${item.dung}</b><br>${item.giaiThich}</div></div>`;
-            v.innerHTML += html;
-        });
-    }
+    function taoDe() {
+        var v = document.getElementById('vung-chua'); 
+        v.innerHTML = "";
+        danhSachHienTai = khoCauHoi.sort(() => 0.5 - Math.random()).slice(0, SO_CAU_MOI_DE);
+        danhSachHienTai.forEach((item, i) => {
+            var html = `<div class='khung' id='box${i}'><p style='font-weight:bold; font-size:20px;'>📝 Câu ${i+1}: ${item.de} <span class="phan-loai-tag">(${item.phanLoai})</span></p>`;
+            var dsLuaChonDaTron = [...item.luaChon].sort(() => 0.5 - Math.random());
+            dsLuaChonDaTron.forEach(lc => {
+                html += `<label><input type='radio' name='cau${i}' value='${lc}'> ${lc}</label>`;
+            });
+            html += `<div class='loi-giai' id='note${i}'><b>💡 Đáp án đúng: ${item.dung}</b><br><i>📖 Giải thích: ${item.giaiThich}</i></div></div>`;
+            v.innerHTML += html;
+        });
+    }
 
-    function batDauDemNguoc() {
-        timer = setInterval(function() {
-            if (daNopBai) return;
-            var p = Math.floor(giay / 60), g = giay % 60;
-            document.getElementById('dong-ho').innerHTML = "⏳ Thời gian: " + p + ":" + (g < 10 ? "0" + g : g);
-            if (giay-- <= 0) { clearInterval(timer); chamDiem(); }
-        }, 1000);
-    }
+    function batDauDemNguoc() {
+        timer = setInterval(function() {
+            if (daNopBai) return;
+            var p = Math.floor(giay / 60), g = giay % 60;
+            document.getElementById('dong-ho').innerHTML = "⏳ Thời gian còn lại: " + p + ":" + (g < 10 ? "0" + g : g);
+            if (giay-- <= 0) { clearInterval(timer); chamDiem(); }
+        }, 1000);
+    }
 
-    document.getElementById('btn-nop-bai').addEventListener('click', chamDiem);
+    function chamDiem() {
+        if (daNopBai) return; 
+        daNopBai = true; 
+        clearInterval(timer);
+        var d = 0;
+        danhSachHienTai.forEach((item, i) => {
+            var chon = Array.from(document.getElementsByName('cau' + i)).find(r => r.checked)?.value;
+            document.getElementById('note' + i).style.display = "block"; 
+            if (chon === item.dung) { d++; document.getElementById('box' + i).classList.add('cau-dung'); }
+            else { document.getElementById('box' + i).classList.add('cau-sai'); }
+        });
+        var diem = (d / SO_CAU_MOI_DE) * 10;
+        document.getElementById('ket-qua').innerHTML = `<h2>Bạn đạt được ${diem} điểm!</h2>`;
+        if(diem >= 8) banPhaoHoa();
+    }
 
-    function chamDiem() {
-        if (daNopBai) return; 
-        daNopBai = true; 
-        clearInterval(timer);
-        var soCauDung = 0;
-        danhSachHienTai.forEach((item, i) => {
-            var chon = Array.from(document.getElementsByName('cau' + i)).find(r => r.checked)?.value;
-            document.getElementById('note' + i).style.display = "block"; 
-            if (chon === item.dung) { 
-                soCauDung++; 
-                document.getElementById('box' + i).classList.add('cau-dung'); 
-            } else { 
-                document.getElementById('box' + i).classList.add('cau-sai'); 
-            }
-        });
-        var diem = (soCauDung / SO_CAU_MOI_DE) * 10;
-        // HIỂN THỊ SỐ CÂU ĐÚNG VÀ ĐIỂM
-        document.getElementById('ket-qua').innerHTML = `<h2>Kết quả: ${soCauDung}/${SO_CAU_MOI_DE} câu đúng. Đạt ${diem} điểm!</h2>`;
-        if(diem >= 8) banPhaoHoa();
-    }
-
-    function banPhaoHoa(){
-        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-        document.getElementById('sound-success').play(); // Phát âm thanh chúc mừng
-    }
+    function banPhaoHoa(){
+        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+    }
 </script>
 </body>
 </html>
