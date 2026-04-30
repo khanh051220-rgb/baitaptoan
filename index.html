@@ -29,6 +29,7 @@
             padding: 45px; 
             border-radius: 30px; 
             box-shadow: 0 20px 50px rgba(0,0,0,0.1); 
+            position: relative;
         }
 
         h1 { text-align: center; color: var(--primary); font-size: 32px; margin-bottom: 20px; letter-spacing: 1px; }
@@ -58,6 +59,7 @@
             padding: 25px; margin-bottom: 25px; border-radius: 20px; 
             background: white; border: 1px solid #e9ecef;
             border-left: 10px solid var(--secondary);
+            position: relative;
         }
 
         .cau-dung { border-left-color: #2dc653 !important; background: #f0fff4; }
@@ -68,6 +70,8 @@
             background: linear-gradient(45deg, #2d6a4f, #52b788); 
             color: white; border: none; border-radius: 50px; 
             font-weight: bold; font-size: 16px;
+            position: relative;
+            z-index: 10001; /* Đảm bảo nút luôn bấm được */
         }
 
         label { display: block; padding: 12px; margin: 8px 0; border-radius: 12px; background: #f8f9fa; cursor: pointer; font-size: 18px; }
@@ -84,7 +88,6 @@
             line-height: 1.5;
         }
 
-        /* Thêm CSS cho ảnh trong lời giải */
         .loi-giai img {
             max-width: 100%;
             height: auto;
@@ -93,40 +96,18 @@
             border: 1px solid #ffccd5;
         }
 
-        /* PHẦN THÊM: CSS cho Watermark lặp lại */
+        /* --- PHẦN WATERMARK MỚI --- */
         #watermark-overlay {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -1;
-            pointer-events: none;
+            width: 100%;
+            height: 100%;
+            z-index: 10000; /* Nằm trên nội dung bài tập */
+            pointer-events: none; /* Không cản trở click chuột */
+            opacity: 0.1; /* Độ mờ nhạt (0.1 = 10%) */
             display: none;
-            opacity: 0.07; /* Độ mờ nhạt để không gây khó nhìn */
-            overflow: hidden;
-            user-select: none;
-        }
-
-        .wm-text {
-            position: absolute;
-            width: 200%;
-            height: 200%;
-            top: -50%;
-            left: -50%;
-            display: flex;
-            flex-wrap: wrap;
-            content: "";
-            transform: rotate(-25deg); /* Xoay nghiêng chữ */
-            justify-content: space-around;
-            align-content: space-around;
-        }
-
-        .wm-item {
-            padding: 40px;
-            font-size: 24px;
-            font-weight: bold;
-            color: #000;
+            background-repeat: repeat;
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
@@ -135,10 +116,8 @@
     <audio id="sound-click" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
     <audio id="sound-success" src="https://www.soundjay.com/human/sounds/applause-01.mp3"></audio>
 
-    <!-- Thẻ chứa Watermark -->
-    <div id="watermark-overlay">
-        <div id="wm-content" class="wm-text"></div>
-    </div>
+    <!-- Lớp phủ Watermark -->
+    <div id="watermark-overlay"></div>
 
 <div class="container">
     <div id="login-screen">
@@ -202,15 +181,22 @@
         if (danhSachHocSinh[n] === c) {
             studentNameStored = n;
 
-            // --- PHẦN MÃ ĐƯỢC THÊM: TẠO CHỮ MỜ LẶP LẠI ---
-            var wmOverlay = document.getElementById('watermark-overlay');
-            var wmContent = document.getElementById('wm-content');
-            wmContent.innerHTML = ""; // Xóa nội dung cũ nếu có
-            for(let i = 0; i < 50; i++) { // Tạo 50 cụm tên lặp lại
-                wmContent.innerHTML += `<div class="wm-item">${n}</div>`;
-            }
-            wmOverlay.style.display = "block";
-            // --- KẾT THÚC PHẦN THÊM ---
+            // --- XỬ LÝ WATERMARK BẰNG CANVAS ---
+            const canvas = document.createElement('canvas');
+            canvas.width = 250; // Khoảng cách chiều rộng giữa các chữ
+            canvas.height = 150; // Khoảng cách chiều cao giữa các chữ
+            const ctx = canvas.getContext('2d');
+            ctx.font = '18px Segoe UI';
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.translate(canvas.width / 2, canvas.height / 2);
+            ctx.rotate(-Math.PI / 6); // Xoay nghiêng 30 độ
+            ctx.fillText(n, 0, 0);
+
+            const overlay = document.getElementById('watermark-overlay');
+            overlay.style.backgroundImage = `url(${canvas.toDataURL()})`;
+            overlay.style.display = 'block';
 
             document.getElementById('login-screen').style.display = "none";
             document.getElementById('main-content').style.display = "block";
@@ -235,15 +221,11 @@
         danhSachHienTai = khoCauHoi.sort(() => 0.5 - Math.random()).slice(0, SO_CAU_MOI_DE);
         danhSachHienTai.forEach((item, i) => {
             var html = `<div class='khung' id='box${i}'><p style='font-weight:bold; font-size:20px;'>📝 Câu ${i+1}: ${item.de}</p>`;
-            
             var dsLuaChonDaTron = [...item.luaChon].sort(() => 0.5 - Math.random());
-            
             dsLuaChonDaTron.forEach(lc => {
                 html += `<label><input type='radio' name='cau${i}' value='${lc}'> ${lc}</label>`;
             });
-            
             var hienAnh = item.anh !== "" ? `<br><img src="${item.anh}">` : "";
-
             html += `<div class='loi-giai' id='note${i}'>
                         <b>💡 Đáp án đúng: ${item.dung}</b><br>
                         <i>📖 Giải thích: ${item.giaiThich}</i>
@@ -258,24 +240,18 @@
         daNopBai = true; 
         clearInterval(timer);
         var d = 0;
-        
         danhSachHienTai.forEach((item, i) => {
             var chon = Array.from(document.getElementsByName('cau' + i)).find(r => r.checked)?.value;
             var b = document.getElementById('box' + i);
             document.getElementById('note' + i).style.display = "block"; 
-
-            if (chon === item.dung) { 
-                d++; 
-                b.classList.add('cau-dung'); 
-            } else { 
-                b.classList.add('cau-sai'); 
-            }
+            if (chon === item.dung) { d++; b.classList.add('cau-dung'); } 
+            else { b.classList.add('cau-sai'); }
         });
 
         var diem = Math.round((d / SO_CAU_MOI_DE) * 100) / 10;
         if (diem >= 8) { banPhaoHoa(); }
         var icon = diem >= 8 ? "🏆 Tuyệt vời!" : (diem >= 5 ? "👏 Khá lắm!" : "💪 Cố gắng lên!");
-        document.getElementById('ket-qua').innerHTML = `<div style="background:#e9f5ee; padding:20px; border-radius:20px; border:2px solid #b7e4c7; text-align:center;">
+        document.getElementById('ket-qua').innerHTML = `<div style="background:#e9f5ee; padding:20px; border-radius:20px; border:2px solid #b7e4c7; text-align:center; position:relative; z-index:10001;">
             <h2 style="color:#1b4332;">${icon}</h2>
             <p style="font-size:40px; font-weight:bold; color:#d00000;">💯 ${diem} ĐIỂM</p>
             <p>Đúng ${d}/${SO_CAU_MOI_DE} câu. Xem lời giải phía trên để rút kinh nghiệm nhé!</p></div>`;
