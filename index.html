@@ -338,21 +338,40 @@
         }
     });
 
+    window.addEventListener('keydown', (function() {
+    const danhSach = [
+        "⚠️ Ui da! Đừng soi code của thầy nhen!",
+        "🤫 Tính hack hay gì? Tập trung làm bài đi!",
+        "🚫 Cửa này không vào được đâu em ơi!",
+        "🕵️ Phát hiện thám tử đang soi code!",
+        "🛑 Dừng lại ngay không thầy báo phụ huynh đó!"
+    ];
+
+    function showWarning() {
+        const text = danhSach[Math.floor(Math.random() * danhSach.length)];
+        const alertBox = document.getElementById('custom-alert');
+        document.getElementById('alert-text').innerText = text;
+        alertBox.style.display = 'block';
+        document.getElementById('sound-denied').play();
+    }
+
+    // Chặn phím tắt và hiện thông báo ngẫu nhiên
     window.addEventListener('keydown', function(e) {
-        const danhSachCanhBao = [
-            "⚠️ Ui da! Đừng soi code của thầy mà, lo làm bài đi em ơi!",
-            "🤫 Tính hack hay gì? Tập trung chuyên môn đi nhen!",
-            "🚫 Cửa này không vào được đâu em, quay lại làm toán thôi!",
-            "🕵️ Phát hiện một thám tử nhí đang soi code! Dừng lại ngay!",
-            "🛑 Hệ thống đang quan sát em... đừng nghịch F12 nữa nhé!"
-        ];
         if (e.keyCode === 123 || (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) || (e.ctrlKey && e.keyCode === 85)) {
             e.preventDefault();
-            document.getElementById('sound-denied').play();
-            alert(danhSachCanhBao[Math.floor(Math.random() * danhSachCanhBao.length)]);
-            return false;
+            showWarning();
         }
     }, true);
+
+    // CỰC MẠNH: Nếu mở được F12, tự động chuyển trang hoặc đóng tab
+    const checkDevTools = setInterval(function() {
+        const threshold = 160;
+        if (window.outerWidth - window.innerWidth > threshold || window.outerHeight - window.innerHeight > threshold) {
+            // Nếu phát hiện mở F12, đá bay sang trang Google luôn cho khỏi soi
+            window.location.href = "https://www.google.com";
+        }
+    }, 500);
+})();
     // 3. Vô hiệu hóa việc nhấn phím F12 (Chốt hạ cuối cùng)
 document.onkeydown = function(e) {
     if (e.keyCode == 123) {
