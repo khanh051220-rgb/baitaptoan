@@ -104,17 +104,8 @@
 </div>
 
 <script>
-    // --- BƯỚC 1: KHAI BÁO BIẾN (Gộp gọn lại, không trùng lặp) ---
-    var studentNameStored = "", 
-        giay = 900, 
-        timer, 
-        daNopBai = false, 
-        soLanViPham = 0,
-        thoiGianBatDau; 
-
-    const GIOI_HAN_VI_PHAM = 2, 
-          SO_CAU_MOI_DE = 5;
-
+    var studentNameStored = "", giay = 900, timer, daNopBai = false, soLanViPham = 0;
+    const GIOI_HAN_VI_PHAM = 2, SO_CAU_MOI_DE = 5;
     var danhSachHocSinh = { "Nguyễn Văn An": "an123", "Trần Thị Bình": "binh456", "Khánh": "0512" };
     
     var khoCauHoi = [
@@ -132,17 +123,15 @@
 
     var danhSachHienTai = []; 
 
-    // Gán sự kiện
     document.getElementById('btn-login').addEventListener('click', checkLogin);
     document.getElementById('btn-nop-bai').addEventListener('click', chamDiem);
 
-    // Theo dõi tiến độ khi làm bài
     document.addEventListener('change', function(e) {
         if(e.target.type === 'radio') {
             document.getElementById('sound-click').play();
             let done = 0;
             for(let i=0; i < SO_CAU_MOI_DE; i++) {
-                if(document.querySelector(`input[name="cau${i}"]:checked`)) done++;
+                if(document.querySelector(input[name="cau${i}"]:checked)) done++;
             }
             document.getElementById('progress-bar').style.width = (done / SO_CAU_MOI_DE) * 100 + "%";
         }
@@ -156,10 +145,6 @@
             document.getElementById('login-screen').style.display = "none";
             document.getElementById('main-content').style.display = "block";
             document.getElementById('progress-container').style.display = "block";
-            
-            // --- GHI LẠI THỜI ĐIỂM BẮT ĐẦU ---
-            thoiGianBatDau = Date.now(); 
-            
             taoDe();
             batDauDemNguoc();
         } else { alert("Sai thông tin rồi em ơi! ❌"); }
@@ -179,11 +164,11 @@
         v.innerHTML = "";
         danhSachHienTai = khoCauHoi.sort(() => 0.5 - Math.random()).slice(0, SO_CAU_MOI_DE);
         danhSachHienTai.forEach((item, i) => {
-            var html = `<div class='khung' id='box${i}'><p style='font-weight:bold; font-size:20px;'>📝 Câu ${i+1}: ${item.de}</p>`;
+            var html = <div class='khung' id='box${i}'><p style='font-weight:bold; font-size:20px;'>📝 Câu ${i+1}: ${item.de}</p>;
             item.luaChon.forEach(lc => {
-                html += `<label><input type='radio' name='cau${i}' value='${lc}'> ${lc}</label>`;
+                html += <label><input type='radio' name='cau${i}' value='${lc}'> ${lc}</label>;
             });
-            html += `<div class='loi-giai' id='note${i}'>💡 Đáp án đúng: ${item.dung}</div></div>`;
+            html += <div class='loi-giai' id='note${i}'>💡 Đáp án đúng: ${item.dung}</div></div>;
             v.innerHTML += html;
         });
     }
@@ -192,14 +177,8 @@
         if (daNopBai) return; 
         daNopBai = true; 
         clearInterval(timer);
-
-        // --- TÍNH THỜI GIAN LÀM BÀI ---
-        var tongGiay = Math.floor((Date.now() - thoiGianBatDau) / 1000);
-        var phut = Math.floor(tongGiay / 60);
-        var giayLe = tongGiay % 60;
-        var thoiGianLamStr = phut + " phút " + giayLe + " giây";
-
         var d = 0;
+        
         danhSachHienTai.forEach((item, i) => {
             var chon = Array.from(document.getElementsByName('cau' + i)).find(r => r.checked)?.value;
             var b = document.getElementById('box' + i);
@@ -213,49 +192,48 @@
         });
 
         var diem = Math.round((d / SO_CAU_MOI_DE) * 100) / 10;
-        if (diem >= 8) banPhaoHoa();
+        
+        if (diem >= 😎 {
+            banPhaoHoa();
+        }
 
         var icon = diem >= 8 ? "🏆 Tuyệt vời!" : (diem >= 5 ? "👏 Khá lắm!" : "💪 Cố gắng lên!");
         
-// 1. Sửa đoạn hiển thị kết quả (Thêm div vung-bxh)
-        document.getElementById('ket-qua').innerHTML = `
-            <div style="background:#e9f5ee; padding:20px; border-radius:20px; border:2px solid #b7e4c7; text-align:center; margin-top:20px;">
-                <h2 style="color:#1b4332;">${icon}</h2>
-                <p style="font-size:40px; font-weight:bold; color:#d00000;">💯 ${diem} ĐIỂM</p>
-                <p>Thời gian: ${thoiGianLamStr}</p>
-                <p>Đúng ${d}/${SO_CAU_MOI_DE} câu. Đã gửi cho thầy!</p>
-                <hr style="border: 0; border-top: 1px solid #b7e4c7; margin: 15px 0;">
-                <div id="vung-bxh">⌛ Đang tải bảng xếp hạng...</div>
-            </div>`;
+        document.getElementById('ket-qua').innerHTML = `<div style="background:#e9f5ee; padding:20px; border-radius:20px; border:2px solid #b7e4c7; text-align:center;">
+            <h2 style="color:#1b4332;">${icon}</h2>
+            <p style="font-size:40px; font-weight:bold; color:#d00000;">💯 ${diem} ĐIỂM</p>
+            <p>Đúng ${d}/${SO_CAU_MOI_DE} câu. Đã gửi cho thầy!</p></div>`;
         
-        // 2. Gửi dữ liệu lên Google Sheets
-        fetch("https://script.google.com/macros/s/AKfycbzYgtDSApBcy5M7R94vgfn_AVcK8ahls6YGvnJa1xvpDD2Rojw8R2TtUYc2ZRy-WIw/exec", {
-            method: "POST", 
-            mode: "no-cors", 
-            body: JSON.stringify({
-                hoTen: studentNameStored, 
-                soCauDung: d + "/" + SO_CAU_MOI_DE, 
-                diemSo: diem,
-                thoiGian: thoiGianLamStr
-            })
+        fetch("https://script.google.com/macros/s/AKfycbz4IPNx4fkDGi_oy3K15LSqIhB8ZtfmfN3Q_kKNIb7KKGrBjqkl8yKT2FusSjeVNlw/exec", {
+            method: "POST", mode: "no-cors", 
+            body: JSON.stringify({hoTen: studentNameStored, soCauDung: d+"/"+SO_CAU_MOI_DE, diemSo: diem})
         });
-
-        // 3. Thêm lệnh này để gọi bảng xếp hạng hiện ra sau 2 giây
-        setTimeout(layBXH, 2000);
-          // 3. Thêm lệnh này để gọi bảng xếp hạng hiện ra sau 2 giây
-        setTimeout(layBXH, 2000);
-    } // Đây là dấu ngoặc đóng của hàm chamDiem (Dòng 249 của cậu)
     }
 
-    // Các hàm pháo hoa và bảo mật giữ nguyên...
     function banPhaoHoa(){
         document.getElementById('sound-success').play();
         var duration = 3 * 1000;
         var end = Date.now() + duration;
+
         (function frame() {
-            confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0, y: 0.8 }, colors: ['#40916c', '#ff9f1c', '#2d6a4f'] });
-            confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1, y: 0.8 }, colors: ['#40916c', '#ff9f1c', '#2d6a4f'] });
-            if (Date.now() < end) requestAnimationFrame(frame);
+            confetti({
+                particleCount: 5,
+                angle: 60,
+                spread: 55,
+                origin: { x: 0, y: 0.8 },
+                colors: ['#40916c', '#ff9f1c', '#2d6a4f']
+            });
+            confetti({
+                particleCount: 5,
+                angle: 120,
+                spread: 55,
+                origin: { x: 1, y: 0.8 },
+                colors: ['#40916c', '#ff9f1c', '#2d6a4f']
+            });
+
+            if (Date.now() < end) {
+                requestAnimationFrame(frame);
+            }
         }());
     }
 
@@ -270,47 +248,38 @@
     document.addEventListener('contextmenu', event => {
         if (!daNopBai && studentNameStored !== "") { event.preventDefault(); alert("🤫 Không dùng chuột phải!"); }
     });
-    function layBXH() {
-    // Gọi đến URL Web App của cậu (Dùng GET để lấy dữ liệu)
-    fetch("https://script.google.com/macros/s/AKfycbzYgtDSApBcy5M7R94vgfn_AVcK8ahls6YGvnJa1xvpDD2Rojw8R2TtUYc2ZRy-WIw/exec")
-    .then(response => response.json())
-    .then(data => {
-        // Sắp xếp: Điểm cao đứng trước, nếu điểm bằng nhau thì thời gian ít hơn đứng trước
-        data.sort((a, b) => {
-            if (b.diemSo !== a.diemSo) return b.diemSo - a.diemSo;
-            return a.thoiGian.localeCompare(b.thoiGian); 
-        });
 
-        let bxhHtml = `
-            <h3 style="color:#2d6a4f; margin-top:10px;">🏆 BẢNG XẾP HẠNG TOP 5</h3>
-            <table style="width:100%; border-collapse: collapse; margin-top:10px; background: white; border-radius: 10px; overflow: hidden;">
-                <tr style="background:#40916c; color:white;">
-                    <th style="padding:10px;">Hạng</th>
-                    <th>Tên</th>
-                    <th>Điểm</th>
-                    <th>Thời gian</th>
-                </tr>`;
+    window.addEventListener("pagehide", function (e) {
+        if (studentNameStored !== "" && !daNopBai) {
+            var d = 0;
+            danhSachHienTai.forEach((item, i) => {
+                var chon = Array.from(document.getElementsByName('cau' + i)).find(r => r.checked)?.value;
+                if (chon === item.dung) { d++; }
+            });
 
-        // Chỉ lấy top 5 người xuất sắc nhất
-        data.slice(0, 5).forEach((item, index) => {
-            let icon = index === 0 ? "🥇" : (index === 1 ? "🥈" : (index === 2 ? "🥉" : index + 1));
-            bxhHtml += `
-                <tr style="border-bottom: 1px solid #eee;">
-                    <td style="padding:10px; text-align:center;">${icon}</td>
-                    <td style="font-weight:bold;">${item.hoTen}</td>
-                    <td style="color:#d00000; text-align:center;">${item.diemSo}</td>
-                    <td style="font-size:12px; text-align:center;">${item.thoiGian}</td>
-                </tr>`;
-        });
+            var diemTamThoi = Math.round((d / SO_CAU_MOI_DE) * 100) / 10;
+            var data = JSON.stringify({
+                hoTen: studentNameStored + " (Thoát ngang)", 
+                soCauDung: d + "/" + SO_CAU_MOI_DE, 
+                diemSo: diemTamThoi
+            });
 
-        bxhHtml += `</table>`;
-        document.getElementById('vung-bxh').innerHTML = bxhHtml;
-    })
-    .catch(error => {
-        console.error("Lỗi lấy BXH:", error);
-        document.getElementById('vung-bxh').innerHTML = "⚠️ Không thể tải bảng xếp hạng lúc này.";
+            var url = "https://script.google.com/macros/s/AKfycbz4IPNx4fkDGi_oy3K15LSqIhB8ZtfmfN3Q_kKNIb7KKGrBjqkl8yKT2FusSjeVNlw/exec";
+            if (navigator.sendBeacon) {
+                navigator.sendBeacon(url, data);
+            } else {
+                fetch(url, { method: "POST", mode: "no-cors", keepalive: true, body: data });
+            }
+        }
     });
-}
+
+    window.addEventListener("beforeunload", function (e) {
+        if (studentNameStored && studentNameStored.trim() !== "" && !daNopBai) {
+            e.preventDefault();
+            e.returnValue = "Hệ thống sẽ ghi nhận điểm 0 nếu bạn thoát bây giờ!"; 
+            return "Hệ thống sẽ ghi nhận điểm 0 nếu bạn thoát bây giờ!";
+        }
+    });
 </script>
 </body>
 </html>
