@@ -71,7 +71,7 @@
             color: white; border: none; border-radius: 50px; 
             font-weight: bold; font-size: 16px;
             position: relative;
-            z-index: 10001; /* Đảm bảo nút luôn bấm được */
+            z-index: 10001; /* Luôn nằm trên lớp mờ để bấm được */
         }
 
         label { display: block; padding: 12px; margin: 8px 0; border-radius: 12px; background: #f8f9fa; cursor: pointer; font-size: 18px; }
@@ -96,16 +96,16 @@
             border: 1px solid #ffccd5;
         }
 
-        /* --- PHẦN WATERMARK MỚI --- */
+        /* --- PHẦN WATERMARK CẬP NHẬT --- */
         #watermark-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 10000; /* Nằm trên nội dung bài tập */
-            pointer-events: none; /* Không cản trở click chuột */
-            opacity: 0.1; /* Độ mờ nhạt (0.1 = 10%) */
+            z-index: 10000; 
+            pointer-events: none; 
+            opacity: 0.18; /* Đã tăng độ đậm theo yêu cầu */
             display: none;
             background-repeat: repeat;
         }
@@ -116,7 +116,6 @@
     <audio id="sound-click" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
     <audio id="sound-success" src="https://www.soundjay.com/human/sounds/applause-01.mp3"></audio>
 
-    <!-- Lớp phủ Watermark -->
     <div id="watermark-overlay"></div>
 
 <div class="container">
@@ -181,17 +180,18 @@
         if (danhSachHocSinh[n] === c) {
             studentNameStored = n;
 
-            // --- XỬ LÝ WATERMARK BẰNG CANVAS ---
+            // --- NÂNG CẤP WATERMARK ---
             const canvas = document.createElement('canvas');
-            canvas.width = 250; // Khoảng cách chiều rộng giữa các chữ
-            canvas.height = 150; // Khoảng cách chiều cao giữa các chữ
+            // Giảm kích thước ô gạch để tăng mật độ chữ (hiện ở giữa câu hỏi)
+            canvas.width = 140; 
+            canvas.height = 90; 
             const ctx = canvas.getContext('2d');
-            ctx.font = '18px Segoe UI';
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+            ctx.font = 'bold 15px Segoe UI'; // Chữ đậm và rõ nét
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.6)'; // Độ đậm mực vẽ
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.translate(canvas.width / 2, canvas.height / 2);
-            ctx.rotate(-Math.PI / 6); // Xoay nghiêng 30 độ
+            ctx.rotate(-Math.PI / 8); 
             ctx.fillText(n, 0, 0);
 
             const overlay = document.getElementById('watermark-overlay');
@@ -235,7 +235,7 @@
         });
     }
 
-   function chamDiem() {
+    function chamDiem() {
         if (daNopBai) return; 
         daNopBai = true; 
         clearInterval(timer);
