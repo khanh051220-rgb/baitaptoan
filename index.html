@@ -45,7 +45,6 @@
             text-align: center;
         }
 
-        /* --- CSS CHO AVATAR --- */
         .avatar-picker {
             display: flex;
             justify-content: center;
@@ -79,7 +78,6 @@
             border-radius: 50px;
         }
         .header-profile img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
-        /* ----------------------- */
 
         #progress-container { width: 100%; background: #eee; border-radius: 10px; margin-bottom: 25px; height: 15px; overflow: hidden; display:none; }
         #progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #40916c, #2dc653); transition: 0.4s; }
@@ -94,6 +92,7 @@
             padding: 25px; margin-bottom: 25px; border-radius: 20px; 
             background: white; border: 1px solid #e9ecef;
             border-left: 10px solid var(--secondary);
+            transition: 0.3s;
         }
 
         .cau-dung { border-left-color: #2dc653 !important; background: #f0fff4; }
@@ -108,7 +107,15 @@
 
         label { display: block; padding: 12px; margin: 8px 0; border-radius: 12px; background: #f8f9fa; cursor: pointer; font-size: 18px; }
         input[type='radio'] { accent-color: var(--secondary); transform: scale(1.3); margin-right: 12px; }
-        .loi-giai { font-style: italic; color: #d90429; margin-top: 15px; display: none; font-weight: bold; }
+        
+        .loi-giai { 
+            margin-top: 15px; 
+            padding: 10px;
+            border-radius: 10px;
+            display: none; 
+            font-weight: 500;
+            line-height: 1.5;
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 </head>
@@ -153,32 +160,30 @@
 
 <script>
     var studentNameStored = "", giay = 900, timer, daNopBai = false, soLanViPham = 0;
-    // GIỮ NGUYÊN: Link ảnh mặc định ban đầu
     var currentSeed = "https://img5.thuthuatphanmem.vn/uploads/2021/11/08/anh-gau-truc-cute_082040722.jpg"; 
     const GIOI_HAN_VI_PHAM = 2, SO_CAU_MOI_DE = 5;
     var danhSachHocSinh = { "Nguyễn Văn An": "an123", "Trần Thị Bình": "binh456", "Khánh": "0512" };
     
+    // Đã thêm lời giải chi tiết (giaiThich) cho từng câu hỏi
     var khoCauHoi = [
-        { de: "15 + 25 bằng bao nhiêu?", luaChon: ["30", "35", "40", "45"], dung: "40" },
-        { de: "Hình tam giác có mấy cạnh?", luaChon: ["2", "3", "4", "5"], dung: "3" },
-        { de: "Số nào lớn nhất: 89, 98, 100, 99?", luaChon: ["89", "98", "100", "99"], dung: "100" },
-        { de: "Kết quả của phép tính 7 x 8 là?", luaChon: ["54", "56", "64", "49"], dung: "56" },
-        { de: "Số nào là số chẵn nhỏ nhất có hai chữ số?", luaChon: ["10", "12", "02", "11"], dung: "10" },
-        { de: "Một hình vuông có cạnh 5cm. Chu vi là?", luaChon: ["10cm", "20cm", "25cm", "15cm"], dung: "20cm" },
-        { de: "Số liền trước của 1000 là?", luaChon: ["999", "1001", "990", "900"], dung: "999" },
-        { de: "3 giờ bằng bao nhiêu phút?", luaChon: ["120 phút", "150 phút", "180 phút", "200 phút"], dung: "180 phút" },
-        { de: "Kết quả của 100 - 45 là?", luaChon: ["45", "55", "65", "35"], dung: "55" },
-        { de: "Số gồm 5 trăm và 5 đơn vị là?", luaChon: ["55", "550", "505", "5005"], dung: "505" }
+        { de: "15 + 25 bằng bao nhiêu?", luaChon: ["30", "35", "40", "45"], dung: "40", giaiThich: "Ta có: 15 + 25 = (10 + 20) + (5 + 5) = 30 + 10 = 40." },
+        { de: "Hình tam giác có mấy cạnh?", luaChon: ["2", "3", "4", "5"], dung: "3", giaiThich: "Định nghĩa: Hình tam giác là hình đa giác có 3 cạnh và 3 đỉnh." },
+        { de: "Số nào lớn nhất: 89, 98, 100, 99?", luaChon: ["89", "98", "100", "99"], dung: "100", giaiThich: "So sánh các số: 100 là số có 3 chữ số, các số còn lại chỉ có 2 chữ số." },
+        { de: "Kết quả của phép tính 7 x 8 là?", luaChon: ["54", "56", "64", "49"], dung: "56", giaiThich: "Dựa vào bảng cửu chương 7 hoặc 8: 7 x 8 = 56." },
+        { de: "Số nào là số chẵn nhỏ nhất có hai chữ số?", luaChon: ["10", "12", "02", "11"], dung: "10", giaiThich: "Số nhỏ nhất có hai chữ số là 10, và 10 cũng là số chẵn." },
+        { de: "Một hình vuông có cạnh 5cm. Chu vi là?", luaChon: ["10cm", "20cm", "25cm", "15cm"], dung: "20cm", giaiThich: "Chu vi hình vuông = Cạnh x 4. Vậy: 5 x 4 = 20cm." },
+        { de: "Số liền trước của 1000 là?", luaChon: ["999", "1001", "990", "900"], dung: "999", giaiThich: "Số liền trước = Số đã cho - 1. Ta có: 1000 - 1 = 999." },
+        { de: "3 giờ bằng bao nhiêu phút?", luaChon: ["120 phút", "150 phút", "180 phút", "200 phút"], dung: "180 phút", giaiThich: "1 giờ = 60 phút. Vậy 3 giờ = 60 x 3 = 180 phút." },
+        { de: "Kết quả của 100 - 45 là?", luaChon: ["45", "55", "65", "35"], dung: "55", giaiThich: "Thực hiện phép tính: 100 - 40 = 60, sau đó 60 - 5 = 55." },
+        { de: "Số gồm 5 trăm và 5 đơn vị là?", luaChon: ["55", "550", "505", "5005"], dung: "505", giaiThich: "5 trăm = 500, 5 đơn vị = 5. Vậy số đó là 500 + 5 = 505." }
     ];
 
     var danhSachHienTai = []; 
 
-    // Click chọn avatar
     document.querySelectorAll('.avatar-option').forEach(opt => {
         opt.addEventListener('click', function() {
             document.querySelectorAll('.avatar-option').forEach(img => img.classList.remove('selected'));
             this.classList.add('selected');
-            // FIX: Gán đúng link ảnh từ data-seed vào biến currentSeed
             currentSeed = this.getAttribute('data-seed');
             document.getElementById('sound-click').play();
         });
@@ -206,11 +211,8 @@
             document.getElementById('login-screen').style.display = "none";
             document.getElementById('main-content').style.display = "block";
             document.getElementById('progress-container').style.display = "block";
-            
-            // FIX: Hiển thị ảnh đã chọn lên Header
             document.getElementById('user-img').src = currentSeed;
             document.getElementById('user-name').innerText = studentNameStored;
-
             taoDe();
             batDauDemNguoc();
         } else { alert("Sai thông tin rồi em ơi! ❌"); }
@@ -234,7 +236,8 @@
             item.luaChon.forEach(function(lc) {
                 html += "<label><input type='radio' name='cau"+i+"' value='"+lc+"'> "+lc+"</label>";
             });
-            html += "<div class='loi-giai' id='note"+i+"'>💡 Đáp án đúng: "+item.dung+"</div></div>";
+            // Khu vực hiển thị lời giải (ẩn lúc đầu)
+            html += "<div class='loi-giai' id='note"+i+"'></div></div>";
             v.innerHTML += html;
         });
     }
@@ -248,12 +251,22 @@
         danhSachHienTai.forEach(function(item, i) {
             var chon = Array.from(document.getElementsByName('cau' + i)).find(function(r) { return r.checked; })?.value;
             var b = document.getElementById('box' + i);
+            var noteBox = document.getElementById('note' + i);
+            
+            // Hiển thị khung lời giải
+            noteBox.style.display = "block";
+
             if (chon === item.dung) { 
                 d++; 
                 b.classList.add('cau-dung'); 
+                noteBox.style.background = "#e6fffa";
+                noteBox.style.color = "#234e52";
+                noteBox.innerHTML = "<b>🌟 Chính xác!</b><br>💡 Giải thích: " + item.giaiThich;
             } else { 
                 b.classList.add('cau-sai'); 
-                document.getElementById('note' + i).style.display = "block"; 
+                noteBox.style.background = "#fff5f5";
+                noteBox.style.color = "#c53030";
+                noteBox.innerHTML = "<b>❌ Tiếc quá!</b> Đáp án đúng là: <b>" + item.dung + "</b><br>💡 Giải thích: " + item.giaiThich;
             }
         });
 
@@ -262,13 +275,12 @@
 
         var icon = diem >= 8 ? "🏆 Tuyệt vời!" : (diem >= 5 ? "👏 Khá lắm!" : "💪 Cố gắng lên!");
         
-        // FIX: Hiển thị đúng avatar trong bảng kết quả
         document.getElementById('ket-qua').innerHTML = `
-            <div style='background:#e9f5ee; padding:20px; border-radius:20px; border:2px solid #b7e4c7; text-align:center;'>
+            <div style='background:#e9f5ee; padding:20px; border-radius:20px; border:2px solid #b7e4c7; text-align:center; margin-top: 20px;'>
                 <img src="${currentSeed}" style="width:80px; height:80px; object-fit:cover; border-radius:50%; border:3px solid var(--secondary); margin-bottom:10px;">
                 <h2 style='color:#1b4332;'>${icon}</h2>
                 <p style='font-size:40px; font-weight:bold; color:#d00000;'>💯 ${diem} ĐIỂM</p>
-                <p>Đúng ${d}/${SO_CAU_MOI_DE} câu. Đã gửi cho thầy!</p>
+                <p>Đúng ${d}/${SO_CAU_MOI_DE} câu. Xem lại lời giải chi tiết ở trên nhen!</p>
             </div>`;
         
         fetch("https://script.google.com/macros/s/AKfycbz4IPNx4fkDGi_oy3K15LSqIhB8ZtfmfN3Q_kKNIb7KKGrBjqkl8yKT2FusSjeVNlw/exec", {
@@ -277,6 +289,7 @@
         });
     }
 
+    // --- CÁC TÍNH NĂNG CŨ GIỮ NGUYÊN ---
     function banPhaoHoa(){
         if(typeof confetti !== 'undefined') {
             document.getElementById('sound-success').play();
@@ -324,76 +337,31 @@
             return "Hệ thống sẽ ghi nhận điểm 0 nếu bạn thoát bây giờ!";
         }
     });
-   window.addEventListener('keydown', function(e) {
-    const danhSachCanhBao = [
-        "⚠️ Ui da! Đừng soi code của thầy mà, lo làm bài đi em ơi!",
-        "🤫 Tính hack hay gì? Tập trung chuyên môn đi nhen!",
-        "🚫 Cửa này không vào được đâu em, quay lại làm toán thôi!",
-        "🕵️ Phát hiện một thám tử nhí đang soi code! Dừng lại ngay!",
-        "🌈 Code thầy viết đẹp lắm rồi, đừng xem nữa, mất công ghiền đó!",
-        "🛑 Hệ thống đang quan sát em... đừng nghịch F12 nữa nhé!"
-    ];
 
-    if (
-        e.keyCode === 123 || 
-        (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) || 
-        (e.ctrlKey && e.keyCode === 85)
-    ) {
-        e.preventDefault();
-        e.stopPropagation();
-        
-        document.getElementById('sound-denied').play();
-        
-        // Logic lấy ngẫu nhiên câu nói
-        const cauNgauNhien = danhSachCanhBao[Math.floor(Math.random() * danhSachCanhBao.length)];
-        alert(cauNgauNhien);
-        
-        return false;
-    }
-}, true);
-    // Chiêu "Đóng băng" Console
-(function() {
-    var checkStatus = false;
+    window.addEventListener('keydown', function(e) {
+        const danhSachCanhBao = [
+            "⚠️ Ui da! Đừng soi code của thầy mà, lo làm bài đi em ơi!",
+            "🤫 Tính hack hay gì? Tập trung chuyên môn đi nhen!",
+            "🚫 Cửa này không vào được đâu em, quay lại làm toán thôi!",
+            "🕵️ Phát hiện một thám tử nhí đang soi code! Dừng lại ngay!",
+            "🛑 Hệ thống đang quan sát em... đừng nghịch F12 nữa nhé!"
+        ];
+        if (e.keyCode === 123 || (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) || (e.ctrlKey && e.keyCode === 85)) {
+            e.preventDefault();
+            document.getElementById('sound-denied').play();
+            alert(danhSachCanhBao[Math.floor(Math.random() * danhSachCanhBao.length)]);
+            return false;
+        }
+    }, true);
+
+    // Chiêu đóng băng Console
     setInterval(function() {
         if (window.outerHeight - window.innerHeight > 160 || window.outerWidth - window.innerWidth > 160) {
-            if (!checkStatus) {
-                console.log("%cPhát hiện em đang mở bảng soi code nhen!", "color:red; font-size:20px;");
-                checkStatus = true;
-            }
-            // Dòng này khiến trình duyệt liên tục bị dừng (pause) nếu mở F12
+            console.clear();
+            console.log("%c🛑 ĐÃ BẢO ĐỪNG SOI MÀ! TẮT F12 ĐI EM!", "color:red; font-size:30px; font-weight:bold;");
             debugger; 
-        } else {
-            checkStatus = false;
         }
     }, 500);
-})();
-    // CHIÊU CUỐI: KHIẾN DEVTOOLS TRỞ NÊN VÔ DỤNG
-setInterval(function() {
-    // 1. Kiểm tra nếu cửa sổ bị thay đổi kích thước đột ngột (dấu hiệu mở F12)
-    if (window.outerHeight - window.innerHeight > 160 || window.outerWidth - window.innerWidth > 160) {
-        // 2. Ép trình duyệt rơi vào trạng thái gỡ lỗi liên tục
-        // Làm cho các em không thể nhấn vào đâu trong bảng F12 được nữa
-        debugger; 
-    }
-}, 100); // Kiểm tra cực nhanh mỗi 0.1 giây
-
-// 3. Vô hiệu hóa việc chuột phải vào các phần tử nhạy cảm
-document.onkeydown = function(e) {
-    if (e.keyCode == 123) return false;
-};
-    setInterval(function() {
-    if (window.outerHeight - window.innerHeight > 160 || window.outerWidth - window.innerWidth > 160) {
-        // In ra dòng này trước khi "đóng băng"
-        console.clear();
-        console.log("%c🛑 ĐÃ BẢO ĐỪNG SOI MÀ! TẮT F12 ĐI EM!", "color:red; font-size:30px; font-weight:bold;");
-        
-        // Sau đó mới đóng băng
-        debugger; 
-    }
-}, 100);
-    
-
-// Kết hợp với cái setInterval debugger phía trên là bộ đôi hoàn hảo nhen!
 </script>
 </body>
 </html>
