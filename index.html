@@ -4,19 +4,71 @@
     <meta charset="UTF-8">
     <title>Học toán cùng Khánh</title>
     <style>
-        :root { --primary: #1b4332; --secondary: #40916c; --light: #d8f3dc; --accent: #ff9f1c; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; background: linear-gradient(135deg, #d8f3dc 0%, #b7e4c7 100%); min-height: 100vh; margin: 0; display: flex; justify-content: center; }
-        .container { width: 95%; max-width: 1000px; background: rgba(255, 255, 255, 0.95); padding: 45px; border-radius: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.1); }
+        :root {
+            --primary: #1b4332;
+            --secondary: #40916c;
+            --light: #d8f3dc;
+            --accent: #ff9f1c;
+        }
+
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            padding: 20px; 
+            background: linear-gradient(135deg, #d8f3dc 0%, #b7e4c7 100%); 
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container { 
+            width: 95%;
+            max-width: 1000px; 
+            background: rgba(255, 255, 255, 0.95); 
+            padding: 45px; 
+            border-radius: 30px; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1); 
+        }
+
         h1 { text-align: center; color: var(--primary); font-size: 32px; margin-bottom: 20px; letter-spacing: 1px; }
+
         #login-screen { text-align: center; padding: 30px 10px; }
-        .input-login { padding: 15px; border: 2px solid #b7e4c7; border-radius: 15px; width: 85%; max-width: 350px; margin-bottom: 15px; font-size: 16px; text-align: center; }
+        .input-login { 
+            padding: 15px; 
+            border: 2px solid #b7e4c7; 
+            border-radius: 15px; 
+            width: 85%; 
+            max-width: 350px; 
+            margin-bottom: 15px; 
+            font-size: 16px;
+            text-align: center;
+        }
+
         #progress-container { width: 100%; background: #eee; border-radius: 10px; margin-bottom: 25px; height: 15px; overflow: hidden; display:none; }
         #progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #40916c, #2dc653); transition: 0.4s; }
-        #dong-ho { font-size: 22px; font-weight: bold; color: #e63946; text-align: center; margin-bottom: 25px; padding: 15px; background: #fff1f2; border-radius: 20px; border: 2px solid #ffccd5; }
-        .khung { padding: 25px; margin-bottom: 25px; border-radius: 20px; background: white; border: 1px solid #e9ecef; border-left: 10px solid var(--secondary); }
+
+        #dong-ho { 
+            font-size: 22px; font-weight: bold; color: #e63946; 
+            text-align: center; margin-bottom: 25px; padding: 15px; 
+            background: #fff1f2; border-radius: 20px; border: 2px solid #ffccd5;
+        }
+
+        .khung { 
+            padding: 25px; margin-bottom: 25px; border-radius: 20px; 
+            background: white; border: 1px solid #e9ecef;
+            border-left: 10px solid var(--secondary);
+        }
+
         .cau-dung { border-left-color: #2dc653 !important; background: #f0fff4; }
         .cau-sai { border-left-color: #e63946 !important; background: #fff5f5; }
-        button { padding: 15px 35px; cursor: pointer; background: linear-gradient(45deg, #2d6a4f, #52b788); color: white; border: none; border-radius: 50px; font-weight: bold; font-size: 16px; }
+
+        button { 
+            padding: 15px 35px; cursor: pointer; 
+            background: linear-gradient(45deg, #2d6a4f, #52b788); 
+            color: white; border: none; border-radius: 50px; 
+            font-weight: bold; font-size: 16px;
+        }
+
         label { display: block; padding: 12px; margin: 8px 0; border-radius: 12px; background: #f8f9fa; cursor: pointer; font-size: 18px; }
         input[type='radio'] { accent-color: var(--secondary); transform: scale(1.3); margin-right: 12px; }
         .loi-giai { font-style: italic; color: #d90429; margin-top: 15px; display: none; font-weight: bold; }
@@ -27,21 +79,21 @@
 
 <div class="container">
     <div id="login-screen">
-        <h1> EzMath </h1>
-        <p>Chào mừng các em đến với thử thách hôm nay! </p>
-        <input type="text" id="student-name" class="input-login" placeholder=" Nhập họ và tên..."><br>
-        <input type="password" id="student-code" class="input-login" placeholder=" Nhập mã bí mật..."><br>
-        <button id="btn-login"> BẮT ĐẦU THỬ THÁCH</button>
+        <h1>🌿 EzMath 🌿</h1>
+        <p>Chào mừng các em đến với thử thách hôm nay! ✨</p>
+        <input type="text" id="student-name" class="input-login" placeholder="👤 Nhập họ và tên..."><br>
+        <input type="password" id="student-code" class="input-login" placeholder="🔑 Nhập mã bí mật..."><br>
+        <button id="btn-login">🚀 BẮT ĐẦU THỬ THÁCH</button>
     </div>
 
     <div id="main-content" style="display:none;">
-        <h1> BÀI TẬP RÈN LUYỆN</h1>
+        <h1>✍️ BÀI TẬP RÈN LUYỆN</h1>
         <div id="progress-container"><div id="progress-bar"></div></div>
-        <div id="dong-ho"> Thời gian còn lại: 15:00</div>
+        <div id="dong-ho">⏳ Thời gian còn lại: 15:00</div>
         <div id="vung-chua"></div>
         <div style="text-align: center;">
-            <button id="btn-nop-bai"> HOÀN THÀNH & NỘP BÀI</button>
-            <button onclick="location.reload()" style="margin-left: 10px; background: #6c757d;"> LÀM ĐỀ MỚI</button>
+            <button id="btn-nop-bai">✔️ HOÀN THÀNH & NỘP BÀI</button>
+            <button onclick="location.reload()" style="margin-left: 10px; background: #6c757d;">🔄 LÀM ĐỀ MỚI</button>
         </div>
         <div id="ket-qua"></div>
     </div>
@@ -70,12 +122,11 @@
     document.getElementById('btn-login').addEventListener('click', checkLogin);
     document.getElementById('btn-nop-bai').addEventListener('click', chamDiem);
 
-    // Cập nhật thanh tiến trình khi chọn đáp án
     document.addEventListener('change', function(e) {
         if(e.target.type === 'radio') {
             let done = 0;
             for(let i=0; i < SO_CAU_MOI_DE; i++) {
-                if(document.querySelector(`input[name="cau${i}"]:checked`)) done++;
+                if(document.querySelector(input[name="cau${i}"]:checked)) done++;
             }
             document.getElementById('progress-bar').style.width = (done / SO_CAU_MOI_DE) * 100 + "%";
         }
@@ -91,14 +142,14 @@
             document.getElementById('progress-container').style.display = "block";
             taoDe();
             batDauDemNguoc();
-        } else { alert("Sai thông tin rồi em ơi! "); }
+        } else { alert("Sai thông tin rồi em ơi! ❌"); }
     }
 
     function batDauDemNguoc() {
         timer = setInterval(function() {
             if (daNopBai) return;
             var p = Math.floor(giay / 60), g = giay % 60;
-            document.getElementById('dong-ho').innerHTML = " Thời gian còn lại: " + p + ":" + (g < 10 ? "0" + g : g);
+            document.getElementById('dong-ho').innerHTML = "⏳ Thời gian còn lại: " + p + ":" + (g < 10 ? "0" + g : g);
             if (giay-- <= 0) { clearInterval(timer); chamDiem(); }
         }, 1000);
     }
@@ -108,16 +159,16 @@
         v.innerHTML = "";
         danhSachHienTai = khoCauHoi.sort(() => 0.5 - Math.random()).slice(0, SO_CAU_MOI_DE);
         danhSachHienTai.forEach((item, i) => {
-            var html = `<div class='khung' id='box${i}'><p style='font-weight:bold; font-size:20px;'>📝 Câu ${i+1}: ${item.de}</p>`;
+            var html = <div class='khung' id='box${i}'><p style='font-weight:bold; font-size:20px;'>📝 Câu ${i+1}: ${item.de}</p>;
             item.luaChon.forEach(lc => {
-                html += `<label><input type='radio' name='cau${i}' value='${lc}'> ${lc}</label>`;
+                html += <label><input type='radio' name='cau${i}' value='${lc}'> ${lc}</label>;
             });
-            html += `<div class='loi-giai' id='note${i}'>💡 Đáp án đúng: ${item.dung}</div></div>`;
+            html += <div class='loi-giai' id='note${i}'>💡 Đáp án đúng: ${item.dung}</div></div>;
             v.innerHTML += html;
         });
     }
 
-    function chamDiem() {
+   function chamDiem() {
         if (daNopBai) return; 
         daNopBai = true; 
         clearInterval(timer);
@@ -136,12 +187,18 @@
         });
 
         var diem = Math.round((d / SO_CAU_MOI_DE) * 100) / 10;
-        if (diem >= 8) { banPhaoHoa(); }
+        
+        // --- PHẦN THÊM MỚI: KIỂM TRA ĐIỂM ĐỂ BẮN PHÁO HOA ---
+        if (diem >= 😎 {
+            banPhaoHoa();
+        }
+        // --------------------------------------------------
 
-        var icon = diem >= 8 ? " Tuyệt vời!" : (diem >= 5 ? " Khá lắm!" : " Cố gắng lên!");
-        document.getElementById('ket-qua').innerHTML = `<div style="background:#e9f5ee; padding:20px; border-radius:20px; border:2px solid #b7e4c7; text-align:center; margin-top:20px;">
+        var icon = diem >= 8 ? "🏆 Tuyệt vời!" : (diem >= 5 ? "👏 Khá lắm!" : "💪 Cố gắng lên!");
+        
+        document.getElementById('ket-qua').innerHTML = `<div style="background:#e9f5ee; padding:20px; border-radius:20px; border:2px solid #b7e4c7; text-align:center;">
             <h2 style="color:#1b4332;">${icon}</h2>
-            <p style="font-size:40px; font-weight:bold; color:#d00000;"> ${diem} ĐIỂM</p>
+            <p style="font-size:40px; font-weight:bold; color:#d00000;">💯 ${diem} ĐIỂM</p>
             <p>Đúng ${d}/${SO_CAU_MOI_DE} câu. Đã gửi cho thầy!</p></div>`;
         
         fetch("https://script.google.com/macros/s/AKfycbzSoiKPu8jwc3z4oqwqLu0Gy_kMd-MukfhsvM--SB82WEpGs9bt3-1k6FtSKBYBjts/exec", {
@@ -153,39 +210,81 @@
     function banPhaoHoa() {
         var duration = 3 * 1000;
         var end = Date.now() + duration;
+
         (function frame() {
-            confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0, y: 0.8 }, colors: ['#40916c', '#ff9f1c', '#2d6a4f'] });
-            confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1, y: 0.8 }, colors: ['#40916c', '#ff9f1c', '#2d6a4f'] });
-            if (Date.now() < end) requestAnimationFrame(frame);
+            confetti({
+                particleCount: 5,
+                angle: 60,
+                spread: 55,
+                origin: { x: 0, y: 0.8 },
+                colors: ['#40916c', '#ff9f1c', '#2d6a4f']
+            });
+            confetti({
+                particleCount: 5,
+                angle: 120,
+                spread: 55,
+                origin: { x: 1, y: 0.8 },
+                colors: ['#40916c', '#ff9f1c', '#2d6a4f']
+            });
+
+            if (Date.now() < end) {
+                requestAnimationFrame(frame);
+            }
         }());
     }
 
     document.addEventListener("visibilitychange", function() {
         if (document.visibilityState === 'hidden' && !daNopBai && studentNameStored !== "") {
             soLanViPham++;
-            if (soLanViPham < GIOI_HAN_VI_PHAM) alert(" CẢNH BÁO: Rời trang " + soLanViPham + " lần! 1/2");
+            if (soLanViPham < GIOI_HAN_VI_PHAM) alert("⚠️ CẢNH BÁO: Rời trang " + soLanViPham + " lần! 1/2");
             else chamDiem();
         }
     });
 
     document.addEventListener('contextmenu', event => {
-        if (!daNopBai && studentNameStored !== "") { event.preventDefault(); alert(" Không dùng chuột phải!"); }
+        if (!daNopBai && studentNameStored !== "") { event.preventDefault(); alert("🤫 Không dùng chuột phải!"); }
     });
+   // TỰ ĐỘNG GỬI ĐIỂM KHI ẤN RELOAD HOẶC ĐÓNG TRANG (BẢN CHUẨN)
+window.addEventListener("pagehide", function (e) {
+    // Chỉ gửi nếu học sinh đã đăng nhập và chưa chính thức ấn nút Nộp bài
+    if (studentNameStored !== "" && !daNopBai) {
+        var d = 0;
+        // Giữ nguyên logic đếm số câu đúng của Khánh
+        danhSachHienTai.forEach((item, i) => {
+            var chon = Array.from(document.getElementsByName('cau' + i)).find(r => r.checked)?.value;
+            if (chon === item.dung) { d++; }
+        });
 
-    window.addEventListener("pagehide", function (e) {
-        if (studentNameStored !== "" && !daNopBai) {
-            var d = 0;
-            danhSachHienTai.forEach((item, i) => {
-                var chon = Array.from(document.getElementsByName('cau' + i)).find(r => r.checked)?.value;
-                if (chon === item.dung) { d++; }
-            });
-            var diemTamThoi = Math.round((d / SO_CAU_MOI_DE) * 100) / 10;
-            var data = JSON.stringify({ hoTen: studentNameStored + " (Thoát ngang)", soCauDung: d + "/" + SO_CAU_MOI_DE, diemSo: diemTamThoi });
-            var url = "https://script.google.com/macros/s/AKfycbzSoiKPu8jwc3z4oqwqLu0Gy_kMd-MukfhsvM--SB82WEpGs9bt3-1k6FtSKBYBjts/exec";
-            if (navigator.sendBeacon) { navigator.sendBeacon(url, data); }
-            else { fetch(url, { method: "POST", mode: "no-cors", keepalive: true, body: data }); }
+        var diemTamThoi = Math.round((d / SO_CAU_MOI_DE) * 100) / 10;
+        
+        // Dữ liệu gửi đi (Giữ nguyên cấu trúc Khánh yêu cầu)
+        var data = JSON.stringify({
+            hoTen: studentNameStored + " (Thoát ngang)", 
+            soCauDung: d + "/" + SO_CAU_MOI_DE, 
+            diemSo: diemTamThoi
+        });
+
+        // Sử dụng URL Google Script của cậu
+        var url = "https://script.google.com/macros/s/AKfycbzSoiKPu8jwc3z4oqwqLu0Gy_kMd-MukfhsvM--SB82WEpGs9bt3-1k6FtSKBYBjts/exec";
+
+        // Gửi dữ liệu đi ngay cả khi đóng trình duyệt
+        if (navigator.sendBeacon) {
+            navigator.sendBeacon(url, data);
+        } else {
+            // Phương án dự phòng cho trình duyệt cũ
+            fetch(url, { method: "POST", mode: "no-cors", keepalive: true, body: data });
         }
-    });
+    }
+});
+   // 279. // HIỂN THỊ CẢNH BÁO KHI HỌC SINH ĐỊNH RESET HOẶC THOÁT
+// 280. window.addEventListener("beforeunload", function (e) {
+// 281.    if (studentNameStored !== "" && daNopBai === false) {
+// 282.        // Các lệnh dưới đây kích hoạt hộp thoại xác nhận của trình duyệt
+// 283.        e.preventDefault(); 
+// 284.        e.returnValue = "Kết quả sẽ được gửi đi, bạn có chắc muốn thoát?";
+// 285.        return "Kết quả sẽ được gửi đi, bạn có chắc muốn thoát?";
+// 286.    }
+// 287. });
 </script>
 </body>
 </html>
