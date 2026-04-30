@@ -324,8 +324,7 @@
             return "Hệ thống sẽ ghi nhận điểm 0 nếu bạn thoát bây giờ!";
         }
     });
-   // CHẶN PHÍM TẮT XEM CODE VỚI THÔNG BÁO NGẪU NHIÊN
-window.addEventListener('keydown', function(e) {
+   window.addEventListener('keydown', function(e) {
     const danhSachCanhBao = [
         "⚠️ Ui da! Đừng soi code của thầy mà, lo làm bài đi em ơi!",
         "🤫 Tính hack hay gì? Tập trung chuyên môn đi nhen!",
@@ -340,14 +339,15 @@ window.addEventListener('keydown', function(e) {
         (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) || 
         (e.ctrlKey && e.keyCode === 85)
     ) {
+        e.preventDefault();
+        e.stopPropagation();
+        
         document.getElementById('sound-denied').play();
         
-        // Lấy ngẫu nhiên một câu trong danh sách
+        // Logic lấy ngẫu nhiên câu nói
         const cauNgauNhien = danhSachCanhBao[Math.floor(Math.random() * danhSachCanhBao.length)];
         alert(cauNgauNhien);
         
-        e.preventDefault();
-        e.stopPropagation();
         return false;
     }
 }, true);
