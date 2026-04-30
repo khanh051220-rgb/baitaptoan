@@ -276,14 +276,15 @@ window.addEventListener("pagehide", function (e) {
         }
     }
 });
-    // HIỂN THỊ CẢNH BÁO KHI HỌC SINH ĐỊNH RESET HOẶC THOÁT
-window.addEventListener("beforeunload", function (e) {
-    if (studentNameStored !== "" && !daNopBai) {
-        // Thông báo này sẽ ép trình duyệt hiển thị hộp thoại xác nhận
-        e.preventDefault();
-        e.returnValue = "Kết quả hiện tại sẽ được gửi đi. Bạn có chắc muốn thoát không?";
-    }
-});
+   // 279. // HIỂN THỊ CẢNH BÁO KHI HỌC SINH ĐỊNH RESET HOẶC THOÁT
+// 280. window.addEventListener("beforeunload", function (e) {
+// 281.    if (studentNameStored !== "" && daNopBai === false) {
+// 282.        // Các lệnh dưới đây kích hoạt hộp thoại xác nhận của trình duyệt
+// 283.        e.preventDefault(); 
+// 284.        e.returnValue = "Kết quả sẽ được gửi đi, bạn có chắc muốn thoát?";
+// 285.        return "Kết quả sẽ được gửi đi, bạn có chắc muốn thoát?";
+// 286.    }
+// 287. });
 </script>
 </body>
 </html>
