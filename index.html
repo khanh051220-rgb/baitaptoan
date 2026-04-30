@@ -244,30 +244,36 @@
     document.addEventListener('contextmenu', event => {
         if (!daNopBai && studentNameStored !== "") { event.preventDefault(); alert("🤫 Không dùng chuột phải!"); }
     });
-    // TỰ ĐỘNG GỬI ĐIỂM KHI ẤN RELOAD HOẶC ĐÓNG TRANG
-window.addEventListener("beforeunload", function (e) {
+   // TỰ ĐỘNG GỬI ĐIỂM KHI ẤN RELOAD HOẶC ĐÓNG TRANG (BẢN CHUẨN)
+window.addEventListener("pagehide", function (e) {
     // Chỉ gửi nếu học sinh đã đăng nhập và chưa chính thức ấn nút Nộp bài
     if (studentNameStored !== "" && !daNopBai) {
         var d = 0;
-        // Đếm nhanh số câu đúng hiện tại tại thời điểm học sinh thoát ra
+        // Giữ nguyên logic đếm số câu đúng của Khánh
         danhSachHienTai.forEach((item, i) => {
             var chon = Array.from(document.getElementsByName('cau' + i)).find(r => r.checked)?.value;
             if (chon === item.dung) { d++; }
         });
 
         var diemTamThoi = Math.round((d / SO_CAU_MOI_DE) * 100) / 10;
-
-        // Sử dụng fetch để gửi dữ liệu đi ngay lập tức
-        fetch("https://script.google.com/macros/s/AKfycbzSoiKPu8jwc3z4oqwqLu0Gy_kMd-MukfhsvM--SB82WEpGs9bt3-1k6FtSKBYBjts/exec", {
-            method: "POST",
-            mode: "no-cors",
-            keepalive: true, // Quan trọng: Giữ kết nối mở cho đến khi gửi xong dù trang đã đóng
-            body: JSON.stringify({
-                hoTen: studentNameStored + " (Thoát ngang)", 
-                soCauDung: d + "/" + SO_CAU_MOI_DE, 
-                diemSo: diemTamThoi
-            })
+        
+        // Dữ liệu gửi đi (Giữ nguyên cấu trúc Khánh yêu cầu)
+        var data = JSON.stringify({
+            hoTen: studentNameStored + " (Thoát ngang)", 
+            soCauDung: d + "/" + SO_CAU_MOI_DE, 
+            diemSo: diemTamThoi
         });
+
+        // Sử dụng URL Google Script của cậu
+        var url = "https://script.google.com/macros/s/AKfycbzSoiKPu8jwc3z4oqwqLu0Gy_kMd-MukfhsvM--SB82WEpGs9bt3-1k6FtSKBYBjts/exec";
+
+        // Gửi dữ liệu đi ngay cả khi đóng trình duyệt
+        if (navigator.sendBeacon) {
+            navigator.sendBeacon(url, data);
+        } else {
+            // Phương án dự phòng cho trình duyệt cũ
+            fetch(url, { method: "POST", mode: "no-cors", keepalive: true, body: data });
+        }
     }
 });
 </script>
