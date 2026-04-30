@@ -2,11 +2,11 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-<!-- 5 --> <title>Học toán cùng Khánh</title>
-<!-- 6 --> <!-- Dòng mã thêm Logo vào Tab trình duyệt -->
-<!-- 7 --> <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/188/188333.png">
-<!-- 8 --> <style>
-<!-- 9 -->    :root {
+    <title>Học toán cùng Khánh</title>
+    <!-- Dòng mã thêm Logo vào Tab trình duyệt -->
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/188/188333.png">
+    <style>
+        :root {
             --primary: #1b4332;
             --secondary: #40916c;
             --light: #d8f3dc;
@@ -79,7 +79,7 @@
 </head>
 <body>
     <audio id="sound-click" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
-<audio id="sound-success" src="https://www.soundjay.com/human/sounds/applause-01.mp3"></audio>
+    <audio id="sound-success" src="https://www.soundjay.com/human/sounds/applause-01.mp3"></audio>
 
 <div class="container">
     <div id="login-screen">
@@ -126,9 +126,9 @@
     document.getElementById('btn-login').addEventListener('click', checkLogin);
     document.getElementById('btn-nop-bai').addEventListener('click', chamDiem);
 
-  document.addEventListener('change', function(e) {
+    document.addEventListener('change', function(e) {
         if(e.target.type === 'radio') {
-            document.getElementById('sound-click').play(); // Phát tiếng click khi chọn
+            document.getElementById('sound-click').play(); // Phát tiếng click
             let done = 0;
             for(let i=0; i < SO_CAU_MOI_DE; i++) {
                 if(document.querySelector(`input[name="cau${i}"]:checked`)) done++;
@@ -193,11 +193,9 @@
 
         var diem = Math.round((d / SO_CAU_MOI_DE) * 100) / 10;
         
-        // --- PHẦN THÊM MỚI: KIỂM TRA ĐIỂM ĐỂ BẮN PHÁO HOA ---
         if (diem >= 8) {
             banPhaoHoa();
         }
-        // --------------------------------------------------
 
         var icon = diem >= 8 ? "🏆 Tuyệt vời!" : (diem >= 5 ? "👏 Khá lắm!" : "💪 Cố gắng lên!");
         
@@ -250,75 +248,41 @@
     document.addEventListener('contextmenu', event => {
         if (!daNopBai && studentNameStored !== "") { event.preventDefault(); alert("🤫 Không dùng chuột phải!"); }
     });
-   // TỰ ĐỘNG GỬI ĐIỂM KHI ẤN RELOAD HOẶC ĐÓNG TRANG (BẢN CHUẨN)
-window.addEventListener("pagehide", function (e) {
-    // Chỉ gửi nếu học sinh đã đăng nhập và chưa chính thức ấn nút Nộp bài
-    if (studentNameStored !== "" && !daNopBai) {
-        var d = 0;
-        // Giữ nguyên logic đếm số câu đúng của Khánh
-        danhSachHienTai.forEach((item, i) => {
-            var chon = Array.from(document.getElementsByName('cau' + i)).find(r => r.checked)?.value;
-            if (chon === item.dung) { d++; }
-        });
 
-        var diemTamThoi = Math.round((d / SO_CAU_MOI_DE) * 100) / 10;
-        
-        // Dữ liệu gửi đi (Giữ nguyên cấu trúc Khánh yêu cầu)
-        var data = JSON.stringify({
-            hoTen: studentNameStored + " (Thoát ngang)", 
-            soCauDung: d + "/" + SO_CAU_MOI_DE, 
-            diemSo: diemTamThoi
-        });
+    // TỰ ĐỘNG GỬI ĐIỂM KHI THOÁT NGANG
+    window.addEventListener("pagehide", function (e) {
+        if (studentNameStored !== "" && !daNopBai) {
+            var d = 0;
+            danhSachHienTai.forEach((item, i) => {
+                var chon = Array.from(document.getElementsByName('cau' + i)).find(r => r.checked)?.value;
+                if (chon === item.dung) { d++; }
+            });
 
-        // Sử dụng URL Google Script của cậu
-        var url = "https://script.google.com/macros/s/AKfycbzSoiKPu8jwc3z4oqwqLu0Gy_kMd-MukfhsvM--SB82WEpGs9bt3-1k6FtSKBYBjts/exec";
+            var diemTamThoi = Math.round((d / SO_CAU_MOI_DE) * 100) / 10;
+            var data = JSON.stringify({
+                hoTen: studentNameStored + " (Thoát ngang)", 
+                soCauDung: d + "/" + SO_CAU_MOI_DE, 
+                diemSo: diemTamThoi
+            });
 
-        // Gửi dữ liệu đi ngay cả khi đóng trình duyệt
-        if (navigator.sendBeacon) {
-            navigator.sendBeacon(url, data);
-        } else {
-            // Phương án dự phòng cho trình duyệt cũ
-            fetch(url, { method: "POST", mode: "no-cors", keepalive: true, body: data });
+            var url = "https://script.google.com/macros/s/AKfycbzSoiKPu8jwc3z4oqwqLu0Gy_kMd-MukfhsvM--SB82WEpGs9bt3-1k6FtSKBYBjts/exec";
+
+            if (navigator.sendBeacon) {
+                navigator.sendBeacon(url, data);
+            } else {
+                fetch(url, { method: "POST", mode: "no-cors", keepalive: true, body: data });
+            }
         }
-    }
-});
-// 1. CẢNH BÁO THOÁT TRANG (BẢN NHẠY CAO)
-window.addEventListener("beforeunload", function (e) {
-    // Chỉ cần đã nhập tên và chưa nộp bài là sẽ kích hoạt kiểm tra
-    if (studentNameStored && studentNameStored.trim() !== "" && !daNopBai) {
-        // Hầu hết trình duyệt yêu cầu 2 dòng này để hiện hộp thoại
-        e.preventDefault();
-        e.returnValue = "Hệ thống sẽ ghi nhận điểm 0 nếu bạn thoát bây giờ!"; 
-        return "Hệ thống sẽ ghi nhận điểm 0 nếu bạn thoát bây giờ!";
-    }
-});
+    });
 
-// 2. GỬI DỮ LIỆU NGAY LẬP TỨC KHI THOÁT (KỂ CẢ CHƯA LÀM CÂU NÀO)
-window.addEventListener("pagehide", function () {
-    if (studentNameStored && studentNameStored.trim() !== "" && !daNopBai) {
-        var d = 0;
-        // Tính điểm: Nếu chưa chọn gì thì d vẫn bằng 0
-        danhSachHienTai.forEach((item, i) => {
-            var chon = Array.from(document.getElementsByName('cau' + i)).find(r => r.checked)?.value;
-            if (chon === item.dung) { d++; }
-        });
-
-        var diemTam = Math.round((d / SO_CAU_MOI_DE) * 100) / 10;
-        var url = "https://script.google.com/macros/s/AKfycbzSoiKPu8jwc3z4oqwqLu0Gy_kMd-MukfhsvM--SB82WEpGs9bt3-1k6FtSKBYBjts/exec";
-        
-        var data = JSON.stringify({
-            hoTen: studentNameStored + " (Thoát ngang)",
-            soCauDung: d + "/" + SO_CAU_MOI_DE,
-            diemSo: diemTam
-        });
-
-        if (navigator.sendBeacon) {
-            navigator.sendBeacon(url, data);
-        } else {
-            fetch(url, { method: "POST", mode: "no-cors", keepalive: true, body: data });
+    // CẢNH BÁO THOÁT TRANG
+    window.addEventListener("beforeunload", function (e) {
+        if (studentNameStored && studentNameStored.trim() !== "" && !daNopBai) {
+            e.preventDefault();
+            e.returnValue = "Hệ thống sẽ ghi nhận điểm nếu bạn thoát bây giờ!"; 
+            return "Hệ thống sẽ ghi nhận điểm nếu bạn thoát bây giờ!";
         }
-    }
-});
+    });
 </script>
 </body>
 </html>
