@@ -92,12 +92,53 @@
             border-radius: 8px;
             border: 1px solid #ffccd5;
         }
+
+        /* PHẦN THÊM: CSS cho Watermark lặp lại */
+        #watermark-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+            display: none;
+            opacity: 0.07; /* Độ mờ nhạt để không gây khó nhìn */
+            overflow: hidden;
+            user-select: none;
+        }
+
+        .wm-text {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            display: flex;
+            flex-wrap: wrap;
+            content: "";
+            transform: rotate(-25deg); /* Xoay nghiêng chữ */
+            justify-content: space-around;
+            align-content: space-around;
+        }
+
+        .wm-item {
+            padding: 40px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #000;
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 </head>
 <body>
     <audio id="sound-click" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
     <audio id="sound-success" src="https://www.soundjay.com/human/sounds/applause-01.mp3"></audio>
+
+    <!-- Thẻ chứa Watermark -->
+    <div id="watermark-overlay">
+        <div id="wm-content" class="wm-text"></div>
+    </div>
 
 <div class="container">
     <div id="login-screen">
@@ -132,7 +173,6 @@
         { de: "Số nào lớn nhất: 89, 98, 100, 99?", luaChon: ["89", "98", "100", "99"], dung: "100", giaiThich: "So sánh các số, 100 là số có 3 chữ số nên lớn nhất.", anh: "" },
         { de: "Kết quả của phép tính 7 x 8 là?", luaChon: ["54", "56", "64", "49"], dung: "56", giaiThich: "Theo bảng cửu chương: 7 x 8 = 56.", anh: "" },
         { de: "Số nào là số chẵn nhỏ nhất có hai chữ số?", luaChon: ["10", "12", "02", "11"], dung: "10", giaiThich: "Số có 2 chữ số bé nhất là 10, và nó là số chẵn.", anh: "" },
-        // Ví dụ một câu có ảnh minh họa
         { de: "Một hình vuông có cạnh 5cm. Chu vi là?", luaChon: ["10cm", "20cm", "25cm", "15cm"], dung: "20cm", giaiThich: "Chu vi hình vuông = cạnh x 4 = 5 x 4 = 20cm.", anh: "https://vungoi.vn/lop-3/ly-thuyet-chu-vi-hinh-vuong-s5af95da063f130590a599723.html/image.png" },
         { de: "Số liền trước của 1000 là?", luaChon: ["999", "1001", "990", "900"], dung: "999", giaiThich: "Số liền trước = số đã cho - 1. Ta có: 1000 - 1 = 999.", anh: "" },
         { de: "3 giờ bằng bao nhiêu phút?", luaChon: ["120 phút", "150 phút", "180 phút", "200 phút"], dung: "180 phút", giaiThich: "1 giờ = 60 phút. 3 giờ = 60 x 3 = 180 phút.", anh: "" },
@@ -161,6 +201,17 @@
         var c = document.getElementById('student-code').value.trim();
         if (danhSachHocSinh[n] === c) {
             studentNameStored = n;
+
+            // --- PHẦN MÃ ĐƯỢC THÊM: TẠO CHỮ MỜ LẶP LẠI ---
+            var wmOverlay = document.getElementById('watermark-overlay');
+            var wmContent = document.getElementById('wm-content');
+            wmContent.innerHTML = ""; // Xóa nội dung cũ nếu có
+            for(let i = 0; i < 50; i++) { // Tạo 50 cụm tên lặp lại
+                wmContent.innerHTML += `<div class="wm-item">${n}</div>`;
+            }
+            wmOverlay.style.display = "block";
+            // --- KẾT THÚC PHẦN THÊM ---
+
             document.getElementById('login-screen').style.display = "none";
             document.getElementById('main-content').style.display = "block";
             document.getElementById('progress-container').style.display = "block";
@@ -185,16 +236,12 @@
         danhSachHienTai.forEach((item, i) => {
             var html = `<div class='khung' id='box${i}'><p style='font-weight:bold; font-size:20px;'>📝 Câu ${i+1}: ${item.de}</p>`;
             
-            // --- PHẦN MÃ ĐƯỢC THÊM: XÁO TRỘN ĐÁP ÁN ---
-            // Tạo bản sao mảng lựa chọn và xáo trộn bản sao đó
             var dsLuaChonDaTron = [...item.luaChon].sort(() => 0.5 - Math.random());
             
             dsLuaChonDaTron.forEach(lc => {
                 html += `<label><input type='radio' name='cau${i}' value='${lc}'> ${lc}</label>`;
             });
-            // --- KẾT THÚC PHẦN THÊM ---
             
-            // Xử lý hiển thị ảnh: Nếu có link ảnh thì tạo thẻ img, nếu không thì để trống
             var hienAnh = item.anh !== "" ? `<br><img src="${item.anh}">` : "";
 
             html += `<div class='loi-giai' id='note${i}'>
