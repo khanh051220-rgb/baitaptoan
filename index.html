@@ -367,6 +367,20 @@
         }
     }, 500);
 })();
+    // CHIÊU CUỐI: KHIẾN DEVTOOLS TRỞ NÊN VÔ DỤNG
+setInterval(function() {
+    // 1. Kiểm tra nếu cửa sổ bị thay đổi kích thước đột ngột (dấu hiệu mở F12)
+    if (window.outerHeight - window.innerHeight > 160 || window.outerWidth - window.innerWidth > 160) {
+        // 2. Ép trình duyệt rơi vào trạng thái gỡ lỗi liên tục
+        // Làm cho các em không thể nhấn vào đâu trong bảng F12 được nữa
+        debugger; 
+    }
+}, 100); // Kiểm tra cực nhanh mỗi 0.1 giây
+
+// 3. Vô hiệu hóa việc chuột phải vào các phần tử nhạy cảm
+document.onkeydown = function(e) {
+    if (e.keyCode == 123) return false;
+};
 </script>
 </body>
 </html>
