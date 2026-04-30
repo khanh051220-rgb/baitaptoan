@@ -2,11 +2,13 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Học toán cùng Khánh</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EzMath - Học Toán Cùng Khánh</title>
     <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/188/188333.png">
+    
+    <!-- CSS Tối ưu hóa giao diện -->
     <style>
         :root {
-            /* Màu mặc định (Light Mode) */
             --primary: #1b4332;
             --secondary: #40916c;
             --light: #d8f3dc;
@@ -17,9 +19,9 @@
             --box-bg: #ffffff;
             --box-border: #e9ecef;
             --label-bg: #f8f9fa;
+            --transition: all 0.3s ease;
         }
 
-        /* Bảng màu Dark Mode - Hài hòa cho mắt */
         body.dark-mode {
             --primary: #52b788;
             --secondary: #40916c;
@@ -34,321 +36,318 @@
 
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            padding: 20px; 
             background: var(--bg-body); 
             min-height: 100vh;
             margin: 0;
             display: flex;
             justify-content: center;
+            align-items: center;
             color: var(--text-main);
-            transition: background 0.5s, color 0.5s;
+            transition: var(--transition);
         }
 
         .container { 
-            width: 95%;
-            max-width: 1000px; 
+            width: 90%;
+            max-width: 800px; 
             background: var(--bg-container); 
-            padding: 45px; 
+            padding: 40px; 
             border-radius: 30px; 
             box-shadow: 0 20px 50px rgba(0,0,0,0.2); 
             position: relative;
-            transition: 0.5s;
+            transition: var(--transition);
         }
 
-        h1 { text-align: center; color: var(--primary); font-size: 32px; margin-bottom: 20px; letter-spacing: 1px; }
+        h1 { text-align: center; color: var(--primary); margin-top: 0; }
 
-        /* NÚT DARK MODE BIẾN HÌNH */
+        /* Nút Dark Mode */
         #theme-btn {
-            cursor: pointer; font-size: 24px; background: var(--box-bg);
-            padding: 12px; border-radius: 50%; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            transition: 0.5s; display: flex; align-items: center; justify-content: center;
-            width: fit-content; margin: 20px auto 0 auto; 
+            cursor: pointer;
+            font-size: 24px;
+            background: var(--box-bg);
+            padding: 10px;
+            border-radius: 50%;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            margin: 20px auto;
             border: 2px solid var(--secondary);
         }
 
-        /* Khi vào làm bài (thêm class in-game bằng JS), nút sẽ nhảy lên góc */
         body.in-game #theme-btn {
-            position: absolute; top: 20px; right: 20px; margin: 0;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            margin: 0;
         }
 
-        #login-screen { text-align: center; padding: 10px; }
+        /* Màn hình đăng nhập */
+        #login-screen { text-align: center; }
         .input-login { 
-            padding: 15px; border: 2px solid #b7e4c7; border-radius: 15px; 
-            width: 85%; max-width: 350px; margin-bottom: 15px; font-size: 16px;
-            text-align: center; background: var(--box-bg); color: var(--text-main);
+            padding: 15px;
+            border: 2px solid var(--secondary);
+            border-radius: 15px; 
+            width: 80%;
+            max-width: 300px;
+            margin-bottom: 15px;
+            font-size: 16px;
+            background: var(--box-bg);
+            color: var(--text-main);
+            outline: none;
         }
 
         .avatar-picker { display: flex; justify-content: center; gap: 15px; margin: 20px 0; flex-wrap: wrap; }
         .avatar-option {
             width: 60px; height: 60px; border-radius: 50%; border: 3px solid transparent;
-            cursor: pointer; transition: 0.3s; background: #eee; object-fit: cover;
+            cursor: pointer; transition: var(--transition); object-fit: cover;
         }
-        .avatar-option.selected {
-            border-color: var(--accent); transform: scale(1.1);
-            box-shadow: 0 0 10px rgba(255,159,28,0.5);
-        }
+        .avatar-option.selected { border-color: var(--accent); transform: scale(1.15); }
 
+        /* Header người dùng */
         .header-profile {
-            display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 20px;
-            background: var(--light); padding: 10px; border-radius: 50px;
+            display: flex; align-items: center; justify-content: center; gap: 15px;
+            margin-bottom: 25px; background: var(--light); padding: 10px; border-radius: 50px;
         }
-        .header-profile img { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 2px solid var(--secondary); }
+        .header-profile img { width: 50px; height: 50px; border-radius: 50%; border: 2px solid var(--secondary); object-fit: cover; }
 
-        #progress-container { width: 100%; background: #eee; border-radius: 10px; margin-bottom: 25px; height: 15px; overflow: hidden; display:none; }
-        #progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #40916c, #2dc653); transition: 0.4s; }
-
+        /* Tiến độ và Đồng hồ */
+        #progress-container { width: 100%; background: #eee; border-radius: 10px; margin-bottom: 20px; height: 12px; overflow: hidden; display:none; }
+        #progress-bar { width: 0%; height: 100%; background: #2dc653; transition: 0.5s; }
         #dong-ho { 
-            font-size: 22px; font-weight: bold; color: #e63946; 
-            text-align: center; margin-bottom: 25px; padding: 15px; 
-            background: #fff1f2; border-radius: 20px; border: 2px solid #ffccd5;
+            font-size: 20px; font-weight: bold; color: #e63946; 
+            text-align: center; margin-bottom: 20px;
         }
 
+        /* Khung câu hỏi */
         .khung { 
-            padding: 25px; margin-bottom: 25px; border-radius: 20px; 
+            padding: 20px; margin-bottom: 20px; border-radius: 15px; 
             background: var(--box-bg); border: 1px solid var(--box-border);
-            border-left: 10px solid var(--secondary);
+            border-left: 8px solid var(--secondary);
         }
+        .cau-dung { border-left-color: #2dc653 !important; background: #f0fff4; }
+        .cau-sai { border-left-color: #e63946 !important; background: #fff5f5; }
 
-        .cau-dung { border-left-color: #2dc653 !important; background: #f0fff4; color: #1b4332; }
-        .cau-sai { border-left-color: #e63946 !important; background: #fff5f5; color: #1b4332; }
+        label { display: block; padding: 10px; margin: 5px 0; border-radius: 8px; background: var(--label-bg); cursor: pointer; transition: 0.2s; }
+        label:hover { filter: brightness(0.9); }
+        input[type='radio'] { margin-right: 10px; transform: scale(1.2); accent-color: var(--secondary); }
 
         button { 
-            padding: 15px 35px; cursor: pointer; 
+            padding: 15px 30px; cursor: pointer; 
             background: linear-gradient(45deg, #2d6a4f, #52b788); 
             color: white; border: none; border-radius: 50px; 
-            font-weight: bold; font-size: 16px;
+            font-weight: bold; font-size: 16px; transition: 0.3s;
         }
+        button:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
 
-        label { display: block; padding: 12px; margin: 8px 0; border-radius: 12px; background: var(--label-bg); cursor: pointer; font-size: 18px; }
-        input[type='radio'] { accent-color: var(--secondary); transform: scale(1.3); margin-right: 12px; }
-        .loi-giai { font-style: italic; color: #d90429; margin-top: 15px; display: none; font-weight: bold; }
+        .loi-giai { font-style: italic; color: #d90429; margin-top: 10px; display: none; font-weight: bold; }
     </style>
+    
+    <!-- Thư viện Pháo hoa -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 </head>
-<body id="body-main">
+<body>
+
+    <!-- Âm thanh (nếu trình duyệt cho phép) -->
     <audio id="sound-click" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
     <audio id="sound-success" src="https://www.soundjay.com/human/sounds/applause-01.mp3"></audio>
 
 <div class="container">
+    <!-- MÀN HÌNH ĐĂNG NHẬP -->
     <div id="login-screen">
         <h1>🌿 EzMath 🌿</h1>
-        <p>Chọn một avatar thật ngầu nhen các em! ✨</p>
+        <p>Chọn một avatar và nhập tên để bắt đầu nào!</p>
         
         <div class="avatar-picker">
-            <img src="https://img5.thuthuatphanmem.vn/uploads/2021/11/08/anh-gau-truc-cute_082040722.jpg" class="avatar-option selected" data-seed="https://img5.thuthuatphanmem.vn/uploads/2021/11/08/anh-gau-truc-cute_082040722.jpg">
-            <img src="https://i.pinimg.com/originals/6d/dc/3f/6ddc3f9a79c891e0efd6042624e08f51.png" class="avatar-option" data-seed="https://i.pinimg.com/originals/6d/dc/3f/6ddc3f9a79c891e0efd6042624e08f51.png">
-            <img src="https://i.pinimg.com/originals/9a/c3/55/9ac355832f81c37f4964583c22bee6a0.jpg" class="avatar-option" data-seed="https://i.pinimg.com/originals/9a/c3/55/9ac355832f81c37f4964583c22bee6a0.jpg">
-            <img src="https://antimatter.vn/wp-content/uploads/2022/03/anh-anime-nam-chibi-meo-cute.jpg" class="avatar-option" data-seed="https://antimatter.vn/wp-content/uploads/2022/03/anh-anime-nam-chibi-meo-cute.jpg">
-            <img src="https://png.pngtree.com/png-clipart/20210314/original/pngtree-math-clipart-balloon-cartoon-math-symbol-png-image_6086532.jpg" class="avatar-option" data-seed="https://png.pngtree.com/png-clipart/20210314/original/pngtree-math-clipart-balloon-cartoon-math-symbol-png-image_6086532.jpg">
+            <img src="https://img5.thuthuatphanmem.vn/uploads/2021/11/08/anh-gau-truc-cute_082040722.jpg" class="avatar-option selected" data-url="https://img5.thuthuatphanmem.vn/uploads/2021/11/08/anh-gau-truc-cute_082040722.jpg">
+            <img src="https://i.pinimg.com/originals/6d/dc/3f/6ddc3f9a79c891e0efd6042624e08f51.png" class="avatar-option" data-url="https://i.pinimg.com/originals/6d/dc/3f/6ddc3f9a79c891e0efd6042624e08f51.png">
+            <img src="https://i.pinimg.com/originals/9a/c3/55/9ac355832f81c37f4964583c22bee6a0.jpg" class="avatar-option" data-url="https://i.pinimg.com/originals/9a/c3/55/9ac355832f81c37f4964583c22bee6a0.jpg">
+            <img src="https://antimatter.vn/wp-content/uploads/2022/03/anh-anime-nam-chibi-meo-cute.jpg" class="avatar-option" data-url="https://antimatter.vn/wp-content/uploads/2022/03/anh-anime-nam-chibi-meo-cute.jpg">
         </div>
 
-        <input type="text" id="student-name" class="input-login" placeholder="👤 Nhập họ và tên..."><br>
-        <input type="password" id="student-code" class="input-login" placeholder="🔑 Nhập mã bí mật..."><br>
-        <button id="btn-login">🚀 BẮT ĐẦU THỬ THÁCH</button>
+        <input type="text" id="student-name" class="input-login" placeholder="👤 Nhập tên của bạn...">
+        <input type="password" id="student-code" class="input-login" placeholder="🔑 Mã bí mật (Khánh: 0512)">
+        <br>
+        <button id="btn-login">🚀 VÀO LÀM BÀI NGAY</button>
         
-        <!-- NÚT CHUYỂN CHẾ ĐỘ NẰM DƯỚI NÚT BẮT ĐẦU -->
         <div id="theme-btn">🌙</div>
     </div>
 
+    <!-- MÀN HÌNH LÀM BÀI -->
     <div id="main-content" style="display:none;">
         <div id="profile-header" class="header-profile">
             <img id="user-img" src="">
-            <span id="user-name" style="font-weight: bold;"></span>
+            <span id="user-name" style="font-weight: bold; font-size: 1.2em;"></span>
         </div>
-        <h1>✍️ BÀI TẬP RÈN LUYỆN</h1>
+
         <div id="progress-container"><div id="progress-bar"></div></div>
-        <div id="dong-ho">⏳ Thời gian còn lại: 15:00</div>
+        <div id="dong-ho">⏳ Thời gian: 15:00</div>
+        
         <div id="vung-chua"></div>
-        <div style="text-align: center;">
-            <button id="btn-nop-bai">✔️ HOÀN THÀNH & NỘP BÀI</button>
-            <button onclick="location.reload()" style="margin-left: 10px; background: #6c757d;">🔄 LÀM ĐỀ MỚI</button>
+
+        <div style="text-align: center; margin-top: 20px;">
+            <button id="btn-nop-bai">✔️ NỘP BÀI</button>
+            <button onclick="location.reload()" style="margin-left: 10px; background: #6c757d;">🔄 LÀM LẠI</button>
         </div>
-        <div id="ket-qua"></div>
+        <div id="ket-qua" style="margin-top: 30px;"></div>
     </div>
 </div>
 
 <script>
-    var studentNameStored = "", giay = 900, timer, daNopBai = false, soLanViPham = 0;
-    // Lấy link ảnh đầu tiên làm mặc định
-    var currentSeed = "https://img5.thuthuatphanmem.vn/uploads/2021/11/08/anh-gau-truc-cute_082040722.jpg"; 
-    const GIOI_HAN_VI_PHAM = 2, SO_CAU_MOI_DE = 5;
-    var danhSachHocSinh = { "Nguyễn Văn An": "an123", "Trần Thị Bình": "binh456", "Khánh": "0512" };
-    
-    var khoCauHoi = [
+    // Dữ liệu & Cấu hình
+    const SO_CAU_HỎI = 5;
+    let studentName = "", giay = 900, timer, daNopBai = false;
+    let currentAvatar = "https://img5.thuthuatphanmem.vn/uploads/2021/11/08/anh-gau-truc-cute_082040722.jpg";
+    const danhSachHocSinh = { "Khánh": "0512", "Admin": "123", "Học sinh": "000" };
+
+    const khoCauHoi = [
         { de: "15 + 25 bằng bao nhiêu?", luaChon: ["30", "35", "40", "45"], dung: "40" },
         { de: "Hình tam giác có mấy cạnh?", luaChon: ["2", "3", "4", "5"], dung: "3" },
         { de: "Số nào lớn nhất: 89, 98, 100, 99?", luaChon: ["89", "98", "100", "99"], dung: "100" },
         { de: "Kết quả của phép tính 7 x 8 là?", luaChon: ["54", "56", "64", "49"], dung: "56" },
-        { de: "Số nào là số chẵn nhỏ nhất có hai chữ số?", luaChon: ["10", "12", "02", "11"], dung: "10" },
-        { de: "Một hình vuông có cạnh 5cm. Chu vi là?", luaChon: ["10cm", "20cm", "25cm", "15cm"], dung: "20cm" },
-        { de: "Số liền trước của 1000 là?", luaChon: ["999", "1001", "990", "900"], dung: "999" },
         { de: "3 giờ bằng bao nhiêu phút?", luaChon: ["120 phút", "150 phút", "180 phút", "200 phút"], dung: "180 phút" },
-        { de: "Kết quả của 100 - 45 là?", luaChon: ["45", "55", "65", "35"], dung: "55" },
-        { de: "Số gồm 5 trăm và 5 đơn vị là?", luaChon: ["55", "550", "505", "5005"], dung: "505" }
+        { de: "Số liền trước của 1000 là?", luaChon: ["999", "1001", "990", "900"], dung: "999" },
+        { de: "Một hình vuông có cạnh 5cm. Chu vi là?", luaChon: ["10cm", "20cm", "25cm", "15cm"], dung: "20cm" }
     ];
 
-    var danhSachHienTai = []; 
+    let danhSachHienTai = [];
 
-    // XỬ LÝ DARK MODE
+    // 1. Xử lý Dark Mode
     const themeBtn = document.getElementById('theme-btn');
     themeBtn.addEventListener('click', () => {
         document.body.classList.toggle('dark-mode');
         themeBtn.innerText = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
-        document.getElementById('sound-click').play();
+        playClick();
     });
 
-    // Click chọn avatar
-    document.querySelectorAll('.avatar-option').forEach(opt => {
-        opt.addEventListener('click', function() {
-            document.querySelectorAll('.avatar-option').forEach(img => img.classList.remove('selected'));
+    // 2. Chọn Avatar
+    document.querySelectorAll('.avatar-option').forEach(img => {
+        img.addEventListener('click', function() {
+            document.querySelectorAll('.avatar-option').forEach(i => i.classList.remove('selected'));
             this.classList.add('selected');
-            currentSeed = this.getAttribute('data-seed');
-            document.getElementById('sound-click').play();
+            currentAvatar = this.dataset.url;
+            playClick();
         });
     });
 
-    document.getElementById('btn-login').addEventListener('click', checkLogin);
-    document.getElementById('btn-nop-bai').addEventListener('click', chamDiem);
+    // 3. Đăng nhập
+    document.getElementById('btn-login').addEventListener('click', () => {
+        const name = document.getElementById('student-name').value.trim();
+        const code = document.getElementById('student-code').value.trim();
 
-    document.addEventListener('change', function(e) {
-        if(e.target.type === 'radio') {
-            document.getElementById('sound-click').play();
-            let done = 0;
-            for(let i=0; i < SO_CAU_MOI_DE; i++) {
-                if(document.querySelector('input[name="cau'+i+'"]:checked')) done++;
-            }
-            document.getElementById('progress-bar').style.width = (done / SO_CAU_MOI_DE) * 100 + "%";
-        }
-    });
-
-    function checkLogin() {
-        var n = document.getElementById('student-name').value.trim();
-        var c = document.getElementById('student-code').value.trim();
-        if (danhSachHocSinh[n] === c) {
-            studentNameStored = n;
+        if (danhSachHocSinh[name] === code) {
+            studentName = name;
             document.getElementById('login-screen').style.display = "none";
             document.getElementById('main-content').style.display = "block";
             document.getElementById('progress-container').style.display = "block";
-            
-            // Kích hoạt chế độ in-game để nút Mode nhảy lên góc
             document.body.classList.add('in-game');
-
-            // Hiện tên và avatar lên đầu bài (SỬA ĐỂ HIỆN LINK ẢNH TRỰC TIẾP)
-            document.getElementById('user-img').src = currentSeed;
-            document.getElementById('user-name').innerText = studentNameStored;
+            
+            document.getElementById('user-img').src = currentAvatar;
+            document.getElementById('user-name').innerText = studentName;
 
             taoDe();
             batDauDemNguoc();
-        } else { alert("Sai thông tin rồi em ơi! ❌"); }
+        } else {
+            alert("Thông tin đăng nhập không đúng rồi!");
+        }
+    });
+
+    // 4. Tạo đề bài ngẫu nhiên
+    function taoDe() {
+        const vungChua = document.getElementById('vung-chua');
+        vungChua.innerHTML = "";
+        danhSachHienTai = khoCauHoi.sort(() => 0.5 - Math.random()).slice(0, SO_CAU_HỎI);
+
+        danhSachHienTai.forEach((item, i) => {
+            let html = `
+                <div class="khung" id="box${i}">
+                    <p style="font-weight:bold; font-size:18px;">Câu ${i+1}: ${item.de}</p>
+                    ${item.luaChon.map(lc => `
+                        <label>
+                            <input type="radio" name="cau${i}" value="${lc}" onchange="updateProgress()"> ${lc}
+                        </label>
+                    `).join('')}
+                    <div class="loi-giai" id="note${i}">💡 Đáp án đúng: ${item.dung}</div>
+                </div>`;
+            vungChua.innerHTML += html;
+        });
     }
 
+    // 5. Cập nhật thanh tiến độ
+    window.updateProgress = function() {
+        playClick();
+        let checked = 0;
+        for(let i=0; i<SO_CAU_HỎI; i++) {
+            if(document.querySelector(`input[name="cau${i}"]:checked`)) checked++;
+        }
+        document.getElementById('progress-bar').style.width = (checked / SO_CAU_HỎI) * 100 + "%";
+    }
+
+    // 6. Đếm ngược
     function batDauDemNguoc() {
-        timer = setInterval(function() {
+        timer = setInterval(() => {
             if (daNopBai) return;
-            var p = Math.floor(giay / 60), g = giay % 60;
-            document.getElementById('dong-ho').innerHTML = "⏳ Thời gian còn lại: " + p + ":" + (g < 10 ? "0" + g : g);
+            let m = Math.floor(giay / 60), s = giay % 60;
+            document.getElementById('dong-ho').innerText = `⏳ Thời gian: ${m}:${s < 10 ? '0'+s : s}`;
             if (giay-- <= 0) { clearInterval(timer); chamDiem(); }
         }, 1000);
     }
 
-    function taoDe() {
-        var v = document.getElementById('vung-chua'); 
-        v.innerHTML = "";
-        danhSachHienTai = khoCauHoi.sort(function() { return 0.5 - Math.random(); }).slice(0, SO_CAU_MOI_DE);
-        danhSachHienTai.forEach(function(item, i) {
-            var html = "<div class='khung' id='box"+i+"'><p style='font-weight:bold; font-size:20px;'>📝 Câu "+(i+1)+": "+item.de+"</p>";
-            item.luaChon.forEach(function(lc) {
-                html += "<label><input type='radio' name='cau"+i+"' value='"+lc+"'> "+lc+"</label>";
-            });
-            html += "<div class='loi-giai' id='note"+i+"'>💡 Đáp án đúng: "+item.dung+"</div></div>";
-            v.innerHTML += html;
-        });
-    }
+    // 7. Chấm điểm & Hiệu ứng
+    document.getElementById('btn-nop-bai').addEventListener('click', chamDiem);
 
     function chamDiem() {
-        if (daNopBai) return; 
-        daNopBai = true; 
+        if (daNopBai) return;
+        daNopBai = true;
         clearInterval(timer);
-        var d = 0;
-        
-        danhSachHienTai.forEach(function(item, i) {
-            var chon = Array.from(document.getElementsByName('cau' + i)).find(function(r) { return r.checked; })?.value;
-            var b = document.getElementById('box' + i);
-            if (chon === item.dung) { 
-                d++; 
-                b.classList.add('cau-dung'); 
-            } else { 
-                b.classList.add('cau-sai'); 
-                document.getElementById('note' + i).style.display = "block"; 
+
+        let dung = 0;
+        danhSachHienTai.forEach((item, i) => {
+            const chon = document.querySelector(`input[name="cau${i}"]:checked`)?.value;
+            const box = document.getElementById(`box${i}`);
+            if (chon === item.dung) {
+                dung++;
+                box.classList.add('cau-dung');
+            } else {
+                box.classList.add('cau-sai');
+                document.getElementById(`note${i}`).style.display = "block";
             }
         });
 
-        var diem = Math.round((d / SO_CAU_MOI_DE) * 100) / 10;
-        if (diem >= 8) { banPhaoHoa(); }
+        const diem = (dung / SO_CAU_HỎI) * 10;
+        if (diem >= 8) banPhaoHoa();
 
-        var icon = diem >= 8 ? "🏆 Tuyệt vời!" : (diem >= 5 ? "👏 Khá lắm!" : "💪 Cố gắng lên!");
-        
         document.getElementById('ket-qua').innerHTML = `
-            <div style='background: var(--box-bg); padding:20px; border-radius:20px; border:2px solid var(--secondary); text-align:center;'>
-                <img src="${currentSeed}" style="width:100px; height:100px; border-radius:50%; border:3px solid var(--accent); margin-bottom:10px; object-fit:cover;">
-                <h2 style='color: var(--primary);'>${icon}</h2>
-                <p style='font-size:40px; font-weight:bold; color:#d00000;'>💯 ${diem} ĐIỂM</p>
-                <p>Đúng ${d}/${SO_CAU_MOI_DE} câu. Đã gửi cho thầy!</p>
+            <div style="text-align:center; padding:20px; background:var(--light); border-radius:20px; color:var(--primary);">
+                <h2>KẾT QUẢ CỦA ${studentName.toUpperCase()}</h2>
+                <p style="font-size:48px; font-weight:bold; margin:10px 0;">💯 ${diem} ĐIỂM</p>
+                <p>Bạn đã trả lời đúng ${dung}/${SO_CAU_HỎI} câu hỏi.</p>
             </div>`;
         
-        fetch("https://script.google.com/macros/s/AKfycbz4IPNx4fkDGi_oy3K15LSqIhB8ZtfmfN3Q_kKNIb7KKGrBjqkl8yKT2FusSjeVNlw/exec", {
-            method: "POST", mode: "no-cors", 
-            body: JSON.stringify({hoTen: studentNameStored, soCauDung: d+"/"+SO_CAU_MOI_DE, diemSo: diem})
-        });
+        document.getElementById('btn-nop-bai').style.display = "none";
     }
 
-    function banPhaoHoa(){
-        if(typeof confetti !== 'undefined') {
-            document.getElementById('sound-success').play();
-            var duration = 3 * 1000;
-            var end = Date.now() + duration;
-            (function frame() {
-                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0, y: 0.8 }, colors: ['#40916c', '#ff9f1c', '#2d6a4f'] });
-                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1, y: 0.8 }, colors: ['#40916c', '#ff9f1c', '#2d6a4f'] });
-                if (Date.now() < end) { requestAnimationFrame(frame); }
-            }());
-        }
+    function banPhaoHoa() {
+        document.getElementById('sound-success').play();
+        const duration = 3 * 1000, end = Date.now() + duration;
+        (function frame() {
+            confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0, y: 0.8 } });
+            confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1, y: 0.8 } });
+            if (Date.now() < end) requestAnimationFrame(frame);
+        }());
     }
 
-    document.addEventListener("visibilitychange", function() {
-        if (document.visibilityState === 'hidden' && !daNopBai && studentNameStored !== "") {
-            soLanViPham++;
-            if (soLanViPham < GIOI_HAN_VI_PHAM) alert("⚠️ CẢNH BÁO: Rời trang " + soLanViPham + " lần! 1/2");
-            else chamDiem();
-        }
-    });
+    function playClick() { document.getElementById('sound-click').play(); }
 
-    document.addEventListener('contextmenu', function(event) {
-        if (!daNopBai && studentNameStored !== "") { event.preventDefault(); alert("🤫 Không dùng chuột phải!"); }
-    });
-
-    window.addEventListener("pagehide", function (e) {
-        if (studentNameStored !== "" && !daNopBai) {
-            var d = 0;
-            danhSachHienTai.forEach(function(item, i) {
-                var chon = Array.from(document.getElementsByName('cau' + i)).find(function(r) { return r.checked; })?.value;
-                if (chon === item.dung) { d++; }
-            });
-            var diemTamThoi = Math.round((d / SO_CAU_MOI_DE) * 100) / 10;
-            var data = JSON.stringify({ hoTen: studentNameStored + " (Thoát ngang)", soCauDung: d + "/" + SO_CAU_MOI_DE, diemSo: diemTamThoi });
-            var url = "https://script.google.com/macros/s/AKfycbz4IPNx4fkDGi_oy3K15LSqIhB8ZtfmfN3Q_kKNIb7KKGrBjqkl8yKT2FusSjeVNlw/exec";
-            if (navigator.sendBeacon) { navigator.sendBeacon(url, data); } 
-            else { fetch(url, { method: "POST", mode: "no-cors", keepalive: true, body: data }); }
-        }
-    });
-
-    window.addEventListener("beforeunload", function (e) {
-        if (studentNameStored && studentNameStored.trim() !== "" && !daNopBai) {
-            e.preventDefault();
-            e.returnValue = "Hệ thống sẽ ghi nhận điểm 0 nếu bạn thoát bây giờ!"; 
-            return "Hệ thống sẽ ghi nhận điểm 0 nếu bạn thoát bây giờ!";
+    // Chống gian lận cơ bản
+    document.addEventListener("visibilitychange", () => {
+        if (document.hidden && !daNopBai && studentName) {
+            alert("⚠️ Cảnh báo: Đừng rời trang khi đang làm bài nhé!");
         }
     });
 </script>
+
 </body>
 </html>
