@@ -276,6 +276,14 @@ window.addEventListener("pagehide", function (e) {
         }
     }
 });
+    // HIỂN THỊ CẢNH BÁO KHI HỌC SINH ĐỊNH RESET HOẶC THOÁT
+window.addEventListener("beforeunload", function (e) {
+    if (studentNameStored !== "" && !daNopBai) {
+        // Thông báo này sẽ ép trình duyệt hiển thị hộp thoại xác nhận
+        e.preventDefault();
+        e.returnValue = "Kết quả hiện tại sẽ được gửi đi. Bạn có chắc muốn thoát không?";
+    }
+});
 </script>
 </body>
 </html>
