@@ -20,7 +20,6 @@
             margin: 0;
             display: flex;
             justify-content: center;
-            align-items: center; /* Căn giữa theo chiều dọc */
         }
 
         .container { 
@@ -46,58 +45,40 @@
             text-align: center;
         }
 
-        /* ----- CSS Mới cho Avatar ----- */
+        /* --- CSS CHO AVATAR --- */
         .avatar-picker {
             display: flex;
             justify-content: center;
             gap: 15px;
-            margin-bottom: 20px;
-            flex-wrap: wrap; /* Tự xuống dòng trên điện thoại */
+            margin: 20px 0;
+            flex-wrap: wrap;
         }
-
         .avatar-option {
-            width: 70px;
-            height: 70px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
-            border: 4px solid transparent;
+            border: 3px solid transparent;
             cursor: pointer;
             transition: 0.3s;
-            object-fit: cover; /* Giữ tỷ lệ ảnh */
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            background: #eee;
         }
-
-        .avatar-option:hover {
-            transform: scale(1.1);
-        }
-
         .avatar-option.selected {
             border-color: var(--accent);
-            box-shadow: 0 0 15px rgba(255, 159, 28, 0.5);
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(255,159,28,0.5);
         }
-
-        /* Thêm hiệu ứng cho tên học sinh trên thanh tiến trình */
         .header-profile {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 15px;
+            gap: 10px;
             margin-bottom: 20px;
+            background: #f0fdf4;
             padding: 10px;
-            background: rgba(27, 67, 50, 0.1);
-            border-radius: 15px;
+            border-radius: 50px;
         }
-        .header-profile img {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border: 2px solid var(--secondary);
-        }
-        .header-profile span {
-            font-size: 20px;
-            font-weight: bold;
-            color: var(--primary);
-        }
-        /* ------------------------------- */
+        .header-profile img { width: 40px; height: 40px; border-radius: 50%; }
+        /* ----------------------- */
 
         #progress-container { width: 100%; background: #eee; border-radius: 10px; margin-bottom: 25px; height: 15px; overflow: hidden; display:none; }
         #progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #40916c, #2dc653); transition: 0.4s; }
@@ -139,15 +120,13 @@
         <h1>🌿 EzMath 🌿</h1>
         <p>Chọn một avatar thật ngầu nhen các em! ✨</p>
         
-        <!-- --- KHU VỰC CHỌN AVATAR MỚI --- -->
         <div class="avatar-picker">
-            <img src="https://api.dicebear.com/8.x/lorelei/svg?seed=Bear" class="avatar-option selected" data-avatar="Bear" alt="Bear">
-            <img src="https://api.dicebear.com/8.x/lorelei/svg?seed=Cat" class="avatar-option" data-avatar="Cat" alt="Cat">
-            <img src="https://api.dicebear.com/8.x/lorelei/svg?seed=Dog" class="avatar-option" data-avatar="Dog" alt="Dog">
-            <img src="https://api.dicebear.com/8.x/lorelei/svg?seed=Rabbit" class="avatar-option" data-avatar="Rabbit" alt="Rabbit">
-            <img src="https://api.dicebear.com/8.x/lorelei/svg?seed=Fox" class="avatar-option" data-avatar="Fox" alt="Fox">
+            <img src="https://api.dicebear.com/8.x/adventurer/svg?seed=Felix" class="avatar-option selected" data-seed="Felix">
+            <img src="https://api.dicebear.com/8.x/adventurer/svg?seed=Aneka" class="avatar-option" data-seed="Aneka">
+            <img src="https://api.dicebear.com/8.x/adventurer/svg?seed=Milo" class="avatar-option" data-seed="Milo">
+            <img src="https://api.dicebear.com/8.x/adventurer/svg?seed=Tigger" class="avatar-option" data-seed="Tigger">
+            <img src="https://api.dicebear.com/8.x/adventurer/svg?seed=Buster" class="avatar-option" data-seed="Buster">
         </div>
-        <!-- -------------------------------- -->
 
         <input type="text" id="student-name" class="input-login" placeholder="👤 Nhập họ và tên..."><br>
         <input type="password" id="student-code" class="input-login" placeholder="🔑 Nhập mã bí mật..."><br>
@@ -155,14 +134,11 @@
     </div>
 
     <div id="main-content" style="display:none;">
-        
-        <!-- --- HIỂN THỊ AVATAR TRONG BÀI --- -->
-        <div id="profile-header" class="header-profile" style="display: none;">
-            <img id="current-avatar" src="" alt="Avatar">
-            <span id="current-name"></span>
+        <div id="profile-header" class="header-profile">
+            <img id="user-img" src="">
+            <span id="user-name" style="font-weight: bold; color: var(--primary);"></span>
         </div>
-        <!-- -------------------------------- -->
-
+        <h1>✍️ BÀI TẬP RÈN LUYỆN</h1>
         <div id="progress-container"><div id="progress-bar"></div></div>
         <div id="dong-ho">⏳ Thời gian còn lại: 15:00</div>
         <div id="vung-chua"></div>
@@ -176,7 +152,7 @@
 
 <script>
     var studentNameStored = "", giay = 900, timer, daNopBai = false, soLanViPham = 0;
-    var currentAvatarStored = "Bear"; // Avatar mặc định
+    var currentSeed = "Felix"; // Seed mặc định
     const GIOI_HAN_VI_PHAM = 2, SO_CAU_MOI_DE = 5;
     var danhSachHocSinh = { "Nguyễn Văn An": "an123", "Trần Thị Bình": "binh456", "Khánh": "0512" };
     
@@ -195,22 +171,18 @@
 
     var danhSachHienTai = []; 
 
+    // Click chọn avatar
+    document.querySelectorAll('.avatar-option').forEach(opt => {
+        opt.addEventListener('click', function() {
+            document.querySelectorAll('.avatar-option').forEach(img => img.classList.remove('selected'));
+            this.classList.add('selected');
+            currentSeed = this.getAttribute('data-seed');
+            document.getElementById('sound-click').play();
+        });
+    });
+
     document.getElementById('btn-login').addEventListener('click', checkLogin);
     document.getElementById('btn-nop-bai').addEventListener('click', chamDiem);
-
-    // --- SỰ KIỆN CHỌN AVATAR ---
-    document.querySelector('.avatar-picker').addEventListener('click', function(e) {
-        if (e.target.classList.contains('avatar-option')) {
-            // Xóa class 'selected' của cái cũ
-            document.querySelector('.avatar-option.selected').classList.remove('selected');
-            // Thêm class 'selected' cho cái mới
-            e.target.classList.add('selected');
-            // Lưu lại seed của avatar
-            currentAvatarStored = e.target.getAttribute('data-avatar');
-            document.getElementById('sound-click').play();
-        }
-    });
-    // ----------------------------
 
     document.addEventListener('change', function(e) {
         if(e.target.type === 'radio') {
@@ -231,12 +203,10 @@
             document.getElementById('login-screen').style.display = "none";
             document.getElementById('main-content').style.display = "block";
             document.getElementById('progress-container').style.display = "block";
-
-            // --- HIỂN THỊ AVATAR VÀ TÊN LÊN GIAO DIỆN CHÍNH ---
-            document.getElementById('profile-header').style.display = "flex";
-            document.getElementById('current-avatar').src = `https://api.dicebear.com/8.x/lorelei/svg?seed=${currentAvatarStored}`;
-            document.getElementById('current-name').innerHTML = `👤 ${studentNameStored}`;
-            // ---------------------------------------------------
+            
+            // Hiện tên và avatar lên đầu bài
+            document.getElementById('user-img').src = `https://api.dicebear.com/8.x/adventurer/svg?seed=${currentSeed}`;
+            document.getElementById('user-name').innerText = studentNameStored;
 
             taoDe();
             batDauDemNguoc();
@@ -244,7 +214,6 @@
     }
 
     function batDauDemNguoc() {
-        if(timer) clearInterval(timer); // Đảm bảo không bị timer lặp
         timer = setInterval(function() {
             if (daNopBai) return;
             var p = Math.floor(giay / 60), g = giay % 60;
@@ -286,22 +255,16 @@
         });
 
         var diem = Math.round((d / SO_CAU_MOI_DE) * 100) / 10;
-        
-        if (diem >= 8) {
-            banPhaoHoa();
-        }
+        if (diem >= 8) { banPhaoHoa(); }
 
         var icon = diem >= 8 ? "🏆 Tuyệt vời!" : (diem >= 5 ? "👏 Khá lắm!" : "💪 Cố gắng lên!");
         
-        // --- HIỂN THỊ AVATAR TRONG KẾT QUẢ ---
-        var finalAvatar = `https://api.dicebear.com/8.x/lorelei/svg?seed=${currentAvatarStored}`;
-        
         document.getElementById('ket-qua').innerHTML = `
             <div style='background:#e9f5ee; padding:20px; border-radius:20px; border:2px solid #b7e4c7; text-align:center;'>
-                <img src="${finalAvatar}" style="width:80px; height:80px; border-radius:50%; margin-bottom:10px; border:3px solid ${diem>=8?'#ff9f1c':'#6c757d'}">
-                <h2 style='color:#1b4332; margin-top:0;'>${icon}</h2>
-                <p style='font-size:40px; font-weight:bold; color:#d00000; margin:10px 0;'>💯 ${diem} ĐIỂM</p>
-                <p>Học sinh: <strong>${studentNameStored}</strong> đã đúng ${d}/${SO_CAU_MOI_DE} câu. Đã gửi cho thầy!</p>
+                <img src="https://api.dicebear.com/8.x/adventurer/svg?seed=${currentSeed}" style="width:80px; border-radius:50%; border:3px solid var(--secondary); margin-bottom:10px;">
+                <h2 style='color:#1b4332;'>${icon}</h2>
+                <p style='font-size:40px; font-weight:bold; color:#d00000;'>💯 ${diem} ĐIỂM</p>
+                <p>Đúng ${d}/${SO_CAU_MOI_DE} câu. Đã gửi cho thầy!</p>
             </div>`;
         
         fetch("https://script.google.com/macros/s/AKfycbz4IPNx4fkDGi_oy3K15LSqIhB8ZtfmfN3Q_kKNIb7KKGrBjqkl8yKT2FusSjeVNlw/exec", {
@@ -315,26 +278,10 @@
             document.getElementById('sound-success').play();
             var duration = 3 * 1000;
             var end = Date.now() + duration;
-
             (function frame() {
-                confetti({
-                    particleCount: 5,
-                    angle: 60,
-                    spread: 55,
-                    origin: { x: 0, y: 0.8 },
-                    colors: ['#40916c', '#ff9f1c', '#2d6a4f']
-                });
-                confetti({
-                    particleCount: 5,
-                    angle: 120,
-                    spread: 55,
-                    origin: { x: 1, y: 0.8 },
-                    colors: ['#40916c', '#ff9f1c', '#2d6a4f']
-                });
-
-                if (Date.now() < end) {
-                    requestAnimationFrame(frame);
-                }
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0, y: 0.8 }, colors: ['#40916c', '#ff9f1c', '#2d6a4f'] });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1, y: 0.8 }, colors: ['#40916c', '#ff9f1c', '#2d6a4f'] });
+                if (Date.now() < end) { requestAnimationFrame(frame); }
             }());
         }
     }
@@ -343,7 +290,7 @@
         if (document.visibilityState === 'hidden' && !daNopBai && studentNameStored !== "") {
             soLanViPham++;
             if (soLanViPham < GIOI_HAN_VI_PHAM) alert("⚠️ CẢNH BÁO: Rời trang " + soLanViPham + " lần! 1/2");
-            else { clearInterval(timer); chamDiem(); }
+            else chamDiem();
         }
     });
 
@@ -358,20 +305,11 @@
                 var chon = Array.from(document.getElementsByName('cau' + i)).find(function(r) { return r.checked; })?.value;
                 if (chon === item.dung) { d++; }
             });
-
             var diemTamThoi = Math.round((d / SO_CAU_MOI_DE) * 100) / 10;
-            var data = JSON.stringify({
-                hoTen: studentNameStored + " (Thoát ngang)", 
-                soCauDung: d + "/" + SO_CAU_MOI_DE, 
-                diemSo: diemTamThoi
-            });
-
+            var data = JSON.stringify({ hoTen: studentNameStored + " (Thoát ngang)", soCauDung: d + "/" + SO_CAU_MOI_DE, diemSo: diemTamThoi });
             var url = "https://script.google.com/macros/s/AKfycbz4IPNx4fkDGi_oy3K15LSqIhB8ZtfmfN3Q_kKNIb7KKGrBjqkl8yKT2FusSjeVNlw/exec";
-            if (navigator.sendBeacon) {
-                navigator.sendBeacon(url, data);
-            } else {
-                fetch(url, { method: "POST", mode: "no-cors", keepalive: true, body: data });
-            }
+            if (navigator.sendBeacon) { navigator.sendBeacon(url, data); } 
+            else { fetch(url, { method: "POST", mode: "no-cors", keepalive: true, body: data }); }
         }
     });
 
