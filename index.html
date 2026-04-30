@@ -116,10 +116,28 @@
             font-weight: 500;
             line-height: 1.5;
         }
+        #custom-alert {
+    display: none;
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    z-index: 10000;
+    text-align: center;
+    border: 2px solid #4CAF50;
+    font-weight: bold;
+}
     </style>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 </head>
 <body>
+    <div id="custom-alert">
+    <p id="alert-text"></p>
+    <button onclick="document.getElementById('custom-alert').style.display='none'" style="cursor:pointer; padding: 5px 20px;">OK thầy ơi!</button>
+</div>
     <audio id="sound-click" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
     <audio id="sound-success" src="https://www.soundjay.com/human/sounds/applause-01.mp3"></audio>
     <audio id="sound-denied" src="https://www.soundjay.com/buttons/sounds/beep-05.mp3"></audio>
@@ -378,7 +396,20 @@ document.onkeydown = function(e) {
         return false;
     }
 };
+// CHIÊU CUỐI: KHIẾN DEVTOOLS TRỞ NÊN VÔ DỤNG
+setInterval(function() {
+    // 1. Kiểm tra nếu cửa sổ bị thay đổi kích thước đột ngột (dấu hiệu mở F12)
+    if (window.outerHeight - window.innerHeight > 160 || window.outerWidth - window.innerWidth > 160) {
+        // 2. Ép trình duyệt rơi vào trạng thái gỡ lỗi liên tục
+        // Làm cho các em không thể nhấn vào đâu trong bảng F12 được nữa
+        debugger; 
+    }
+}, 100); // Kiểm tra cực nhanh mỗi 0.1 giây
 
+// 3. Vô hiệu hóa việc chuột phải vào các phần tử nhạy cảm
+document.onkeydown = function(e) {
+    if (e.keyCode == 123) return false;
+};
 // Kết hợp với cái setInterval debugger phía trên là bộ đôi hoàn hảo nhen!
 </script>
 </body>
