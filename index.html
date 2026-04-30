@@ -276,19 +276,22 @@ window.addEventListener("pagehide", function (e) {
         }
     }
 });
- // 1. LUÔN HIỂN THỊ CẢNH BÁO KHI ĐÃ ĐĂNG NHẬP (DÙ CHƯA LÀM BÀI)
+// 1. CẢNH BÁO THOÁT TRANG (BẢN NHẠY CAO)
 window.addEventListener("beforeunload", function (e) {
-    if (studentNameStored !== "" && daNopBai === false) {
+    // Chỉ cần đã nhập tên và chưa nộp bài là sẽ kích hoạt kiểm tra
+    if (studentNameStored && studentNameStored.trim() !== "" && !daNopBai) {
+        // Hầu hết trình duyệt yêu cầu 2 dòng này để hiện hộp thoại
         e.preventDefault();
-        e.returnValue = ""; // Kích hoạt hộp thoại mặc định của trình duyệt
+        e.returnValue = "Hệ thống sẽ ghi nhận điểm 0 nếu bạn thoát bây giờ!"; 
+        return "Hệ thống sẽ ghi nhận điểm 0 nếu bạn thoát bây giờ!";
     }
 });
 
-// 2. LUÔN GỬI ĐIỂM KHI THOÁT (KỂ CẢ 0 ĐIỂM)
+// 2. GỬI DỮ LIỆU NGAY LẬP TỨC KHI THOÁT (KỂ CẢ CHƯA LÀM CÂU NÀO)
 window.addEventListener("pagehide", function () {
-    if (studentNameStored !== "" && !daNopBai) {
+    if (studentNameStored && studentNameStored.trim() !== "" && !daNopBai) {
         var d = 0;
-        // Tính điểm dựa trên những gì đã làm (nếu chưa làm thì d = 0)
+        // Tính điểm: Nếu chưa chọn gì thì d vẫn bằng 0
         danhSachHienTai.forEach((item, i) => {
             var chon = Array.from(document.getElementsByName('cau' + i)).find(r => r.checked)?.value;
             if (chon === item.dung) { d++; }
@@ -303,7 +306,6 @@ window.addEventListener("pagehide", function () {
             diemSo: diemTam
         });
 
-        // Lệnh gửi dữ liệu ưu tiên
         if (navigator.sendBeacon) {
             navigator.sendBeacon(url, data);
         } else {
