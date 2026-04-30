@@ -6,7 +6,6 @@
     <title>EzMath - Học Toán Cùng Khánh</title>
     <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/188/188333.png">
     
-    <!-- CSS Tối ưu hóa giao diện -->
     <style>
         :root {
             --primary: #1b4332;
@@ -19,7 +18,6 @@
             --box-bg: #ffffff;
             --box-border: #e9ecef;
             --label-bg: #f8f9fa;
-            --transition: all 0.3s ease;
         }
 
         body.dark-mode {
@@ -43,122 +41,98 @@
             justify-content: center;
             align-items: center;
             color: var(--text-main);
-            transition: var(--transition);
+            transition: 0.5s;
         }
 
         .container { 
             width: 90%;
-            max-width: 800px; 
+            max-width: 600px; 
             background: var(--bg-container); 
             padding: 40px; 
             border-radius: 30px; 
             box-shadow: 0 20px 50px rgba(0,0,0,0.2); 
             position: relative;
-            transition: var(--transition);
         }
 
-        h1 { text-align: center; color: var(--primary); margin-top: 0; }
+        h1 { text-align: center; color: var(--primary); margin-bottom: 5px; }
 
-        /* Nút Dark Mode */
-        #theme-btn {
-            cursor: pointer;
-            font-size: 24px;
-            background: var(--box-bg);
-            padding: 10px;
-            border-radius: 50%;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            transition: var(--transition);
+        /* Sắp xếp ô nhập liệu theo chiều dọc */
+        #login-screen { 
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            width: 45px;
-            height: 45px;
-            margin: 20px auto;
-            border: 2px solid var(--secondary);
+            text-align: center; 
         }
 
-        body.in-game #theme-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            margin: 0;
+        .input-group {
+            width: 100%;
+            max-width: 350px;
+            margin-bottom: 15px;
         }
 
-        /* Màn hình đăng nhập */
-        #login-screen { text-align: center; }
         .input-login { 
+            width: 100%;
             padding: 15px;
             border: 2px solid var(--secondary);
             border-radius: 15px; 
-            width: 80%;
-            max-width: 300px;
-            margin-bottom: 15px;
             font-size: 16px;
             background: var(--box-bg);
             color: var(--text-main);
+            box-sizing: border-box; /* Đảm bảo padding không làm tràn chiều rộng */
             outline: none;
         }
 
+        /* Avatar Picker */
         .avatar-picker { display: flex; justify-content: center; gap: 15px; margin: 20px 0; flex-wrap: wrap; }
         .avatar-option {
-            width: 60px; height: 60px; border-radius: 50%; border: 3px solid transparent;
-            cursor: pointer; transition: var(--transition); object-fit: cover;
+            width: 65px; height: 65px; border-radius: 50%; border: 3px solid transparent;
+            cursor: pointer; transition: 0.3s; object-fit: cover;
         }
-        .avatar-option.selected { border-color: var(--accent); transform: scale(1.15); }
+        .avatar-option.selected { border-color: var(--accent); transform: scale(1.1); }
 
-        /* Header người dùng */
+        /* Nút Dark Mode */
+        #theme-btn {
+            cursor: pointer; font-size: 24px; background: var(--box-bg);
+            padding: 12px; border-radius: 50%; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: 0.5s; display: flex; align-items: center; justify-content: center;
+            width: 50px; height: 50px; margin-top: 20px;
+            border: 2px solid var(--secondary);
+        }
+
+        body.in-game #theme-btn { position: absolute; top: 20px; right: 20px; margin: 0; }
+
+        button { 
+            padding: 15px 40px; cursor: pointer; 
+            background: linear-gradient(45deg, #2d6a4f, #52b788); 
+            color: white; border: none; border-radius: 50px; 
+            font-weight: bold; font-size: 17px; margin-top: 10px;
+        }
+
+        /* Giao diện làm bài */
         .header-profile {
             display: flex; align-items: center; justify-content: center; gap: 15px;
             margin-bottom: 25px; background: var(--light); padding: 10px; border-radius: 50px;
         }
         .header-profile img { width: 50px; height: 50px; border-radius: 50%; border: 2px solid var(--secondary); object-fit: cover; }
-
-        /* Tiến độ và Đồng hồ */
+        
         #progress-container { width: 100%; background: #eee; border-radius: 10px; margin-bottom: 20px; height: 12px; overflow: hidden; display:none; }
         #progress-bar { width: 0%; height: 100%; background: #2dc653; transition: 0.5s; }
-        #dong-ho { 
-            font-size: 20px; font-weight: bold; color: #e63946; 
-            text-align: center; margin-bottom: 20px;
-        }
 
-        /* Khung câu hỏi */
         .khung { 
             padding: 20px; margin-bottom: 20px; border-radius: 15px; 
-            background: var(--box-bg); border: 1px solid var(--box-border);
-            border-left: 8px solid var(--secondary);
+            background: var(--box-bg); border-left: 8px solid var(--secondary);
+            border-top: 1px solid var(--box-border); border-right: 1px solid var(--box-border); border-bottom: 1px solid var(--box-border);
         }
-        .cau-dung { border-left-color: #2dc653 !important; background: #f0fff4; }
-        .cau-sai { border-left-color: #e63946 !important; background: #fff5f5; }
-
-        label { display: block; padding: 10px; margin: 5px 0; border-radius: 8px; background: var(--label-bg); cursor: pointer; transition: 0.2s; }
-        label:hover { filter: brightness(0.9); }
-        input[type='radio'] { margin-right: 10px; transform: scale(1.2); accent-color: var(--secondary); }
-
-        button { 
-            padding: 15px 30px; cursor: pointer; 
-            background: linear-gradient(45deg, #2d6a4f, #52b788); 
-            color: white; border: none; border-radius: 50px; 
-            font-weight: bold; font-size: 16px; transition: 0.3s;
-        }
-        button:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-
-        .loi-giai { font-style: italic; color: #d90429; margin-top: 10px; display: none; font-weight: bold; }
     </style>
-    
-    <!-- Thư viện Pháo hoa -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 </head>
 <body>
-
-    <!-- Âm thanh (nếu trình duyệt cho phép) -->
-    <audio id="sound-click" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
-    <audio id="sound-success" src="https://www.soundjay.com/human/sounds/applause-01.mp3"></audio>
 
 <div class="container">
     <!-- MÀN HÌNH ĐĂNG NHẬP -->
     <div id="login-screen">
         <h1>🌿 EzMath 🌿</h1>
-        <p>Chọn một avatar và nhập tên để bắt đầu nào!</p>
+        <p style="margin-top: 0;">Chọn avatar và nhập thông tin nhé!</p>
         
         <div class="avatar-picker">
             <img src="https://img5.thuthuatphanmem.vn/uploads/2021/11/08/anh-gau-truc-cute_082040722.jpg" class="avatar-option selected" data-url="https://img5.thuthuatphanmem.vn/uploads/2021/11/08/anh-gau-truc-cute_082040722.jpg">
@@ -167,9 +141,13 @@
             <img src="https://antimatter.vn/wp-content/uploads/2022/03/anh-anime-nam-chibi-meo-cute.jpg" class="avatar-option" data-url="https://antimatter.vn/wp-content/uploads/2022/03/anh-anime-nam-chibi-meo-cute.jpg">
         </div>
 
-        <input type="text" id="student-name" class="input-login" placeholder="👤 Nhập tên của bạn...">
-        <input type="password" id="student-code" class="input-login" placeholder="🔑 Mã bí mật (Khánh: 0512)">
-        <br>
+        <div class="input-group">
+            <input type="text" id="student-name" class="input-login" placeholder="👤 Nhập họ và tên...">
+        </div>
+        <div class="input-group">
+            <input type="password" id="student-code" class="input-login" placeholder="🔑 Nhập mã bí mật...">
+        </div>
+
         <button id="btn-login">🚀 VÀO LÀM BÀI NGAY</button>
         
         <div id="theme-btn">🌙</div>
@@ -179,61 +157,38 @@
     <div id="main-content" style="display:none;">
         <div id="profile-header" class="header-profile">
             <img id="user-img" src="">
-            <span id="user-name" style="font-weight: bold; font-size: 1.2em;"></span>
+            <span id="user-name" style="font-weight: bold;"></span>
         </div>
-
         <div id="progress-container"><div id="progress-bar"></div></div>
-        <div id="dong-ho">⏳ Thời gian: 15:00</div>
-        
         <div id="vung-chua"></div>
-
-        <div style="text-align: center; margin-top: 20px;">
-            <button id="btn-nop-bai">✔️ NỘP BÀI</button>
-            <button onclick="location.reload()" style="margin-left: 10px; background: #6c757d;">🔄 LÀM LẠI</button>
+        <div style="text-align: center;">
+            <button id="btn-nop-bai">✔️ HOÀN THÀNH</button>
         </div>
-        <div id="ket-qua" style="margin-top: 30px;"></div>
+        <div id="ket-qua"></div>
     </div>
 </div>
 
 <script>
-    // Dữ liệu & Cấu hình
-    const SO_CAU_HỎI = 5;
-    let studentName = "", giay = 900, timer, daNopBai = false;
-    let currentAvatar = "https://img5.thuthuatphanmem.vn/uploads/2021/11/08/anh-gau-truc-cute_082040722.jpg";
-    const danhSachHocSinh = { "Khánh": "0512", "Admin": "123", "Học sinh": "000" };
+    let studentName = "", currentAvatar = "https://img5.thuthuatphanmem.vn/uploads/2021/11/08/anh-gau-truc-cute_082040722.jpg";
+    const danhSachHocSinh = { "Khánh": "0512", "Admin": "123" };
 
-    const khoCauHoi = [
-        { de: "15 + 25 bằng bao nhiêu?", luaChon: ["30", "35", "40", "45"], dung: "40" },
-        { de: "Hình tam giác có mấy cạnh?", luaChon: ["2", "3", "4", "5"], dung: "3" },
-        { de: "Số nào lớn nhất: 89, 98, 100, 99?", luaChon: ["89", "98", "100", "99"], dung: "100" },
-        { de: "Kết quả của phép tính 7 x 8 là?", luaChon: ["54", "56", "64", "49"], dung: "56" },
-        { de: "3 giờ bằng bao nhiêu phút?", luaChon: ["120 phút", "150 phút", "180 phút", "200 phút"], dung: "180 phút" },
-        { de: "Số liền trước của 1000 là?", luaChon: ["999", "1001", "990", "900"], dung: "999" },
-        { de: "Một hình vuông có cạnh 5cm. Chu vi là?", luaChon: ["10cm", "20cm", "25cm", "15cm"], dung: "20cm" }
-    ];
-
-    let danhSachHienTai = [];
-
-    // 1. Xử lý Dark Mode
-    const themeBtn = document.getElementById('theme-btn');
-    themeBtn.addEventListener('click', () => {
+    // Dark Mode
+    document.getElementById('theme-btn').addEventListener('click', function() {
         document.body.classList.toggle('dark-mode');
-        themeBtn.innerText = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
-        playClick();
+        this.innerText = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
     });
 
-    // 2. Chọn Avatar
+    // Chọn Avatar
     document.querySelectorAll('.avatar-option').forEach(img => {
         img.addEventListener('click', function() {
             document.querySelectorAll('.avatar-option').forEach(i => i.classList.remove('selected'));
             this.classList.add('selected');
             currentAvatar = this.dataset.url;
-            playClick();
         });
     });
 
-    // 3. Đăng nhập
-    document.getElementById('btn-login').addEventListener('click', () => {
+    // Đăng nhập
+    document.getElementById('btn-login').addEventListener('click', function() {
         const name = document.getElementById('student-name').value.trim();
         const code = document.getElementById('student-code').value.trim();
 
@@ -243,108 +198,13 @@
             document.getElementById('main-content').style.display = "block";
             document.getElementById('progress-container').style.display = "block";
             document.body.classList.add('in-game');
-            
             document.getElementById('user-img').src = currentAvatar;
             document.getElementById('user-name').innerText = studentName;
-
-            taoDe();
-            batDauDemNguoc();
+            
+            // Ở đây cậu gọi hàm taoDe() của cậu nhé
+            document.getElementById('vung-chua').innerHTML = "<p style='text-align:center;'>Đề bài của cậu sẽ hiện ở đây...</p>";
         } else {
-            alert("Thông tin đăng nhập không đúng rồi!");
-        }
-    });
-
-    // 4. Tạo đề bài ngẫu nhiên
-    function taoDe() {
-        const vungChua = document.getElementById('vung-chua');
-        vungChua.innerHTML = "";
-        danhSachHienTai = khoCauHoi.sort(() => 0.5 - Math.random()).slice(0, SO_CAU_HỎI);
-
-        danhSachHienTai.forEach((item, i) => {
-            let html = `
-                <div class="khung" id="box${i}">
-                    <p style="font-weight:bold; font-size:18px;">Câu ${i+1}: ${item.de}</p>
-                    ${item.luaChon.map(lc => `
-                        <label>
-                            <input type="radio" name="cau${i}" value="${lc}" onchange="updateProgress()"> ${lc}
-                        </label>
-                    `).join('')}
-                    <div class="loi-giai" id="note${i}">💡 Đáp án đúng: ${item.dung}</div>
-                </div>`;
-            vungChua.innerHTML += html;
-        });
-    }
-
-    // 5. Cập nhật thanh tiến độ
-    window.updateProgress = function() {
-        playClick();
-        let checked = 0;
-        for(let i=0; i<SO_CAU_HỎI; i++) {
-            if(document.querySelector(`input[name="cau${i}"]:checked`)) checked++;
-        }
-        document.getElementById('progress-bar').style.width = (checked / SO_CAU_HỎI) * 100 + "%";
-    }
-
-    // 6. Đếm ngược
-    function batDauDemNguoc() {
-        timer = setInterval(() => {
-            if (daNopBai) return;
-            let m = Math.floor(giay / 60), s = giay % 60;
-            document.getElementById('dong-ho').innerText = `⏳ Thời gian: ${m}:${s < 10 ? '0'+s : s}`;
-            if (giay-- <= 0) { clearInterval(timer); chamDiem(); }
-        }, 1000);
-    }
-
-    // 7. Chấm điểm & Hiệu ứng
-    document.getElementById('btn-nop-bai').addEventListener('click', chamDiem);
-
-    function chamDiem() {
-        if (daNopBai) return;
-        daNopBai = true;
-        clearInterval(timer);
-
-        let dung = 0;
-        danhSachHienTai.forEach((item, i) => {
-            const chon = document.querySelector(`input[name="cau${i}"]:checked`)?.value;
-            const box = document.getElementById(`box${i}`);
-            if (chon === item.dung) {
-                dung++;
-                box.classList.add('cau-dung');
-            } else {
-                box.classList.add('cau-sai');
-                document.getElementById(`note${i}`).style.display = "block";
-            }
-        });
-
-        const diem = (dung / SO_CAU_HỎI) * 10;
-        if (diem >= 8) banPhaoHoa();
-
-        document.getElementById('ket-qua').innerHTML = `
-            <div style="text-align:center; padding:20px; background:var(--light); border-radius:20px; color:var(--primary);">
-                <h2>KẾT QUẢ CỦA ${studentName.toUpperCase()}</h2>
-                <p style="font-size:48px; font-weight:bold; margin:10px 0;">💯 ${diem} ĐIỂM</p>
-                <p>Bạn đã trả lời đúng ${dung}/${SO_CAU_HỎI} câu hỏi.</p>
-            </div>`;
-        
-        document.getElementById('btn-nop-bai').style.display = "none";
-    }
-
-    function banPhaoHoa() {
-        document.getElementById('sound-success').play();
-        const duration = 3 * 1000, end = Date.now() + duration;
-        (function frame() {
-            confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0, y: 0.8 } });
-            confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1, y: 0.8 } });
-            if (Date.now() < end) requestAnimationFrame(frame);
-        }());
-    }
-
-    function playClick() { document.getElementById('sound-click').play(); }
-
-    // Chống gian lận cơ bản
-    document.addEventListener("visibilitychange", () => {
-        if (document.hidden && !daNopBai && studentName) {
-            alert("⚠️ Cảnh báo: Đừng rời trang khi đang làm bài nhé!");
+            alert("Sai tên hoặc mã rồi em ơi!");
         }
     });
 </script>
