@@ -2,11 +2,10 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-<!-- 5 --> <title>Học toán cùng Khánh</title>
-<!-- 6 --> <!-- Dòng mã thêm Logo vào Tab trình duyệt -->
-<!-- 7 --> <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/188/188333.png">
-<!-- 8 --> <style>
-    :root {
+    <title>Học toán cùng Khánh</title>
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/188/188333.png">
+    <style>
+        :root {
             --primary: #1b4332;
             --secondary: #40916c;
             --light: #d8f3dc;
@@ -79,7 +78,7 @@
 </head>
 <body>
     <audio id="sound-click" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
-<audio id="sound-success" src="https://www.soundjay.com/human/sounds/applause-01.mp3"></audio>
+    <audio id="sound-success" src="https://www.soundjay.com/human/sounds/applause-01.mp3"></audio>
 
 <div class="container">
     <div id="login-screen">
@@ -131,8 +130,8 @@
             document.getElementById('sound-click').play();
             let done = 0;
             for(let i=0; i < SO_CAU_MOI_DE; i++) {
-                // SỬA LỖI: Thêm dấu backtick và ngoặc kép đúng chuẩn
-                if(document.querySelector(input[name="cau${i}"]:checked)) done++;
+                // ĐÃ FIX: Thêm dấu backtick và dấu nháy cho selector
+                if(document.querySelector(`input[name="cau${i}"]:checked`)) done++;
             }
             document.getElementById('progress-bar').style.width = (done / SO_CAU_MOI_DE) * 100 + "%";
         }
@@ -165,12 +164,12 @@
         v.innerHTML = "";
         danhSachHienTai = khoCauHoi.sort(() => 0.5 - Math.random()).slice(0, SO_CAU_MOI_DE);
         danhSachHienTai.forEach((item, i) => {
-            // SỬA LỖI: Dùng dấu backtick ` thay vì ngoặc kép lỗi ở đây
-            var html = <div class='khung' id='box${i}'><p style='font-weight:bold; font-size:20px;'>📝 Câu ${i+1}: ${item.de}</p>;
+            // ĐÃ FIX: Dùng dấu backtick cho biến html
+            var html = `<div class='khung' id='box${i}'><p style='font-weight:bold; font-size:20px;'>📝 Câu ${i+1}: ${item.de}</p>`;
             item.luaChon.forEach(lc => {
-                html += <label><input type='radio' name='cau${i}' value='${lc}'> ${lc}</label>;
+                html += `<label><input type='radio' name='cau${i}' value='${lc}'> ${lc}</label>`;
             });
-            html += <div class='loi-giai' id='note${i}'>💡 Đáp án đúng: ${item.dung}</div></div>;
+            html += `<div class='loi-giai' id='note${i}'>💡 Đáp án đúng: ${item.dung}</div></div>`;
             v.innerHTML += html;
         });
     }
@@ -195,8 +194,8 @@
 
         var diem = Math.round((d / SO_CAU_MOI_DE) * 100) / 10;
         
-        // SỬA LỖI: Thay emoji thành số 8 để code không lỗi
-        if (diem >= 😎 {
+        // ĐÃ FIX: Thay ký tự emoji lỗi thành số 8
+        if (diem >= 8) {
             banPhaoHoa();
         }
 
@@ -207,7 +206,6 @@
             <p style="font-size:40px; font-weight:bold; color:#d00000;">💯 ${diem} ĐIỂM</p>
             <p>Đúng ${d}/${SO_CAU_MOI_DE} câu. Đã gửi cho thầy!</p></div>`;
         
-        // CẬP NHẬT: Link Script mới của cậu
         fetch("https://script.google.com/macros/s/AKfycbz4IPNx4fkDGi_oy3K15LSqIhB8ZtfmfN3Q_kKNIb7KKGrBjqkl8yKT2FusSjeVNlw/exec", {
             method: "POST", mode: "no-cors", 
             body: JSON.stringify({hoTen: studentNameStored, soCauDung: d+"/"+SO_CAU_MOI_DE, diemSo: diem})
