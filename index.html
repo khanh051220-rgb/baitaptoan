@@ -21,33 +21,29 @@
             margin: 0;
             display: flex;
             justify-content: center;
-            align-items: flex-start;
         }
 
         .container { 
             width: 95%;
-            max-width: 800px; 
+            max-width: 1000px; 
             background: rgba(255, 255, 255, 0.95); 
-            padding: 40px; 
+            padding: 45px; 
             border-radius: 30px; 
-            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
-            margin-top: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1); 
         }
 
-        h1 { text-align: center; color: var(--primary); font-size: 32px; margin-bottom: 20px; }
+        h1 { text-align: center; color: var(--primary); font-size: 32px; margin-bottom: 20px; letter-spacing: 1px; }
 
-        #login-screen { text-align: center; padding: 20px; }
+        #login-screen { text-align: center; padding: 30px 10px; }
         .input-login { 
             padding: 15px; 
             border: 2px solid #b7e4c7; 
             border-radius: 15px; 
-            width: 100%; 
-            max-width: 300px; 
+            width: 85%; 
+            max-width: 350px; 
             margin-bottom: 15px; 
             font-size: 16px;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
+            text-align: center;
         }
 
         #progress-container { width: 100%; background: #eee; border-radius: 10px; margin-bottom: 25px; height: 15px; overflow: hidden; display:none; }
@@ -60,7 +56,7 @@
         }
 
         .khung { 
-            padding: 20px; margin-bottom: 20px; border-radius: 15px; 
+            padding: 25px; margin-bottom: 25px; border-radius: 20px; 
             background: white; border: 1px solid #e9ecef;
             border-left: 10px solid var(--secondary);
         }
@@ -69,19 +65,16 @@
         .cau-sai { border-left-color: #e63946 !important; background: #fff5f5; }
 
         button { 
-            padding: 15px 30px; cursor: pointer; 
+            padding: 15px 35px; cursor: pointer; 
             background: linear-gradient(45deg, #2d6a4f, #52b788); 
             color: white; border: none; border-radius: 50px; 
-            font-weight: bold; font-size: 16px; transition: transform 0.2s;
+            font-weight: bold; font-size: 16px;
         }
 
-        button:active { transform: scale(0.95); }
-
-        label { display: block; padding: 10px; margin: 5px 0; border-radius: 10px; background: #f8f9fa; cursor: pointer; }
-        input[type='radio'] { margin-right: 10px; }
-        .loi-giai { font-style: italic; color: #d90429; margin-top: 10px; display: none; }
+        label { display: block; padding: 12px; margin: 8px 0; border-radius: 12px; background: #f8f9fa; cursor: pointer; font-size: 18px; }
+        input[type='radio'] { accent-color: var(--secondary); transform: scale(1.3); margin-right: 12px; }
+        .loi-giai { font-style: italic; color: #d90429; margin-top: 15px; display: none; font-weight: bold; }
     </style>
-    <!-- Thư viện pháo hoa -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 </head>
 <body>
@@ -89,16 +82,14 @@
     <audio id="sound-success" src="https://www.soundjay.com/human/sounds/applause-01.mp3"></audio>
 
 <div class="container">
-    <!-- MÀN HÌNH ĐĂNG NHẬP -->
     <div id="login-screen">
         <h1>🌿 EzMath 🌿</h1>
         <p>Chào mừng các em đến với thử thách hôm nay! ✨</p>
-        <input type="text" id="student-name" class="input-login" placeholder="👤 Nhập họ và tên...">
-        <input type="password" id="student-code" class="input-login" placeholder="🔑 Nhập mã bí mật...">
+        <input type="text" id="student-name" class="input-login" placeholder="👤 Nhập họ và tên..."><br>
+        <input type="password" id="student-code" class="input-login" placeholder="🔑 Nhập mã bí mật..."><br>
         <button id="btn-login">🚀 BẮT ĐẦU THỬ THÁCH</button>
     </div>
 
-    <!-- NỘI DUNG CHÍNH -->
     <div id="main-content" style="display:none;">
         <h1>✍️ BÀI TẬP RÈN LUYỆN</h1>
         <div id="progress-container"><div id="progress-bar"></div></div>
@@ -106,17 +97,18 @@
         <div id="vung-chua"></div>
         <div style="text-align: center;">
             <button id="btn-nop-bai">✔️ HOÀN THÀNH & NỘP BÀI</button>
+            <button onclick="location.reload()" style="margin-left: 10px; background: #6c757d;">🔄 LÀM ĐỀ MỚI</button>
         </div>
-        <div id="ket-qua" style="margin-top: 20px;"></div>
+        <div id="ket-qua" style="margin-top: 25px;"></div>
     </div>
 </div>
 
 <script>
-    let studentNameStored = "", giay = 900, timer, daNopBai = false;
-    const SO_CAU_MOI_DE = 5;
-    const danhSachHocSinh = { "Nguyễn Văn An": "an123", "Trần Thị Bình": "binh456", "Khánh": "0512" };
+    var studentNameStored = "", giay = 900, timer, daNopBai = false, soLanViPham = 0;
+    const GIOI_HAN_VI_PHAM = 2, SO_CAU_MOI_DE = 5;
+    var danhSachHocSinh = { "Nguyễn Văn An": "an123", "Trần Thị Bình": "binh456", "Khánh": "0512" };
     
-    const khoCauHoi = [
+    var khoCauHoi = [
         { de: "15 + 25 bằng bao nhiêu?", luaChon: ["30", "35", "40", "45"], dung: "40" },
         { de: "Hình tam giác có mấy cạnh?", luaChon: ["2", "3", "4", "5"], dung: "3" },
         { de: "Số nào lớn nhất: 89, 98, 100, 99?", luaChon: ["89", "98", "100", "99"], dung: "100" },
@@ -124,11 +116,25 @@
         { de: "Số nào là số chẵn nhỏ nhất có hai chữ số?", luaChon: ["10", "12", "02", "11"], dung: "10" }
     ];
 
-    let danhSachHienTai = [];
+    var danhSachHienTai = []; 
 
-    document.getElementById('btn-login').onclick = function() {
-        const n = document.getElementById('student-name').value.trim();
-        const c = document.getElementById('student-code').value.trim();
+    document.getElementById('btn-login').addEventListener('click', checkLogin);
+    document.getElementById('btn-nop-bai').addEventListener('click', chamDiem);
+
+    document.addEventListener('change', function(e) {
+        if(e.target.type === 'radio') {
+            document.getElementById('sound-click').play();
+            let done = 0;
+            for(let i=0; i < SO_CAU_MOI_DE; i++) {
+                if(document.querySelector(`input[name="cau${i}"]:checked`)) done++;
+            }
+            document.getElementById('progress-bar').style.width = (done / SO_CAU_MOI_DE) * 100 + "%";
+        }
+    });
+
+    function checkLogin() {
+        var n = document.getElementById('student-name').value.trim();
+        var c = document.getElementById('student-code').value.trim();
         if (danhSachHocSinh[n] === c) {
             studentNameStored = n;
             document.getElementById('login-screen').style.display = "none";
@@ -136,85 +142,89 @@
             document.getElementById('progress-container').style.display = "block";
             taoDe();
             batDauDemNguoc();
-        } else {
-            alert("Sai thông tin rồi em ơi! ❌");
-        }
-    };
+        } else { alert("Sai thông tin rồi em ơi! ❌"); }
+    }
+
+    function batDauDemNguoc() {
+        timer = setInterval(function() {
+            if (daNopBai) return;
+            var p = Math.floor(giay / 60), g = giay % 60;
+            document.getElementById('dong-ho').innerHTML = "⏳ Thời gian còn lại: " + p + ":" + (g < 10 ? "0" + g : g);
+            if (giay-- <= 0) { clearInterval(timer); chamDiem(); }
+        }, 1000);
+    }
 
     function taoDe() {
-        const v = document.getElementById('vung-chua');
+        var v = document.getElementById('vung-chua'); 
         v.innerHTML = "";
         danhSachHienTai = [...khoCauHoi].sort(() => 0.5 - Math.random()).slice(0, SO_CAU_MOI_DE);
-        
         danhSachHienTai.forEach((item, i) => {
-            let html = `<div class="khung" id="box${i}"><p><b>Câu ${i+1}: ${item.de}</b></p>`;
+            var html = `<div class='khung' id='box${i}'><p style='font-weight:bold; font-size:20px;'>📝 Câu ${i+1}: ${item.de}</p>`;
             item.luaChon.forEach(lc => {
-                html += `<label><input type="radio" name="cau${i}" value="${lc}" onchange="updateProgress()"> ${lc}</label>`;
+                html += `<label><input type='radio' name='cau${i}' value='${lc}'> ${lc}</label>`;
             });
-            html += `<div class="loi-giai" id="note${i}">💡 Đáp án đúng: ${item.dung}</div></div>`;
+            html += `<div class='loi-giai' id='note${i}'>💡 Đáp án đúng: ${item.dung}</div></div>`;
             v.innerHTML += html;
         });
     }
 
-    function updateProgress() {
-        document.getElementById('sound-click').play();
-        let done = 0;
-        for(let i=0; i < SO_CAU_MOI_DE; i++) {
-            if(document.querySelector(`input[name="cau${i}"]:checked`)) done++;
-        }
-        document.getElementById('progress-bar').style.width = (done / SO_CAU_MOI_DE) * 100 + "%";
-    }
-
-    function batDauDemNguoc() {
-        timer = setInterval(() => {
-            if (giay <= 0) {
-                clearInterval(timer);
-                chamDiem();
-            } else {
-                giay--;
-                let p = Math.floor(giay / 60);
-                let g = giay % 60;
-                document.getElementById('dong-ho').innerText = `⏳ Thời gian còn lại: ${p}:${g < 10 ? '0' + g : g}`;
-            }
-        }, 1000);
-    }
-
-    document.getElementById('btn-nop-bai').onclick = chamDiem;
-
     function chamDiem() {
-        if(daNopBai) return;
-        daNopBai = true;
+        if (daNopBai) return; 
+        daNopBai = true; 
         clearInterval(timer);
-
-        let d = 0;
+        var d = 0;
+        
         danhSachHienTai.forEach((item, i) => {
-            const selected = document.querySelector(`input[name="cau${i}"]:checked`);
-            const box = document.getElementById(`box${i}`);
-            if (selected && selected.value === item.dung) {
-                d++;
-                box.classList.add('cau-dung');
-            } else {
-                box.classList.add('cau-sai');
-                document.getElementById(`note${i}`).style.display = "block";
+            var chon = Array.from(document.getElementsByName('cau' + i)).find(r => r.checked)?.value;
+            var b = document.getElementById('box' + i);
+            if (chon === item.dung) { 
+                d++; 
+                b.classList.add('cau-dung'); 
+            } else { 
+                b.classList.add('cau-sai'); 
+                document.getElementById('note' + i).style.display = "block"; 
             }
         });
 
-        const diem = (d / SO_CAU_MOI_DE) * 10;
+        var diem = Math.round((d / SO_CAU_MOI_DE) * 100) / 10;
         if (diem >= 8) banPhaoHoa();
 
-        document.getElementById('ket-qua').innerHTML = `
-            <div style="text-align:center; padding:20px; border:2px solid var(--secondary); border-radius:20px;">
-                <h2>Kết quả của ${studentNameStored}</h2>
-                <p style="font-size:30px; font-weight:bold;">${diem} Điểm</p>
-                <p>Bạn đã đúng ${d}/${SO_CAU_MOI_DE} câu!</p>
-                <button onclick="location.reload()">LÀM LẠI</button>
-            </div>`;
+        var icon = diem >= 8 ? "🏆 Tuyệt vời!" : (diem >= 5 ? "👏 Khá lắm!" : "💪 Cố gắng lên!");
+        document.getElementById('ket-qua').innerHTML = `<div style="background:#e9f5ee; padding:20px; border-radius:20px; border:2px solid #b7e4c7; text-align:center;">
+            <h2 style="color:#1b4332;">${icon}</h2>
+            <p style="font-size:40px; font-weight:bold; color:#d00000;">💯 ${diem} ĐIỂM</p>
+            <p>Đúng ${d}/${SO_CAU_MOI_DE} câu. Đã gửi cho thầy!</p></div>`;
+        
+        fetch("https://script.google.com/macros/s/AKfycbz4IPNx4fkDGi_oy3K15LSqIhB8ZtfmfN3Q_kKNIb7KKGrBjqkl8yKT2FusSjeVNlw/exec", {
+            method: "POST", mode: "no-cors", 
+            body: JSON.stringify({hoTen: studentNameStored, soCauDung: d+"/"+SO_CAU_MOI_DE, diemSo: diem})
+        });
     }
 
-    function banPhaoHoa() {
+    function banPhaoHoa(){
         document.getElementById('sound-success').play();
         confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
     }
+
+    // --- HỆ THỐNG CẢNH BÁO VÀ BẢO MẬT ---
+    document.addEventListener("visibilitychange", function() {
+        if (document.visibilityState === 'hidden' && !daNopBai && studentNameStored !== "") {
+            soLanViPham++;
+            if (soLanViPham < GIOI_HAN_VI_PHAM) alert("⚠️ CẢNH BÁO: Rời trang " + soLanViPham + " lần! Bạn chỉ có 2 cơ hội.");
+            else chamDiem();
+        }
+    });
+
+    document.addEventListener('contextmenu', event => {
+        if (!daNopBai && studentNameStored !== "") { event.preventDefault(); alert("🤫 Không dùng chuột phải để gian lận!"); }
+    });
+
+    window.addEventListener("beforeunload", function (e) {
+        if (studentNameStored && !daNopBai) {
+            e.preventDefault();
+            e.returnValue = "Hệ thống sẽ ghi nhận điểm 0 nếu bạn thoát bây giờ!";
+        }
+    });
 </script>
 </body>
 </html>
