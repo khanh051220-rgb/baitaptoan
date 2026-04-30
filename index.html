@@ -78,6 +78,8 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 </head>
 <body>
+    <audio id="sound-click" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
+<audio id="sound-success" src="https://www.soundjay.com/human/sounds/applause-01.mp3"></audio>
 
 <div class="container">
     <div id="login-screen">
@@ -126,6 +128,9 @@
 
     document.addEventListener('change', function(e) {
         if(e.target.type === 'radio') {
+            // Tìm dòng: if(e.target.type === 'radio') {
+// Dán dòng này vào ngay dưới nó:
+document.getElementById('sound-click').play();
             let done = 0;
             for(let i=0; i < SO_CAU_MOI_DE; i++) {
                 if(document.querySelector(`input[name="cau${i}"]:checked`)) done++;
@@ -209,7 +214,10 @@
         });
     }
 
-    function banPhaoHoa() {
+    function banPhaoHoa() {function banPhaoHoa() {
+    document.getElementById('sound-success').play(); // Thêm dòng này
+    var duration = 3 * 1000;
+    // ... giữ nguyên phần còn lại
         var duration = 3 * 1000;
         var end = Date.now() + duration;
 
