@@ -217,20 +217,31 @@
 
         var icon = diem >= 8 ? "🏆 Tuyệt vời!" : (diem >= 5 ? "👏 Khá lắm!" : "💪 Cố gắng lên!");
         
+// 1. Sửa đoạn hiển thị kết quả (Thêm div vung-bxh)
         document.getElementById('ket-qua').innerHTML = `
-            <div style="background:#e9f5ee; padding:20px; border-radius:20px; border:2px solid #b7e4c7; text-align:center;">
+            <div style="background:#e9f5ee; padding:20px; border-radius:20px; border:2px solid #b7e4c7; text-align:center; margin-top:20px;">
                 <h2 style="color:#1b4332;">${icon}</h2>
                 <p style="font-size:40px; font-weight:bold; color:#d00000;">💯 ${diem} ĐIỂM</p>
                 <p>Thời gian: ${thoiGianLamStr}</p>
                 <p>Đúng ${d}/${SO_CAU_MOI_DE} câu. Đã gửi cho thầy!</p>
+                <hr style="border: 0; border-top: 1px solid #b7e4c7; margin: 15px 0;">
+                <div id="vung-bxh">⌛ Đang tải bảng xếp hạng...</div>
             </div>`;
         
-        // Gửi kèm thời gian làm bài lên Google
-        fetch("https://script.google.com/macros/s/AKfycbzSoiKPu8jwc3z4oqwqLu0Gy_kMd-MukfhsvM--SB82WEpGs9bt3-1k6FtSKBYBjts/exec", {
-            method: "POST", mode: "no-cors", 
+        // 2. Gửi dữ liệu lên Google Sheets
+        fetch("https://script.google.com/macros/s/AKfycbzYgtDSApBcy5M7R94vgfn_AVcK8ahls6YGvnJa1xvpDD2Rojw8R2TtUYc2ZRy-WIw/exec", {
+            method: "POST", 
+            mode: "no-cors", 
             body: JSON.stringify({
                 hoTen: studentNameStored, 
-                soCauDung: d+"/"+SO_CAU_MOI_DE, 
+                soCauDung: d + "/" + SO_CAU_MOI_DE, 
+                diemSo: diem,
+                thoiGian: thoiGianLamStr
+            })
+        });
+
+        // 3. Thêm lệnh này để gọi bảng xếp hạng hiện ra sau 2 giây
+        setTimeout(layBXH, 2000);
                 diemSo: diem,
                 thoiGian: thoiGianLamStr
             })
@@ -260,6 +271,47 @@
     document.addEventListener('contextmenu', event => {
         if (!daNopBai && studentNameStored !== "") { event.preventDefault(); alert("🤫 Không dùng chuột phải!"); }
     });
+    function layBXH() {
+    // Gọi đến URL Web App của cậu (Dùng GET để lấy dữ liệu)
+    fetch("https://script.google.com/macros/s/AKfycbzYgtDSApBcy5M7R94vgfn_AVcK8ahls6YGvnJa1xvpDD2Rojw8R2TtUYc2ZRy-WIw/exec")
+    .then(response => response.json())
+    .then(data => {
+        // Sắp xếp: Điểm cao đứng trước, nếu điểm bằng nhau thì thời gian ít hơn đứng trước
+        data.sort((a, b) => {
+            if (b.diemSo !== a.diemSo) return b.diemSo - a.diemSo;
+            return a.thoiGian.localeCompare(b.thoiGian); 
+        });
+
+        let bxhHtml = `
+            <h3 style="color:#2d6a4f; margin-top:10px;">🏆 BẢNG XẾP HẠNG TOP 5</h3>
+            <table style="width:100%; border-collapse: collapse; margin-top:10px; background: white; border-radius: 10px; overflow: hidden;">
+                <tr style="background:#40916c; color:white;">
+                    <th style="padding:10px;">Hạng</th>
+                    <th>Tên</th>
+                    <th>Điểm</th>
+                    <th>Thời gian</th>
+                </tr>`;
+
+        // Chỉ lấy top 5 người xuất sắc nhất
+        data.slice(0, 5).forEach((item, index) => {
+            let icon = index === 0 ? "🥇" : (index === 1 ? "🥈" : (index === 2 ? "🥉" : index + 1));
+            bxhHtml += `
+                <tr style="border-bottom: 1px solid #eee;">
+                    <td style="padding:10px; text-align:center;">${icon}</td>
+                    <td style="font-weight:bold;">${item.hoTen}</td>
+                    <td style="color:#d00000; text-align:center;">${item.diemSo}</td>
+                    <td style="font-size:12px; text-align:center;">${item.thoiGian}</td>
+                </tr>`;
+        });
+
+        bxhHtml += `</table>`;
+        document.getElementById('vung-bxh').innerHTML = bxhHtml;
+    })
+    .catch(error => {
+        console.error("Lỗi lấy BXH:", error);
+        document.getElementById('vung-bxh').innerHTML = "⚠️ Không thể tải bảng xếp hạng lúc này.";
+    });
+}
 </script>
 </body>
 </html>
