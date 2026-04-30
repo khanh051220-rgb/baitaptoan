@@ -6,79 +6,93 @@
     <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/188/188333.png">
     <style>
         :root {
+            /* Màu mặc định (Light Mode) */
             --primary: #1b4332;
             --secondary: #40916c;
             --light: #d8f3dc;
             --accent: #ff9f1c;
+            --bg-body: linear-gradient(135deg, #d8f3dc 0%, #b7e4c7 100%);
+            --bg-container: rgba(255, 255, 255, 0.95);
+            --text-main: #1b4332;
+            --box-bg: #ffffff;
+            --box-border: #e9ecef;
+            --label-bg: #f8f9fa;
+        }
+
+        /* Bảng màu Dark Mode - Hài hòa cho mắt */
+        body.dark-mode {
+            --primary: #52b788;
+            --secondary: #40916c;
+            --light: #1b4332;
+            --bg-body: linear-gradient(135deg, #081c15 0%, #1b4332 100%);
+            --bg-container: rgba(27, 67, 50, 0.98);
+            --text-main: #d8f3dc;
+            --box-bg: #2d6a4f;
+            --box-border: #40916c;
+            --label-bg: #1b4332;
         }
 
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             padding: 20px; 
-            background: linear-gradient(135deg, #d8f3dc 0%, #b7e4c7 100%); 
+            background: var(--bg-body); 
             min-height: 100vh;
             margin: 0;
             display: flex;
             justify-content: center;
+            color: var(--text-main);
+            transition: background 0.5s, color 0.5s;
         }
 
         .container { 
             width: 95%;
             max-width: 1000px; 
-            background: rgba(255, 255, 255, 0.95); 
+            background: var(--bg-container); 
             padding: 45px; 
             border-radius: 30px; 
-            box-shadow: 0 20px 50px rgba(0,0,0,0.1); 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2); 
+            position: relative;
+            transition: 0.5s;
         }
 
         h1 { text-align: center; color: var(--primary); font-size: 32px; margin-bottom: 20px; letter-spacing: 1px; }
 
-        #login-screen { text-align: center; padding: 10px; }
-        .input-login { 
-            padding: 15px; 
-            border: 2px solid #b7e4c7; 
-            border-radius: 15px; 
-            width: 85%; 
-            max-width: 350px; 
-            margin-bottom: 15px; 
-            font-size: 16px;
-            text-align: center;
+        /* NÚT DARK MODE BIẾN HÌNH */
+        #theme-btn {
+            cursor: pointer; font-size: 24px; background: var(--box-bg);
+            padding: 12px; border-radius: 50%; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: 0.5s; display: flex; align-items: center; justify-content: center;
+            width: fit-content; margin: 20px auto 0 auto; 
+            border: 2px solid var(--secondary);
         }
 
-        /* --- CSS CHO AVATAR --- */
-        .avatar-picker {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin: 20px 0;
-            flex-wrap: wrap;
+        /* Khi vào làm bài (thêm class in-game bằng JS), nút sẽ nhảy lên góc */
+        body.in-game #theme-btn {
+            position: absolute; top: 20px; right: 20px; margin: 0;
         }
+
+        #login-screen { text-align: center; padding: 10px; }
+        .input-login { 
+            padding: 15px; border: 2px solid #b7e4c7; border-radius: 15px; 
+            width: 85%; max-width: 350px; margin-bottom: 15px; font-size: 16px;
+            text-align: center; background: var(--box-bg); color: var(--text-main);
+        }
+
+        .avatar-picker { display: flex; justify-content: center; gap: 15px; margin: 20px 0; flex-wrap: wrap; }
         .avatar-option {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            border: 3px solid transparent;
-            cursor: pointer;
-            transition: 0.3s;
-            background: #eee;
+            width: 60px; height: 60px; border-radius: 50%; border: 3px solid transparent;
+            cursor: pointer; transition: 0.3s; background: #eee; object-fit: cover;
         }
         .avatar-option.selected {
-            border-color: var(--accent);
-            transform: scale(1.1);
+            border-color: var(--accent); transform: scale(1.1);
             box-shadow: 0 0 10px rgba(255,159,28,0.5);
         }
+
         .header-profile {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 20px;
-            background: #f0fdf4;
-            padding: 10px;
-            border-radius: 50px;
+            display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 20px;
+            background: var(--light); padding: 10px; border-radius: 50px;
         }
-        .header-profile img { width: 40px; height: 40px; border-radius: 50%; }
-        /* ----------------------- */
+        .header-profile img { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 2px solid var(--secondary); }
 
         #progress-container { width: 100%; background: #eee; border-radius: 10px; margin-bottom: 25px; height: 15px; overflow: hidden; display:none; }
         #progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #40916c, #2dc653); transition: 0.4s; }
@@ -91,12 +105,12 @@
 
         .khung { 
             padding: 25px; margin-bottom: 25px; border-radius: 20px; 
-            background: white; border: 1px solid #e9ecef;
+            background: var(--box-bg); border: 1px solid var(--box-border);
             border-left: 10px solid var(--secondary);
         }
 
-        .cau-dung { border-left-color: #2dc653 !important; background: #f0fff4; }
-        .cau-sai { border-left-color: #e63946 !important; background: #fff5f5; }
+        .cau-dung { border-left-color: #2dc653 !important; background: #f0fff4; color: #1b4332; }
+        .cau-sai { border-left-color: #e63946 !important; background: #fff5f5; color: #1b4332; }
 
         button { 
             padding: 15px 35px; cursor: pointer; 
@@ -105,13 +119,13 @@
             font-weight: bold; font-size: 16px;
         }
 
-        label { display: block; padding: 12px; margin: 8px 0; border-radius: 12px; background: #f8f9fa; cursor: pointer; font-size: 18px; }
+        label { display: block; padding: 12px; margin: 8px 0; border-radius: 12px; background: var(--label-bg); cursor: pointer; font-size: 18px; }
         input[type='radio'] { accent-color: var(--secondary); transform: scale(1.3); margin-right: 12px; }
         .loi-giai { font-style: italic; color: #d90429; margin-top: 15px; display: none; font-weight: bold; }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 </head>
-<body>
+<body id="body-main">
     <audio id="sound-click" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
     <audio id="sound-success" src="https://www.soundjay.com/human/sounds/applause-01.mp3"></audio>
 
@@ -120,23 +134,26 @@
         <h1>🌿 EzMath 🌿</h1>
         <p>Chọn một avatar thật ngầu nhen các em! ✨</p>
         
-       <div class="avatar-picker">
-    <img src="https://img5.thuthuatphanmem.vn/uploads/2021/11/08/anh-gau-truc-cute_082040722.jpg" class="avatar-option selected" data-seed="https://img5.thuthuatphanmem.vn/uploads/2021/11/08/anh-gau-truc-cute_082040722.jpg">
-    <img src="https://i.pinimg.com/originals/6d/dc/3f/6ddc3f9a79c891e0efd6042624e08f51.png" class="avatar-option" data-seed="https://i.pinimg.com/originals/6d/dc/3f/6ddc3f9a79c891e0efd6042624e08f51.png">
-    <img src="https://i.pinimg.com/originals/9a/c3/55/9ac355832f81c37f4964583c22bee6a0.jpg" class="avatar-option" data-seed="https://i.pinimg.com/originals/9a/c3/55/9ac355832f81c37f4964583c22bee6a0.jpg">
-    <img src="https://antimatter.vn/wp-content/uploads/2022/03/anh-anime-nam-chibi-meo-cute.jpg" class="avatar-option" data-seed="https://antimatter.vn/wp-content/uploads/2022/03/anh-anime-nam-chibi-meo-cute.jpg">
-    <img src="https://png.pngtree.com/png-clipart/20210314/original/pngtree-math-clipart-balloon-cartoon-math-symbol-png-image_6086532.jpg" class="avatar-option" data-seed="https://png.pngtree.com/png-clipart/20210314/original/pngtree-math-clipart-balloon-cartoon-math-symbol-png-image_6086532.jpg">
-</div>
+        <div class="avatar-picker">
+            <img src="https://img5.thuthuatphanmem.vn/uploads/2021/11/08/anh-gau-truc-cute_082040722.jpg" class="avatar-option selected" data-seed="https://img5.thuthuatphanmem.vn/uploads/2021/11/08/anh-gau-truc-cute_082040722.jpg">
+            <img src="https://i.pinimg.com/originals/6d/dc/3f/6ddc3f9a79c891e0efd6042624e08f51.png" class="avatar-option" data-seed="https://i.pinimg.com/originals/6d/dc/3f/6ddc3f9a79c891e0efd6042624e08f51.png">
+            <img src="https://i.pinimg.com/originals/9a/c3/55/9ac355832f81c37f4964583c22bee6a0.jpg" class="avatar-option" data-seed="https://i.pinimg.com/originals/9a/c3/55/9ac355832f81c37f4964583c22bee6a0.jpg">
+            <img src="https://antimatter.vn/wp-content/uploads/2022/03/anh-anime-nam-chibi-meo-cute.jpg" class="avatar-option" data-seed="https://antimatter.vn/wp-content/uploads/2022/03/anh-anime-nam-chibi-meo-cute.jpg">
+            <img src="https://png.pngtree.com/png-clipart/20210314/original/pngtree-math-clipart-balloon-cartoon-math-symbol-png-image_6086532.jpg" class="avatar-option" data-seed="https://png.pngtree.com/png-clipart/20210314/original/pngtree-math-clipart-balloon-cartoon-math-symbol-png-image_6086532.jpg">
+        </div>
 
         <input type="text" id="student-name" class="input-login" placeholder="👤 Nhập họ và tên..."><br>
         <input type="password" id="student-code" class="input-login" placeholder="🔑 Nhập mã bí mật..."><br>
         <button id="btn-login">🚀 BẮT ĐẦU THỬ THÁCH</button>
+        
+        <!-- NÚT CHUYỂN CHẾ ĐỘ NẰM DƯỚI NÚT BẮT ĐẦU -->
+        <div id="theme-btn">🌙</div>
     </div>
 
     <div id="main-content" style="display:none;">
         <div id="profile-header" class="header-profile">
             <img id="user-img" src="">
-            <span id="user-name" style="font-weight: bold; color: var(--primary);"></span>
+            <span id="user-name" style="font-weight: bold;"></span>
         </div>
         <h1>✍️ BÀI TẬP RÈN LUYỆN</h1>
         <div id="progress-container"><div id="progress-bar"></div></div>
@@ -152,7 +169,8 @@
 
 <script>
     var studentNameStored = "", giay = 900, timer, daNopBai = false, soLanViPham = 0;
-    var currentSeed = "Felix"; // Seed mặc định
+    // Lấy link ảnh đầu tiên làm mặc định
+    var currentSeed = "https://img5.thuthuatphanmem.vn/uploads/2021/11/08/anh-gau-truc-cute_082040722.jpg"; 
     const GIOI_HAN_VI_PHAM = 2, SO_CAU_MOI_DE = 5;
     var danhSachHocSinh = { "Nguyễn Văn An": "an123", "Trần Thị Bình": "binh456", "Khánh": "0512" };
     
@@ -170,6 +188,14 @@
     ];
 
     var danhSachHienTai = []; 
+
+    // XỬ LÝ DARK MODE
+    const themeBtn = document.getElementById('theme-btn');
+    themeBtn.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        themeBtn.innerText = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+        document.getElementById('sound-click').play();
+    });
 
     // Click chọn avatar
     document.querySelectorAll('.avatar-option').forEach(opt => {
@@ -204,8 +230,11 @@
             document.getElementById('main-content').style.display = "block";
             document.getElementById('progress-container').style.display = "block";
             
-            // Hiện tên và avatar lên đầu bài
-            document.getElementById('user-img').src = `https://api.dicebear.com/8.x/adventurer/svg?seed=${currentSeed}`;
+            // Kích hoạt chế độ in-game để nút Mode nhảy lên góc
+            document.body.classList.add('in-game');
+
+            // Hiện tên và avatar lên đầu bài (SỬA ĐỂ HIỆN LINK ẢNH TRỰC TIẾP)
+            document.getElementById('user-img').src = currentSeed;
             document.getElementById('user-name').innerText = studentNameStored;
 
             taoDe();
@@ -260,9 +289,9 @@
         var icon = diem >= 8 ? "🏆 Tuyệt vời!" : (diem >= 5 ? "👏 Khá lắm!" : "💪 Cố gắng lên!");
         
         document.getElementById('ket-qua').innerHTML = `
-            <div style='background:#e9f5ee; padding:20px; border-radius:20px; border:2px solid #b7e4c7; text-align:center;'>
-                <img src="https://api.dicebear.com/8.x/adventurer/svg?seed=${currentSeed}" style="width:80px; border-radius:50%; border:3px solid var(--secondary); margin-bottom:10px;">
-                <h2 style='color:#1b4332;'>${icon}</h2>
+            <div style='background: var(--box-bg); padding:20px; border-radius:20px; border:2px solid var(--secondary); text-align:center;'>
+                <img src="${currentSeed}" style="width:100px; height:100px; border-radius:50%; border:3px solid var(--accent); margin-bottom:10px; object-fit:cover;">
+                <h2 style='color: var(--primary);'>${icon}</h2>
                 <p style='font-size:40px; font-weight:bold; color:#d00000;'>💯 ${diem} ĐIỂM</p>
                 <p>Đúng ${d}/${SO_CAU_MOI_DE} câu. Đã gửi cho thầy!</p>
             </div>`;
