@@ -126,9 +126,9 @@
     document.getElementById('btn-login').addEventListener('click', checkLogin);
     document.getElementById('btn-nop-bai').addEventListener('click', chamDiem);
 
-    document.addEventListener('change', function(e) {
+  document.addEventListener('change', function(e) {
         if(e.target.type === 'radio') {
-document.getElementById('sound-click').play();
+            document.getElementById('sound-click').play(); // Phát tiếng click khi chọn
             let done = 0;
             for(let i=0; i < SO_CAU_MOI_DE; i++) {
                 if(document.querySelector(`input[name="cau${i}"]:checked`)) done++;
@@ -212,10 +212,8 @@ document.getElementById('sound-click').play();
         });
     }
 
-    function banPhaoHoa(){
-    document.getElementById('sound-success').play(); // Thêm dòng này
-    var duration = 3 * 1000;
-    // ... giữ nguyên phần còn lại
+    function banPhaoHoa() {
+        document.getElementById('sound-success').play(); // Phát tiếng vỗ tay
         var duration = 3 * 1000;
         var end = Date.now() + duration;
 
