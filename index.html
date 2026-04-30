@@ -276,34 +276,38 @@ window.addEventListener("pagehide", function (e) {
         }
     }
 });
-  // TỰ ĐỘNG GỬI ĐIỂM KHI THOÁT (BẢN NÂNG CẤP CÔNG BẰNG)
+ // 1. LUÔN HIỂN THỊ CẢNH BÁO KHI ĐÃ ĐĂNG NHẬP (DÙ CHƯA LÀM BÀI)
+window.addEventListener("beforeunload", function (e) {
+    if (studentNameStored !== "" && daNopBai === false) {
+        e.preventDefault();
+        e.returnValue = ""; // Kích hoạt hộp thoại mặc định của trình duyệt
+    }
+});
+
+// 2. LUÔN GỬI ĐIỂM KHI THOÁT (KỂ CẢ 0 ĐIỂM)
 window.addEventListener("pagehide", function () {
     if (studentNameStored !== "" && !daNopBai) {
         var d = 0;
-        var daLamCauNaoChua = false; // Biến kiểm tra xem đã tích ô nào chưa
-
+        // Tính điểm dựa trên những gì đã làm (nếu chưa làm thì d = 0)
         danhSachHienTai.forEach((item, i) => {
-            var inputs = document.getElementsByName('cau' + i);
-            var chon = Array.from(inputs).find(r => r.checked);
-            
-            if (chon) {
-                daLamCauNaoChua = true; // Xác nhận học sinh đã bắt đầu làm bài
-                if (chon.value === item.dung) { d++; }
-            }
+            var chon = Array.from(document.getElementsByName('cau' + i)).find(r => r.checked)?.value;
+            if (chon === item.dung) { d++; }
         });
 
-        // CHỈ GỬI ĐIỂM NẾU ĐÃ LÀM ÍT NHẤT 1 CÂU
-        if (daLamCauNaoChua) {
-            var diemTam = Math.round((d / SO_CAU_MOI_DE) * 100) / 10;
-            var url = "https://script.google.com/macros/s/AKfycbzSoiKPu8jwc3z4oqwqLu0Gy_kMd-MukfhsvM--SB82WEpGs9bt3-1k6FtSKBYBjts/exec";
-            var data = JSON.stringify({ 
-                hoTen: studentNameStored + " (Thoát ngang)", 
-                soCauDung: d + "/" + SO_CAU_MOI_DE, 
-                diemSo: diemTam 
-            });
+        var diemTam = Math.round((d / SO_CAU_MOI_DE) * 100) / 10;
+        var url = "https://script.google.com/macros/s/AKfycbzSoiKPu8jwc3z4oqwqLu0Gy_kMd-MukfhsvM--SB82WEpGs9bt3-1k6FtSKBYBjts/exec";
+        
+        var data = JSON.stringify({
+            hoTen: studentNameStored + " (Thoát ngang)",
+            soCauDung: d + "/" + SO_CAU_MOI_DE,
+            diemSo: diemTam
+        });
 
-            if (navigator.sendBeacon) { navigator.sendBeacon(url, data); } 
-            else { fetch(url, { method: "POST", mode: "no-cors", keepalive: true, body: data }); }
+        // Lệnh gửi dữ liệu ưu tiên
+        if (navigator.sendBeacon) {
+            navigator.sendBeacon(url, data);
+        } else {
+            fetch(url, { method: "POST", mode: "no-cors", keepalive: true, body: data });
         }
     }
 });
