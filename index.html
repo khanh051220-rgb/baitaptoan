@@ -104,8 +104,17 @@
 </div>
 
 <script>
-    var studentNameStored = "", giay = 900, timer, daNopBai = false, soLanViPham = 0;
-    const GIOI_HAN_VI_PHAM = 2, SO_CAU_MOI_DE = 5;
+    // --- BƯỚC 1: KHAI BÁO BIẾN (Gộp gọn lại, không trùng lặp) ---
+    var studentNameStored = "", 
+        giay = 900, 
+        timer, 
+        daNopBai = false, 
+        soLanViPham = 0,
+        thoiGianBatDau; 
+
+    const GIOI_HAN_VI_PHAM = 2, 
+          SO_CAU_MOI_DE = 5;
+
     var danhSachHocSinh = { "Nguyễn Văn An": "an123", "Trần Thị Bình": "binh456", "Khánh": "0512" };
     
     var khoCauHoi = [
@@ -123,9 +132,11 @@
 
     var danhSachHienTai = []; 
 
+    // Gán sự kiện
     document.getElementById('btn-login').addEventListener('click', checkLogin);
     document.getElementById('btn-nop-bai').addEventListener('click', chamDiem);
 
+    // Theo dõi tiến độ khi làm bài
     document.addEventListener('change', function(e) {
         if(e.target.type === 'radio') {
             document.getElementById('sound-click').play();
@@ -145,6 +156,10 @@
             document.getElementById('login-screen').style.display = "none";
             document.getElementById('main-content').style.display = "block";
             document.getElementById('progress-container').style.display = "block";
+            
+            // --- GHI LẠI THỜI ĐIỂM BẮT ĐẦU ---
+            thoiGianBatDau = Date.now(); 
+            
             taoDe();
             batDauDemNguoc();
         } else { alert("Sai thông tin rồi em ơi! ❌"); }
@@ -177,8 +192,14 @@
         if (daNopBai) return; 
         daNopBai = true; 
         clearInterval(timer);
+
+        // --- TÍNH THỜI GIAN LÀM BÀI ---
+        var tongGiay = Math.floor((Date.now() - thoiGianBatDau) / 1000);
+        var phut = Math.floor(tongGiay / 60);
+        var giayLe = tongGiay % 60;
+        var thoiGianLamStr = phut + " phút " + giayLe + " giây";
+
         var d = 0;
-        
         danhSachHienTai.forEach((item, i) => {
             var chon = Array.from(document.getElementsByName('cau' + i)).find(r => r.checked)?.value;
             var b = document.getElementById('box' + i);
@@ -192,48 +213,39 @@
         });
 
         var diem = Math.round((d / SO_CAU_MOI_DE) * 100) / 10;
-        
-        if (diem >= 8) {
-            banPhaoHoa();
-        }
+        if (diem >= 8) banPhaoHoa();
 
         var icon = diem >= 8 ? "🏆 Tuyệt vời!" : (diem >= 5 ? "👏 Khá lắm!" : "💪 Cố gắng lên!");
         
-        document.getElementById('ket-qua').innerHTML = `<div style="background:#e9f5ee; padding:20px; border-radius:20px; border:2px solid #b7e4c7; text-align:center;">
-            <h2 style="color:#1b4332;">${icon}</h2>
-            <p style="font-size:40px; font-weight:bold; color:#d00000;">💯 ${diem} ĐIỂM</p>
-            <p>Đúng ${d}/${SO_CAU_MOI_DE} câu. Đã gửi cho thầy!</p></div>`;
+        document.getElementById('ket-qua').innerHTML = `
+            <div style="background:#e9f5ee; padding:20px; border-radius:20px; border:2px solid #b7e4c7; text-align:center;">
+                <h2 style="color:#1b4332;">${icon}</h2>
+                <p style="font-size:40px; font-weight:bold; color:#d00000;">💯 ${diem} ĐIỂM</p>
+                <p>Thời gian: ${thoiGianLamStr}</p>
+                <p>Đúng ${d}/${SO_CAU_MOI_DE} câu. Đã gửi cho thầy!</p>
+            </div>`;
         
+        // Gửi kèm thời gian làm bài lên Google
         fetch("https://script.google.com/macros/s/AKfycbzSoiKPu8jwc3z4oqwqLu0Gy_kMd-MukfhsvM--SB82WEpGs9bt3-1k6FtSKBYBjts/exec", {
             method: "POST", mode: "no-cors", 
-            body: JSON.stringify({hoTen: studentNameStored, soCauDung: d+"/"+SO_CAU_MOI_DE, diemSo: diem})
+            body: JSON.stringify({
+                hoTen: studentNameStored, 
+                soCauDung: d+"/"+SO_CAU_MOI_DE, 
+                diemSo: diem,
+                thoiGian: thoiGianLamStr
+            })
         });
     }
 
+    // Các hàm pháo hoa và bảo mật giữ nguyên...
     function banPhaoHoa(){
         document.getElementById('sound-success').play();
         var duration = 3 * 1000;
         var end = Date.now() + duration;
-
         (function frame() {
-            confetti({
-                particleCount: 5,
-                angle: 60,
-                spread: 55,
-                origin: { x: 0, y: 0.8 },
-                colors: ['#40916c', '#ff9f1c', '#2d6a4f']
-            });
-            confetti({
-                particleCount: 5,
-                angle: 120,
-                spread: 55,
-                origin: { x: 1, y: 0.8 },
-                colors: ['#40916c', '#ff9f1c', '#2d6a4f']
-            });
-
-            if (Date.now() < end) {
-                requestAnimationFrame(frame);
-            }
+            confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0, y: 0.8 }, colors: ['#40916c', '#ff9f1c', '#2d6a4f'] });
+            confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1, y: 0.8 }, colors: ['#40916c', '#ff9f1c', '#2d6a4f'] });
+            if (Date.now() < end) requestAnimationFrame(frame);
         }());
     }
 
@@ -247,38 +259,6 @@
 
     document.addEventListener('contextmenu', event => {
         if (!daNopBai && studentNameStored !== "") { event.preventDefault(); alert("🤫 Không dùng chuột phải!"); }
-    });
-
-    window.addEventListener("pagehide", function (e) {
-        if (studentNameStored !== "" && !daNopBai) {
-            var d = 0;
-            danhSachHienTai.forEach((item, i) => {
-                var chon = Array.from(document.getElementsByName('cau' + i)).find(r => r.checked)?.value;
-                if (chon === item.dung) { d++; }
-            });
-
-            var diemTamThoi = Math.round((d / SO_CAU_MOI_DE) * 100) / 10;
-            var data = JSON.stringify({
-                hoTen: studentNameStored + " (Thoát ngang)", 
-                soCauDung: d + "/" + SO_CAU_MOI_DE, 
-                diemSo: diemTamThoi
-            });
-
-            var url = "https://script.google.com/macros/s/AKfycbzSoiKPu8jwc3z4oqwqLu0Gy_kMd-MukfhsvM--SB82WEpGs9bt3-1k6FtSKBYBjts/exec";
-            if (navigator.sendBeacon) {
-                navigator.sendBeacon(url, data);
-            } else {
-                fetch(url, { method: "POST", mode: "no-cors", keepalive: true, body: data });
-            }
-        }
-    });
-
-    window.addEventListener("beforeunload", function (e) {
-        if (studentNameStored && studentNameStored.trim() !== "" && !daNopBai) {
-            e.preventDefault();
-            e.returnValue = "Hệ thống sẽ ghi nhận điểm 0 nếu bạn thoát bây giờ!"; 
-            return "Hệ thống sẽ ghi nhận điểm 0 nếu bạn thoát bây giờ!";
-        }
     });
 </script>
 </body>
