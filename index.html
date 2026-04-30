@@ -30,20 +30,15 @@
             border-radius: 30px; 
             box-shadow: 0 20px 50px rgba(0,0,0,0.1); 
             position: relative;
+            z-index: 1;
         }
 
         h1 { text-align: center; color: var(--primary); font-size: 32px; margin-bottom: 20px; letter-spacing: 1px; }
 
         #login-screen { text-align: center; padding: 30px 10px; }
         .input-login { 
-            padding: 15px; 
-            border: 2px solid #b7e4c7; 
-            border-radius: 15px; 
-            width: 85%; 
-            max-width: 350px; 
-            margin-bottom: 15px; 
-            font-size: 16px;
-            text-align: center;
+            padding: 15px; border: 2px solid #b7e4c7; border-radius: 15px; 
+            width: 85%; max-width: 350px; margin-bottom: 15px; font-size: 16px; text-align: center;
         }
 
         #progress-container { width: 100%; background: #eee; border-radius: 10px; margin-bottom: 25px; height: 15px; overflow: hidden; display:none; }
@@ -71,41 +66,27 @@
             color: white; border: none; border-radius: 50px; 
             font-weight: bold; font-size: 16px;
             position: relative;
-            z-index: 10001; /* Luôn nằm trên lớp mờ để bấm được */
+            z-index: 10005; /* Đảm bảo nút luôn nằm trên Watermark để bấm được */
         }
 
         label { display: block; padding: 12px; margin: 8px 0; border-radius: 12px; background: #f8f9fa; cursor: pointer; font-size: 18px; }
         input[type='radio'] { accent-color: var(--secondary); transform: scale(1.3); margin-right: 12px; }
         
         .loi-giai { 
-            font-style: normal; 
-            color: #d90429; 
-            margin-top: 15px; 
-            display: none; 
-            background: #fdf2f2;
-            padding: 12px;
-            border-radius: 10px;
-            line-height: 1.5;
+            font-style: normal; color: #d90429; margin-top: 15px; 
+            display: none; background: #fdf2f2; padding: 12px; border-radius: 10px; line-height: 1.5;
         }
 
-        .loi-giai img {
-            max-width: 100%;
-            height: auto;
-            margin-top: 10px;
-            border-radius: 8px;
-            border: 1px solid #ffccd5;
-        }
-
-        /* --- PHẦN WATERMARK CẬP NHẬT --- */
+        /* --- WATERMARK OVERLAY --- */
         #watermark-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 10000; 
-            pointer-events: none; 
-            opacity: 0.18; /* Đã tăng độ đậm theo yêu cầu */
+            z-index: 9999; /* Nằm dưới nút bấm nhưng trên nội dung */
+            pointer-events: none; /* Quan trọng: cho phép click xuyên qua để chọn đáp án */
+            opacity: 0.2; /* Độ đậm 20% */
             display: none;
             background-repeat: repeat;
         }
@@ -163,35 +144,23 @@
     document.getElementById('btn-login').addEventListener('click', checkLogin);
     document.getElementById('btn-nop-bai').addEventListener('click', chamDiem);
 
-    document.addEventListener('change', function(e) {
-        if(e.target.type === 'radio') {
-            document.getElementById('sound-click').play();
-            let done = 0;
-            for(let i=0; i < SO_CAU_MOI_DE; i++) {
-                if(document.querySelector(`input[name="cau${i}"]:checked`)) done++;
-            }
-            document.getElementById('progress-bar').style.width = (done / SO_CAU_MOI_DE) * 100 + "%";
-        }
-    });
-
     function checkLogin() {
         var n = document.getElementById('student-name').value.trim();
         var c = document.getElementById('student-code').value.trim();
         if (danhSachHocSinh[n] === c) {
             studentNameStored = n;
-
-            // --- NÂNG CẤP WATERMARK ---
+            
+            // --- TẠO LẠI WATERMARK ---
             const canvas = document.createElement('canvas');
-            // Giảm kích thước ô gạch để tăng mật độ chữ (hiện ở giữa câu hỏi)
-            canvas.width = 140; 
-            canvas.height = 90; 
+            canvas.width = 120; // Khoảng cách nhỏ hơn để chữ dày hơn
+            canvas.height = 80; 
             const ctx = canvas.getContext('2d');
-            ctx.font = 'bold 15px Segoe UI'; // Chữ đậm và rõ nét
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.6)'; // Độ đậm mực vẽ
+            ctx.font = 'bold 14px Segoe UI'; // Chữ đậm
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.7)'; // Mực đậm
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.translate(canvas.width / 2, canvas.height / 2);
-            ctx.rotate(-Math.PI / 8); 
+            ctx.rotate(-Math.PI / 6); 
             ctx.fillText(n, 0, 0);
 
             const overlay = document.getElementById('watermark-overlay');
@@ -206,15 +175,6 @@
         } else { alert("Sai thông tin rồi em ơi! ❌"); }
     }
 
-    function batDauDemNguoc() {
-        timer = setInterval(function() {
-            if (daNopBai) return;
-            var p = Math.floor(giay / 60), g = giay % 60;
-            document.getElementById('dong-ho').innerHTML = "⏳ Thời gian còn lại: " + p + ":" + (g < 10 ? "0" + g : g);
-            if (giay-- <= 0) { clearInterval(timer); chamDiem(); }
-        }, 1000);
-    }
-
     function taoDe() {
         var v = document.getElementById('vung-chua'); 
         v.innerHTML = "";
@@ -225,14 +185,18 @@
             dsLuaChonDaTron.forEach(lc => {
                 html += `<label><input type='radio' name='cau${i}' value='${lc}'> ${lc}</label>`;
             });
-            var hienAnh = item.anh !== "" ? `<br><img src="${item.anh}">` : "";
-            html += `<div class='loi-giai' id='note${i}'>
-                        <b>💡 Đáp án đúng: ${item.dung}</b><br>
-                        <i>📖 Giải thích: ${item.giaiThich}</i>
-                        ${hienAnh}
-                     </div></div>`;
+            html += `<div class='loi-giai' id='note${i}'><b>💡 Đáp án đúng: ${item.dung}</b><br><i>📖 Giải thích: ${item.giaiThich}</i></div></div>`;
             v.innerHTML += html;
         });
+    }
+
+    function batDauDemNguoc() {
+        timer = setInterval(function() {
+            if (daNopBai) return;
+            var p = Math.floor(giay / 60), g = giay % 60;
+            document.getElementById('dong-ho').innerHTML = "⏳ Thời gian còn lại: " + p + ":" + (g < 10 ? "0" + g : g);
+            if (giay-- <= 0) { clearInterval(timer); chamDiem(); }
+        }, 1000);
     }
 
     function chamDiem() {
@@ -247,68 +211,20 @@
             if (chon === item.dung) { d++; b.classList.add('cau-dung'); } 
             else { b.classList.add('cau-sai'); }
         });
-
-        var diem = Math.round((d / SO_CAU_MOI_DE) * 100) / 10;
-        if (diem >= 8) { banPhaoHoa(); }
-        var icon = diem >= 8 ? "🏆 Tuyệt vời!" : (diem >= 5 ? "👏 Khá lắm!" : "💪 Cố gắng lên!");
-        document.getElementById('ket-qua').innerHTML = `<div style="background:#e9f5ee; padding:20px; border-radius:20px; border:2px solid #b7e4c7; text-align:center; position:relative; z-index:10001;">
-            <h2 style="color:#1b4332;">${icon}</h2>
-            <p style="font-size:40px; font-weight:bold; color:#d00000;">💯 ${diem} ĐIỂM</p>
-            <p>Đúng ${d}/${SO_CAU_MOI_DE} câu. Xem lời giải phía trên để rút kinh nghiệm nhé!</p></div>`;
-        
-        fetch("https://script.google.com/macros/s/AKfycbz4IPNx4fkDGi_oy3K15LSqIhB8ZtfmfN3Q_kKNIb7KKGrBjqkl8yKT2FusSjeVNlw/exec", {
-            method: "POST", mode: "no-cors", 
-            body: JSON.stringify({hoTen: studentNameStored, soCauDung: d+"/"+SO_CAU_MOI_DE, diemSo: diem})
-        });
+        var diem = (d / SO_CAU_MOI_DE) * 10;
+        if (diem >= 8) banPhaoHoa();
+        document.getElementById('ket-qua').innerHTML = `<div style="background:#e9f5ee; padding:20px; border-radius:20px; text-align:center;">
+            <p style="font-size:30px; font-weight:bold; color:#d00000;">💯 ${diem} ĐIỂM</p></div>`;
     }
 
     function banPhaoHoa(){
-        if(typeof confetti !== 'undefined') {
-            document.getElementById('sound-success').play();
-            var duration = 3 * 1000;
-            var end = Date.now() + duration;
-            (function frame() {
-                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0, y: 0.8 }, colors: ['#40916c', '#ff9f1c', '#2d6a4f'] });
-                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1, y: 0.8 }, colors: ['#40916c', '#ff9f1c', '#2d6a4f'] });
-                if (Date.now() < end) requestAnimationFrame(frame);
-            }());
-        }
+        var end = Date.now() + 3000;
+        (function frame() {
+            confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0, y: 0.8 } });
+            confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1, y: 0.8 } });
+            if (Date.now() < end) requestAnimationFrame(frame);
+        }());
     }
-
-    document.addEventListener("visibilitychange", function() {
-        if (document.visibilityState === 'hidden' && !daNopBai && studentNameStored !== "") {
-            soLanViPham++;
-            if (soLanViPham < GIOI_HAN_VI_PHAM) alert("⚠️ CẢNH BÁO: Rời trang " + soLanViPham + " lần! 1/2");
-            else chamDiem();
-        }
-    });
-
-    document.addEventListener('contextmenu', event => {
-        if (!daNopBai && studentNameStored !== "") { event.preventDefault(); alert("🤫 Không dùng chuột phải!"); }
-    });
-
-    window.addEventListener("pagehide", function (e) {
-        if (studentNameStored !== "" && !daNopBai) {
-            var d = 0;
-            danhSachHienTai.forEach((item, i) => {
-                var chon = Array.from(document.getElementsByName('cau' + i)).find(r => r.checked)?.value;
-                if (chon === item.dung) { d++; }
-            });
-            var diemTamThoi = Math.round((d / SO_CAU_MOI_DE) * 100) / 10;
-            var data = JSON.stringify({ hoTen: studentNameStored + " (Thoát ngang)", soCauDung: d + "/" + SO_CAU_MOI_DE, diemSo: diemTamThoi });
-            var url = "https://script.google.com/macros/s/AKfycbz4IPNx4fkDGi_oy3K15LSqIhB8ZtfmfN3Q_kKNIb7KKGrBjqkl8yKT2FusSjeVNlw/exec";
-            if (navigator.sendBeacon) { navigator.sendBeacon(url, data); } 
-            else { fetch(url, { method: "POST", mode: "no-cors", keepalive: true, body: data }); }
-        }
-    });
-
-    window.addEventListener("beforeunload", function (e) {
-        if (studentNameStored && studentNameStored.trim() !== "" && !daNopBai) {
-            e.preventDefault();
-            e.returnValue = "Hệ thống sẽ ghi nhận điểm 0 nếu bạn thoát bây giờ!"; 
-            return "Hệ thống sẽ ghi nhận điểm 0 nếu bạn thoát bây giờ!";
-        }
-    });
 </script>
 </body>
 </html>
