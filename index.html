@@ -182,7 +182,6 @@
     const GIOI_HAN_VI_PHAM = 2, SO_CAU_MOI_DE = 5;
     var danhSachHocSinh = { "Nguyễn Văn An": "an123", "Trần Thị Bình": "binh456", "Khánh": "0512" };
     
-    // Đã thêm lời giải chi tiết (giaiThich) cho từng câu hỏi
     var khoCauHoi = [
         { de: "15 + 25 bằng bao nhiêu?", luaChon: ["30", "35", "40", "45"], dung: "40", giaiThich: "Ta có: 15 + 25 = (10 + 20) + (5 + 5) = 30 + 10 = 40." },
         { de: "Hình tam giác có mấy cạnh?", luaChon: ["2", "3", "4", "5"], dung: "3", giaiThich: "Định nghĩa: Hình tam giác là hình đa giác có 3 cạnh và 3 đỉnh." },
@@ -198,6 +197,7 @@
 
     var danhSachHienTai = []; 
 
+    // --- XỬ LÝ GIAO DIỆN ---
     document.querySelectorAll('.avatar-option').forEach(opt => {
         opt.addEventListener('click', function() {
             document.querySelectorAll('.avatar-option').forEach(img => img.classList.remove('selected'));
@@ -254,7 +254,6 @@
             item.luaChon.forEach(function(lc) {
                 html += "<label><input type='radio' name='cau"+i+"' value='"+lc+"'> "+lc+"</label>";
             });
-            // Khu vực hiển thị lời giải (ẩn lúc đầu)
             html += "<div class='loi-giai' id='note"+i+"'></div></div>";
             v.innerHTML += html;
         });
@@ -265,62 +264,63 @@
         daNopBai = true; 
         clearInterval(timer);
         var d = 0;
-        
         danhSachHienTai.forEach(function(item, i) {
             var chon = Array.from(document.getElementsByName('cau' + i)).find(function(r) { return r.checked; })?.value;
             var b = document.getElementById('box' + i);
             var noteBox = document.getElementById('note' + i);
-            
-            // Hiển thị khung lời giải
             noteBox.style.display = "block";
-
             if (chon === item.dung) { 
-                d++; 
-                b.classList.add('cau-dung'); 
-                noteBox.style.background = "#e6fffa";
-                noteBox.style.color = "#234e52";
+                d++; b.classList.add('cau-dung'); 
                 noteBox.innerHTML = "<b>🌟 Chính xác!</b><br>💡 Giải thích: " + item.giaiThich;
             } else { 
                 b.classList.add('cau-sai'); 
-                noteBox.style.background = "#fff5f5";
-                noteBox.style.color = "#c53030";
                 noteBox.innerHTML = "<b>❌ Tiếc quá!</b> Đáp án đúng là: <b>" + item.dung + "</b><br>💡 Giải thích: " + item.giaiThich;
             }
         });
-
         var diem = Math.round((d / SO_CAU_MOI_DE) * 100) / 10;
         if (diem >= 8) { banPhaoHoa(); }
-
-        var icon = diem >= 8 ? "🏆 Tuyệt vời!" : (diem >= 5 ? "👏 Khá lắm!" : "💪 Cố gắng lên!");
-        
-        document.getElementById('ket-qua').innerHTML = `
-            <div style='background:#e9f5ee; padding:20px; border-radius:20px; border:2px solid #b7e4c7; text-align:center; margin-top: 20px;'>
-                <img src="${currentSeed}" style="width:80px; height:80px; object-fit:cover; border-radius:50%; border:3px solid var(--secondary); margin-bottom:10px;">
-                <h2 style='color:#1b4332;'>${icon}</h2>
-                <p style='font-size:40px; font-weight:bold; color:#d00000;'>💯 ${diem} ĐIỂM</p>
-                <p>Đúng ${d}/${SO_CAU_MOI_DE} câu. Xem lại lời giải chi tiết ở trên nhen!</p>
-            </div>`;
-        
-        fetch("https://script.google.com/macros/s/AKfycbz4IPNx4fkDGi_oy3K15LSqIhB8ZtfmfN3Q_kKNIb7KKGrBjqkl8yKT2FusSjeVNlw/exec", {
-            method: "POST", mode: "no-cors", 
-            body: JSON.stringify({hoTen: studentNameStored, soCauDung: d+"/"+SO_CAU_MOI_DE, diemSo: diem})
-        });
+        document.getElementById('ket-qua').innerHTML = `<div style='background:#e9f5ee; padding:20px; border-radius:20px; border:2px solid #b7e4c7; text-align:center; margin-top: 20px;'><h2 style='color:#1b4332;'>Điểm số của bạn</h2><p style='font-size:40px; font-weight:bold; color:#d00000;'>💯 ${diem} ĐIỂM</p></div>`;
     }
 
-    // --- CÁC TÍNH NĂNG CŨ GIỮ NGUYÊN ---
     function banPhaoHoa(){
         if(typeof confetti !== 'undefined') {
             document.getElementById('sound-success').play();
-            var duration = 3 * 1000;
-            var end = Date.now() + duration;
-            (function frame() {
-                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0, y: 0.8 }, colors: ['#40916c', '#ff9f1c', '#2d6a4f'] });
-                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1, y: 0.8 }, colors: ['#40916c', '#ff9f1c', '#2d6a4f'] });
-                if (Date.now() < end) { requestAnimationFrame(frame); }
-            }());
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
         }
     }
 
+    // --- HỆ THỐNG PHÒNG THỦ (ĐÃ TỐI ƯU) ---
+
+    // 1. Chặn phím tắt & Thông báo ngẫu nhiên
+    const danhSachCanhBao = [
+        "⚠️ Ui da! Đừng soi code của thầy nhen!",
+        "🤫 Tính hack hay gì? Tập trung làm bài đi!",
+        "🚫 Cửa này không vào được đâu em ơi!",
+        "🕵️ Phát hiện thám tử đang soi code!",
+        "🛑 Dừng lại ngay không thầy báo phụ huynh đó!"
+    ];
+
+    window.addEventListener('keydown', function(e) {
+        // Chặn F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
+        if (e.keyCode === 123 || (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) || (e.ctrlKey && e.keyCode === 85)) {
+            e.preventDefault();
+            const text = danhSachCanhBao[Math.floor(Math.random() * danhSachCanhBao.length)];
+            document.getElementById('alert-text').innerText = text;
+            document.getElementById('custom-alert').style.display = 'block';
+            document.getElementById('sound-denied').play();
+            return false;
+        }
+    }, true);
+
+    // 2. Chặn chuột phải
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        document.getElementById('alert-text').innerText = "🖱️ Chuột phải bị khóa để đảm bảo công bằng nhen!";
+        document.getElementById('custom-alert').style.display = 'block';
+        document.getElementById('sound-denied').play();
+    });
+
+    // 3. Chống gian lận khi thoát tab
     document.addEventListener("visibilitychange", function() {
         if (document.visibilityState === 'hidden' && !daNopBai && studentNameStored !== "") {
             soLanViPham++;
@@ -329,88 +329,16 @@
         }
     });
 
-    document.addEventListener('contextmenu', function(event) {
-        if (!daNopBai && studentNameStored !== "") { event.preventDefault(); alert("🤫 Không dùng chuột phải!"); }
-    });
-
-    window.addEventListener("pagehide", function (e) {
-        if (studentNameStored !== "" && !daNopBai) {
-            var d = 0;
-            danhSachHienTai.forEach(function(item, i) {
-                var chon = Array.from(document.getElementsByName('cau' + i)).find(function(r) { return r.checked; })?.value;
-                if (chon === item.dung) { d++; }
-            });
-            var diemTamThoi = Math.round((d / SO_CAU_MOI_DE) * 100) / 10;
-            var data = JSON.stringify({ hoTen: studentNameStored + " (Thoát ngang)", soCauDung: d + "/" + SO_CAU_MOI_DE, diemSo: diemTamThoi });
-            var url = "https://script.google.com/macros/s/AKfycbz4IPNx4fkDGi_oy3K15LSqIhB8ZtfmfN3Q_kKNIb7KKGrBjqkl8yKT2FusSjeVNlw/exec";
-            if (navigator.sendBeacon) { navigator.sendBeacon(url, data); } 
-            else { fetch(url, { method: "POST", mode: "no-cors", keepalive: true, body: data }); }
-        }
-    });
-
-    window.addEventListener("beforeunload", function (e) {
-        if (studentNameStored && studentNameStored.trim() !== "" && !daNopBai) {
-            e.preventDefault();
-            e.returnValue = "Hệ thống sẽ ghi nhận điểm 0 nếu bạn thoát bây giờ!"; 
-            return "Hệ thống sẽ ghi nhận điểm 0 nếu bạn thoát bây giờ!";
-        }
-    });
-
-    window.addEventListener('keydown', (function() {
-    const danhSach = [
-        "⚠️ Ui da! Đừng soi code của thầy nhen!",
-        "🤫 Tính hack hay gì? Tập trung làm bài đi!",
-        "🚫 Cửa này không vào được đâu em ơi!",
-        "🕵️ Phát hiện thám tử đang soi code!",
-        "🛑 Dừng lại ngay không thầy báo phụ huynh đó!"
-    ];
-
-    function showWarning() {
-        const text = danhSach[Math.floor(Math.random() * danhSach.length)];
-        const alertBox = document.getElementById('custom-alert');
-        document.getElementById('alert-text').innerText = text;
-        alertBox.style.display = 'block';
-        document.getElementById('sound-denied').play();
-    }
-
-    // Chặn phím tắt và hiện thông báo ngẫu nhiên
-    window.addEventListener('keydown', function(e) {
-        if (e.keyCode === 123 || (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) || (e.ctrlKey && e.keyCode === 85)) {
-            e.preventDefault();
-            showWarning();
-        }
-    }, true);
-
-    // CỰC MẠNH: Nếu mở được F12, tự động chuyển trang hoặc đóng tab
-    const checkDevTools = setInterval(function() {
+    // 4. "ĐÓNG BĂNG" KHI MỞ F12 (Chiêu cuối)
+    setInterval(function() {
         const threshold = 160;
         if (window.outerWidth - window.innerWidth > threshold || window.outerHeight - window.innerHeight > threshold) {
-            // Nếu phát hiện mở F12, đá bay sang trang Google luôn cho khỏi soi
-            window.location.href = "https://www.google.com";
+            console.clear();
+            console.log("%c🛑 PHÁT HIỆN GIAN LẬN!", "color:red; font-size:30px; font-weight:bold;");
+            debugger; // Dừng mọi hoạt động
         }
     }, 500);
-})();
-    // 3. Vô hiệu hóa việc nhấn phím F12 (Chốt hạ cuối cùng)
-document.onkeydown = function(e) {
-    if (e.keyCode == 123) {
-        return false;
-    }
-};
-// CHIÊU CUỐI: KHIẾN DEVTOOLS TRỞ NÊN VÔ DỤNG
-setInterval(function() {
-    // 1. Kiểm tra nếu cửa sổ bị thay đổi kích thước đột ngột (dấu hiệu mở F12)
-    if (window.outerHeight - window.innerHeight > 160 || window.outerWidth - window.innerWidth > 160) {
-        // 2. Ép trình duyệt rơi vào trạng thái gỡ lỗi liên tục
-        // Làm cho các em không thể nhấn vào đâu trong bảng F12 được nữa
-        debugger; 
-    }
-}, 100); // Kiểm tra cực nhanh mỗi 0.1 giây
 
-// 3. Vô hiệu hóa việc chuột phải vào các phần tử nhạy cảm
-document.onkeydown = function(e) {
-    if (e.keyCode == 123) return false;
-};
-// Kết hợp với cái setInterval debugger phía trên là bộ đôi hoàn hảo nhen!
 </script>
 </body>
 </html>
