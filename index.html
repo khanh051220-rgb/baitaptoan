@@ -116,28 +116,10 @@
             font-weight: 500;
             line-height: 1.5;
         }
-        #custom-alert {
-    display: none;
-    position: fixed;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    background: white;
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.5);
-    z-index: 10000;
-    text-align: center;
-    border: 2px solid #4CAF50;
-    font-weight: bold;
-}
     </style>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 </head>
 <body>
-    <div id="custom-alert">
-    <p id="alert-text"></p>
-    <button onclick="document.getElementById('custom-alert').style.display='none'" style="cursor:pointer; padding: 5px 20px;">OK thầy ơi!</button>
-</div>
     <audio id="sound-click" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
     <audio id="sound-success" src="https://www.soundjay.com/human/sounds/applause-01.mp3"></audio>
     <audio id="sound-denied" src="https://www.soundjay.com/buttons/sounds/beep-05.mp3"></audio>
@@ -182,6 +164,7 @@
     const GIOI_HAN_VI_PHAM = 2, SO_CAU_MOI_DE = 5;
     var danhSachHocSinh = { "Nguyễn Văn An": "an123", "Trần Thị Bình": "binh456", "Khánh": "0512" };
     
+    // Đã thêm lời giải chi tiết (giaiThich) cho từng câu hỏi
     var khoCauHoi = [
         { de: "15 + 25 bằng bao nhiêu?", luaChon: ["30", "35", "40", "45"], dung: "40", giaiThich: "Ta có: 15 + 25 = (10 + 20) + (5 + 5) = 30 + 10 = 40." },
         { de: "Hình tam giác có mấy cạnh?", luaChon: ["2", "3", "4", "5"], dung: "3", giaiThich: "Định nghĩa: Hình tam giác là hình đa giác có 3 cạnh và 3 đỉnh." },
@@ -197,7 +180,6 @@
 
     var danhSachHienTai = []; 
 
-    // --- XỬ LÝ GIAO DIỆN ---
     document.querySelectorAll('.avatar-option').forEach(opt => {
         opt.addEventListener('click', function() {
             document.querySelectorAll('.avatar-option').forEach(img => img.classList.remove('selected'));
@@ -254,6 +236,7 @@
             item.luaChon.forEach(function(lc) {
                 html += "<label><input type='radio' name='cau"+i+"' value='"+lc+"'> "+lc+"</label>";
             });
+            // Khu vực hiển thị lời giải (ẩn lúc đầu)
             html += "<div class='loi-giai' id='note"+i+"'></div></div>";
             v.innerHTML += html;
         });
@@ -264,63 +247,62 @@
         daNopBai = true; 
         clearInterval(timer);
         var d = 0;
+        
         danhSachHienTai.forEach(function(item, i) {
             var chon = Array.from(document.getElementsByName('cau' + i)).find(function(r) { return r.checked; })?.value;
             var b = document.getElementById('box' + i);
             var noteBox = document.getElementById('note' + i);
+            
+            // Hiển thị khung lời giải
             noteBox.style.display = "block";
+
             if (chon === item.dung) { 
-                d++; b.classList.add('cau-dung'); 
+                d++; 
+                b.classList.add('cau-dung'); 
+                noteBox.style.background = "#e6fffa";
+                noteBox.style.color = "#234e52";
                 noteBox.innerHTML = "<b>🌟 Chính xác!</b><br>💡 Giải thích: " + item.giaiThich;
             } else { 
                 b.classList.add('cau-sai'); 
+                noteBox.style.background = "#fff5f5";
+                noteBox.style.color = "#c53030";
                 noteBox.innerHTML = "<b>❌ Tiếc quá!</b> Đáp án đúng là: <b>" + item.dung + "</b><br>💡 Giải thích: " + item.giaiThich;
             }
         });
+
         var diem = Math.round((d / SO_CAU_MOI_DE) * 100) / 10;
         if (diem >= 8) { banPhaoHoa(); }
-        document.getElementById('ket-qua').innerHTML = `<div style='background:#e9f5ee; padding:20px; border-radius:20px; border:2px solid #b7e4c7; text-align:center; margin-top: 20px;'><h2 style='color:#1b4332;'>Điểm số của bạn</h2><p style='font-size:40px; font-weight:bold; color:#d00000;'>💯 ${diem} ĐIỂM</p></div>`;
+
+        var icon = diem >= 8 ? "🏆 Tuyệt vời!" : (diem >= 5 ? "👏 Khá lắm!" : "💪 Cố gắng lên!");
+        
+        document.getElementById('ket-qua').innerHTML = `
+            <div style='background:#e9f5ee; padding:20px; border-radius:20px; border:2px solid #b7e4c7; text-align:center; margin-top: 20px;'>
+                <img src="${currentSeed}" style="width:80px; height:80px; object-fit:cover; border-radius:50%; border:3px solid var(--secondary); margin-bottom:10px;">
+                <h2 style='color:#1b4332;'>${icon}</h2>
+                <p style='font-size:40px; font-weight:bold; color:#d00000;'>💯 ${diem} ĐIỂM</p>
+                <p>Đúng ${d}/${SO_CAU_MOI_DE} câu. Xem lại lời giải chi tiết ở trên nhen!</p>
+            </div>`;
+        
+        fetch("https://script.google.com/macros/s/AKfycbz4IPNx4fkDGi_oy3K15LSqIhB8ZtfmfN3Q_kKNIb7KKGrBjqkl8yKT2FusSjeVNlw/exec", {
+            method: "POST", mode: "no-cors", 
+            body: JSON.stringify({hoTen: studentNameStored, soCauDung: d+"/"+SO_CAU_MOI_DE, diemSo: diem})
+        });
     }
 
+    // --- CÁC TÍNH NĂNG CŨ GIỮ NGUYÊN ---
     function banPhaoHoa(){
         if(typeof confetti !== 'undefined') {
             document.getElementById('sound-success').play();
-            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+            var duration = 3 * 1000;
+            var end = Date.now() + duration;
+            (function frame() {
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0, y: 0.8 }, colors: ['#40916c', '#ff9f1c', '#2d6a4f'] });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1, y: 0.8 }, colors: ['#40916c', '#ff9f1c', '#2d6a4f'] });
+                if (Date.now() < end) { requestAnimationFrame(frame); }
+            }());
         }
     }
 
-    // --- HỆ THỐNG PHÒNG THỦ (ĐÃ TỐI ƯU) ---
-
-    // 1. Chặn phím tắt & Thông báo ngẫu nhiên
-    const danhSachCanhBao = [
-        "⚠️ Ui da! Đừng soi code của thầy nhen!",
-        "🤫 Tính hack hay gì? Tập trung làm bài đi!",
-        "🚫 Cửa này không vào được đâu em ơi!",
-        "🕵️ Phát hiện thám tử đang soi code!",
-        "🛑 Dừng lại ngay không thầy báo phụ huynh đó!"
-    ];
-
-    window.addEventListener('keydown', function(e) {
-        // Chặn F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
-        if (e.keyCode === 123 || (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) || (e.ctrlKey && e.keyCode === 85)) {
-            e.preventDefault();
-            const text = danhSachCanhBao[Math.floor(Math.random() * danhSachCanhBao.length)];
-            document.getElementById('alert-text').innerText = text;
-            document.getElementById('custom-alert').style.display = 'block';
-            document.getElementById('sound-denied').play();
-            return false;
-        }
-    }, true);
-
-    // 2. Chặn chuột phải
-    document.addEventListener('contextmenu', function(e) {
-        e.preventDefault();
-        document.getElementById('alert-text').innerText = "🖱️ Chuột phải bị khóa để đảm bảo công bằng nhen!";
-        document.getElementById('custom-alert').style.display = 'block';
-        document.getElementById('sound-denied').play();
-    });
-
-    // 3. Chống gian lận khi thoát tab
     document.addEventListener("visibilitychange", function() {
         if (document.visibilityState === 'hidden' && !daNopBai && studentNameStored !== "") {
             soLanViPham++;
@@ -329,16 +311,57 @@
         }
     });
 
-    // 4. "ĐÓNG BĂNG" KHI MỞ F12 (Chiêu cuối)
+    document.addEventListener('contextmenu', function(event) {
+        if (!daNopBai && studentNameStored !== "") { event.preventDefault(); alert("🤫 Không dùng chuột phải!"); }
+    });
+
+    window.addEventListener("pagehide", function (e) {
+        if (studentNameStored !== "" && !daNopBai) {
+            var d = 0;
+            danhSachHienTai.forEach(function(item, i) {
+                var chon = Array.from(document.getElementsByName('cau' + i)).find(function(r) { return r.checked; })?.value;
+                if (chon === item.dung) { d++; }
+            });
+            var diemTamThoi = Math.round((d / SO_CAU_MOI_DE) * 100) / 10;
+            var data = JSON.stringify({ hoTen: studentNameStored + " (Thoát ngang)", soCauDung: d + "/" + SO_CAU_MOI_DE, diemSo: diemTamThoi });
+            var url = "https://script.google.com/macros/s/AKfycbz4IPNx4fkDGi_oy3K15LSqIhB8ZtfmfN3Q_kKNIb7KKGrBjqkl8yKT2FusSjeVNlw/exec";
+            if (navigator.sendBeacon) { navigator.sendBeacon(url, data); } 
+            else { fetch(url, { method: "POST", mode: "no-cors", keepalive: true, body: data }); }
+        }
+    });
+
+    window.addEventListener("beforeunload", function (e) {
+        if (studentNameStored && studentNameStored.trim() !== "" && !daNopBai) {
+            e.preventDefault();
+            e.returnValue = "Hệ thống sẽ ghi nhận điểm 0 nếu bạn thoát bây giờ!"; 
+            return "Hệ thống sẽ ghi nhận điểm 0 nếu bạn thoát bây giờ!";
+        }
+    });
+
+    window.addEventListener('keydown', function(e) {
+        const danhSachCanhBao = [
+            "⚠️ Ui da! Đừng soi code của thầy mà, lo làm bài đi em ơi!",
+            "🤫 Tính hack hay gì? Tập trung chuyên môn đi nhen!",
+            "🚫 Cửa này không vào được đâu em, quay lại làm toán thôi!",
+            "🕵️ Phát hiện một thám tử nhí đang soi code! Dừng lại ngay!",
+            "🛑 Hệ thống đang quan sát em... đừng nghịch F12 nữa nhé!"
+        ];
+        if (e.keyCode === 123 || (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) || (e.ctrlKey && e.keyCode === 85)) {
+            e.preventDefault();
+            document.getElementById('sound-denied').play();
+            alert(danhSachCanhBao[Math.floor(Math.random() * danhSachCanhBao.length)]);
+            return false;
+        }
+    }, true);
+
+    // Chiêu đóng băng Console
     setInterval(function() {
-        const threshold = 160;
-        if (window.outerWidth - window.innerWidth > threshold || window.outerHeight - window.innerHeight > threshold) {
+        if (window.outerHeight - window.innerHeight > 160 || window.outerWidth - window.innerWidth > 160) {
             console.clear();
-            console.log("%c🛑 PHÁT HIỆN GIAN LẬN!", "color:red; font-size:30px; font-weight:bold;");
-            debugger; // Dừng mọi hoạt động
+            console.log("%c🛑 ĐÃ BẢO ĐỪNG SOI MÀ! TẮT F12 ĐI EM!", "color:red; font-size:30px; font-weight:bold;");
+            debugger; 
         }
     }, 500);
-
 </script>
 </body>
 </html>
