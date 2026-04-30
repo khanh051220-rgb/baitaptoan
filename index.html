@@ -381,6 +381,16 @@ setInterval(function() {
 document.onkeydown = function(e) {
     if (e.keyCode == 123) return false;
 };
+    setInterval(function() {
+    if (window.outerHeight - window.innerHeight > 160 || window.outerWidth - window.innerWidth > 160) {
+        // In ra dòng này trước khi "đóng băng"
+        console.clear();
+        console.log("%c🛑 ĐÃ BẢO ĐỪNG SOI MÀ! TẮT F12 ĐI EM!", "color:red; font-size:30px; font-weight:bold;");
+        
+        // Sau đó mới đóng băng
+        debugger; 
+    }
+}, 100);
 </script>
 </body>
 </html>
