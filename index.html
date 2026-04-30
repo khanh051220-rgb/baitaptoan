@@ -324,20 +324,33 @@
             return "Hệ thống sẽ ghi nhận điểm 0 nếu bạn thoát bây giờ!";
         }
     });
-   // CHẶN PHÍM TẮT XEM CODE (CẬP NHẬT)
+   // CHẶN PHÍM TẮT XEM CODE VỚI THÔNG BÁO NGẪU NHIÊN
 window.addEventListener('keydown', function(e) {
+    const danhSachCanhBao = [
+        "⚠️ Ui da! Đừng soi code của thầy mà, lo làm bài đi em ơi!",
+        "🤫 Tính hack hay gì? Tập trung chuyên môn đi nhen!",
+        "🚫 Cửa này không vào được đâu em, quay lại làm toán thôi!",
+        "🕵️ Phát hiện một thám tử nhí đang soi code! Dừng lại ngay!",
+        "🌈 Code thầy viết đẹp lắm rồi, đừng xem nữa, mất công ghiền đó!",
+        "🛑 Hệ thống đang quan sát em... đừng nghịch F12 nữa nhé!"
+    ];
+
     if (
         e.keyCode === 123 || 
         (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) || 
         (e.ctrlKey && e.keyCode === 85)
     ) {
         document.getElementById('sound-denied').play();
-        alert("⚠️ Ui da! Đừng soi code của thầy mà, lo làm bài đi em ơi!");
+        
+        // Lấy ngẫu nhiên một câu trong danh sách
+        const cauNgauNhien = danhSachCanhBao[Math.floor(Math.random() * danhSachCanhBao.length)];
+        alert(cauNgauNhien);
+        
         e.preventDefault();
-        e.stopPropagation(); // Thêm dòng này để ngăn chặn triệt để
+        e.stopPropagation();
         return false;
     }
-}, true); // Thêm true ở đây để ưu tiên chạy trước các sự kiện khác
+}, true);
     // Chiêu "Đóng băng" Console
 (function() {
     var checkStatus = false;
