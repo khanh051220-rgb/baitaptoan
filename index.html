@@ -359,8 +359,9 @@
                 b.classList.add('cau-sai'); 
                 noteBox.style.background = "#fff5f5";
                 noteBox.style.color = "#c53030";
-                noteBox.innerHTML = "<b>❌ Tiếc quá!</b> Đáp án đúng là: <b>" + item.dung + "</b><br>💡 Giải thích: " + item.giaiThich;
-            }
+               // Nhánh sai - CẬU QUÊN + anhHtml Ở ĐÂY NÈ! Tớ thêm vào rồi đó:
+    noteBox.innerHTML = "<b>❌ Tiếc quá!</b> Đáp án đúng là: <b>" + item.dung + "</b><br>💡 Giải thích: " + item.giaiThich + anhHtml;
+}
         });
 
         var diem = Math.round((d / SO_CAU_MOI_DE) * 100) / 10;
