@@ -409,35 +409,81 @@
         setTimeout(() => { bubble.style.display = 'none'; }, 4000);
     }
 
-    function xuLyChat() {
-        let input = document.getElementById('user-input');
-        let content = document.getElementById('chat-content');
-        let message = input.value.toLowerCase().trim();
-        if (message === "") return;
-        content.innerHTML += `<p><b>Em:</b> ${input.value}</p>`;
+   function xuLyChat() {
+    let input = document.getElementById('user-input');
+    let content = document.getElementById('chat-content');
+    let message = input.value.toLowerCase().trim();
+    if (message === "") return;
+
+    // Hiển thị tin nhắn của "Em"
+    content.innerHTML += `<p><b>Em:</b> ${input.value}</p>`;
+    
+    let reply = "";
+
+    // 1. TÁM CHUYỆN VỀ NGƯỜI YÊU (Đáp lại ngẫu nhiên nhiều nội dung)
+    if (message.includes("người yêu") || message.includes("crush") || message.includes("yêu")) {
+        const mauNguoiYeu = [
+            "Mẫu người yêu của anh á? Chắc chắn là một người giỏi Toán như em rồi! 😍",
+            "Người yêu gì tầm này, có làm được hết đề của Khánh chưa mà đòi yêu?",
+            "Anh là AI mà, người yêu anh phải là cái ổ cứng 2TB trở lên mới xứng đôi!",
+            "Mẫu người yêu lý tưởng của em hả? Để anh đoán... là một người không bao giờ bắt em làm bài tập đúng không?",
+            "Người yêu tương lai của em đang đợi ở kết quả bài thi ấy, làm đúng hết đi rồi anh dắt tới gặp!",
+            "Anh chỉ là một đoạn code, yêu anh thì em chỉ có nước... cưới cái máy tính thôi. 😂"
+        ];
+        reply = mauNguoiYeu[Math.floor(Math.random() * mauNguoiYeu.length)];
+    } 
+    // 2. KHI ĐƯỢC KHEN HOẶC HỎI LINH TINH
+    else if (message.includes("đẹp trai") || message.includes("xinh") || message.includes("đang làm gì") || message.includes("ăn cơm chưa")) {
+        const phanHoiVui = [
+            "Anh đang bận ngắm em làm bài, nhìn em lúc tập trung... buồn cười phết! 😜",
+            "Anh ăn điện thay cơm em ơi, sạc đầy pin là anh 'sung' ngay.",
+            "Đừng có mà dùng mỹ nhân kế với anh, anh không cho chép bài đâu nha!",
+            "Ui, nghe em khen mà anh muốn 'chập mạch' vì hạnh phúc luôn đây này!",
+            "Đang chờ em nộp bài để được nghỉ ngơi đây, nhanh tay lên nào."
+        ];
+        reply = phanHoiVui[Math.floor(Math.random() * phanHoiVui.length)];
+    }
+    // 3. LOGIC GỢI Ý BÀI (Vẫn giữ nguyên để cậu không bị lạc đề)
+    else if (message.includes("gợi ý")) {
         if (soLuotHoi <= 0) {
-            content.innerHTML += `<p style="color: red;"><b>AI:</b> Hết lượt hỏi rồi em ơi!</p>`;
-            input.value = ""; return;
-        }
-        let reply = "";
-        const camTamChuyen = ["người yêu", "yêu", "vợ", "chồng", "ăn", "chơi", "game", "hack", "đẹp trai", "xinh"];
-        if (camTamChuyen.some(tu => message.includes(tu))) {
-            reply = "Lo làm bài đi, đừng tám chuyện nhé. ✨";
-        } else if (message.includes("gợi ý")) {
+            reply = "Hết lượt hỏi rồi! Tự lực cánh sinh đi, 'người yêu' tương lai đang nhìn đấy! 😎";
+        } else {
             let match = message.match(/\d+/);
             let index = match ? parseInt(match[0]) - 1 : -1;
             if (index >= 0 && index < SO_CAU_MOI_DE) {
-                reply = `Gợi ý câu ${index + 1}: ${danhSachHienTai[index].goiY || "Xem lại bảng cửu chương nhé!"}`;
+                reply = `Gợi ý câu ${index + 1}: ${danhSachHienTai[index].goiY || "Câu này dễ mà, nhắm mắt cũng làm được!"}`;
                 soLuotHoi--; 
                 document.getElementById('ask-count').innerText = `Lượt hỏi: ${soLuotHoi}/2`;
-            } else { reply = "Em muốn hỏi gợi ý câu mấy? Ví dụ: 'Gợi ý câu 1'."; }
-        } else { reply = "Gõ 'Gợi ý câu + số' để anh giúp nhé!"; }
-        setTimeout(() => {
-            content.innerHTML += `<p style="color: #2d6a4f;"><b>AI:</b> ${reply}</p>`;
-            content.scrollTop = content.scrollHeight;
-        }, 500);
-        input.value = "";
+            } else {
+                reply = "Em muốn hỏi gợi ý câu mấy? Ví dụ: 'Gợi ý câu 1'.";
+            }
+        }
     }
+    // 4. PHẢN HỒI KHI KHÔNG HIỂU (Hoặc khi em nói gì đó lạ lẫm)
+    else {
+        const macDinh = [
+            "Hả? Em nói gì cơ? Anh đang mải suy nghĩ về crush nên không nghe rõ.",
+            "Cái này anh chưa học, nhưng anh biết câu tiếp theo em sẽ làm đúng!",
+            "Nói tiếng người đi em ơi, code của anh chưa cập nhật ngôn ngữ này!",
+            "Tập trung chuyên môn đi cô nương/công tử ơi! Sắp hết giờ rồi kìa.",
+            "Anh không hiểu lắm, nhưng anh thấy em... cũng xinh đấy!"
+        ];
+        reply = macDinh[Math.floor(Math.random() * macDinh.length)];
+    }
+
+    // Hiệu ứng phản hồi sau 0.5s cho nó giống người thật đang nhắn tin
+    setTimeout(() => {
+        content.innerHTML += `<p style="color: #2d6a4f;"><b>AI:</b> ${reply}</p>`;
+        content.scrollTop = content.scrollHeight;
+        
+        // Bonus thêm hiệu ứng nảy nhẹ cái khung chat khi AI nói chuyện cho sinh động
+        let chatBox = document.getElementById('chat-box');
+        chatBox.style.transform = "scale(1.05)";
+        setTimeout(() => { chatBox.style.transform = "scale(1)"; }, 150);
+    }, 500);
+
+    input.value = "";
+}
     document.getElementById('btn-send').onclick = xuLyChat;
     document.getElementById('user-input').onkeypress = (e) => { if (e.key === 'Enter') xuLyChat(); };
 </script>
