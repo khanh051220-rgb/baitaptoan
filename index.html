@@ -200,7 +200,7 @@
         dung: "3", 
         giaiThich: "Định nghĩa: Hình tam giác là hình đa giác có 3 cạnh và 3 đỉnh.",
         goiY: "Trong Hán Việt tam là mấy nhỉ",
-        hinhAnh: "https://img.icons8.com/color/96/triangle.png" // Dán link ảnh minh họa vào đây
+        hinhAnh: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Regular_triangle.svg/200px-Regular_triangle.svg.png" // Dán link ảnh minh họa vào đây
     },
     { 
         de: "Số nào lớn nhất: 89, 98, 100, 99?", 
@@ -346,8 +346,12 @@
             var b = document.getElementById('box' + i);
             var noteBox = document.getElementById('note' + i);
             noteBox.style.display = "block";
-// 1. Tạo chuỗi ảnh trước
-        let anhHtml = item.hinhAnh ? `<br><img src="${item.hinhAnh}" style="max-width:200px; border-radius:10px; margin-top:10px; border: 1px solid #ddd;">` : "";
+// --- ĐOẠN NÀY ĐÃ FIX LỖI ICON VỠ VÀ HIỂN THỊ ẢNH ---
+let anhHtml = "";
+if (item.hinhAnh) {
+    // Tớ thêm onerror để nếu link chết thì nó ẩn luôn cái icon vỡ đi cho đẹp
+    anhHtml = `<br><img src="${item.hinhAnh}" onerror="this.style.display='none'" style="max-width:150px; border-radius:10px; margin-top:10px; border: 2px solid #eee; display:block;">`;
+}
             if (chon === item.dung) { 
                 d++; 
                 b.classList.add('cau-dung'); 
