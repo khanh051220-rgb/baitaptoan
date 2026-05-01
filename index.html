@@ -1,183 +1,181 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <title>Học toán cùng Khánh</title>
-    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/188/188333.png">
-    <style>
-        :root {
-            --primary: #1b4332;
-            --secondary: #40916c;
-            --light: #d8f3dc;
-            --accent: #ff9f1c;
-        }
+    <meta charset="UTF-8">
+    <title>Học toán cùng Khánh</title>
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/188/188333.png">
+    <style>
+        :root {
+            --primary: #1b4332;
+            --secondary: #40916c;
+            --light: #d8f3dc;
+            --accent: #ff9f1c;
+        }
 
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            padding: 20px; 
-            background: linear-gradient(135deg, #d8f3dc 0%, #b7e4c7 100%); 
-            min-height: 100vh;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-        }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            padding: 20px; 
+            background: linear-gradient(135deg, #d8f3dc 0%, #b7e4c7 100%); 
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
 
-        .container { 
-            width: 95%;
-            max-width: 1000px; 
-            background: rgba(255, 255, 255, 0.95); 
-            padding: 45px; 
-            border-radius: 30px; 
-            box-shadow: 0 20px 50px rgba(0,0,0,0.1); 
-        }
+        .container { 
+            width: 95%;
+            max-width: 1000px; 
+            background: rgba(255, 255, 255, 0.95); 
+            padding: 45px; 
+            border-radius: 30px; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1); 
+        }
 
-        h1 { text-align: center; color: var(--primary); font-size: 32px; margin-bottom: 20px; letter-spacing: 1px; }
+        h1 { text-align: center; color: var(--primary); font-size: 32px; margin-bottom: 20px; letter-spacing: 1px; }
 
-        #login-screen { text-align: center; padding: 10px; }
-        .input-login { 
-            padding: 15px; 
-            border: 2px solid #b7e4c7; 
-            border-radius: 15px; 
-            width: 85%; 
-            max-width: 350px; 
-            margin-bottom: 15px; 
-            font-size: 16px;
-            text-align: center;
-        }
+        #login-screen { text-align: center; padding: 10px; }
+        .input-login { 
+            padding: 15px; 
+            border: 2px solid #b7e4c7; 
+            border-radius: 15px; 
+            width: 85%; 
+            max-width: 350px; 
+            margin-bottom: 15px; 
+            font-size: 16px;
+            text-align: center;
+        }
 
-        .avatar-picker {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin: 20px 0;
-            flex-wrap: wrap;
-        }
-        .avatar-option {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            border: 3px solid transparent;
-            cursor: pointer;
-            transition: 0.3s;
-            background: #eee;
-            object-fit: cover;
-        }
-        .avatar-option.selected {
-            border-color: var(--accent);
-            transform: scale(1.1);
-            box-shadow: 0 0 10px rgba(255,159,28,0.5);
-        }
-        .header-profile {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 20px;
-            background: #f0fdf4;
-            padding: 10px;
-            border-radius: 50px;
-        }
-        .header-profile img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+        .avatar-picker {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .avatar-option {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            cursor: pointer;
+            transition: 0.3s;
+            background: #eee;
+            object-fit: cover;
+        }
+        .avatar-option.selected {
+            border-color: var(--accent);
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(255,159,28,0.5);
+        }
+        .header-profile {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            background: #f0fdf4;
+            padding: 10px;
+            border-radius: 50px;
+        }
+        .header-profile img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
 
-        #progress-container { width: 100%; background: #eee; border-radius: 10px; margin-bottom: 25px; height: 15px; overflow: hidden; display:none; }
-        #progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #40916c, #2dc653); transition: 0.4s; }
+        #progress-container { width: 100%; background: #eee; border-radius: 10px; margin-bottom: 25px; height: 15px; overflow: hidden; display:none; }
+        #progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #40916c, #2dc653); transition: 0.4s; }
 
-        #dong-ho { 
-            font-size: 22px; font-weight: bold; color: #e63946; 
-            text-align: center; margin-bottom: 25px; padding: 15px; 
-            background: #fff1f2; border-radius: 20px; border: 2px solid #ffccd5;
-        }
+        #dong-ho { 
+            font-size: 22px; font-weight: bold; color: #e63946; 
+            text-align: center; margin-bottom: 25px; padding: 15px; 
+            background: #fff1f2; border-radius: 20px; border: 2px solid #ffccd5;
+        }
 
-        .khung { 
-            padding: 25px; margin-bottom: 25px; border-radius: 20px; 
-            background: white; border: 1px solid #e9ecef;
-            border-left: 10px solid var(--secondary);
-            transition: 0.3s;
-        }
+        .khung { 
+            padding: 25px; margin-bottom: 25px; border-radius: 20px; 
+            background: white; border: 1px solid #e9ecef;
+            border-left: 10px solid var(--secondary);
+            transition: 0.3s;
+        }
 
-        .cau-dung { border-left-color: #2dc653 !important; background: #f0fff4; }
-        .cau-sai { border-left-color: #e63946 !important; background: #fff5f5; }
+        .cau-dung { border-left-color: #2dc653 !important; background: #f0fff4; }
+        .cau-sai { border-left-color: #e63946 !important; background: #fff5f5; }
 
-        button { 
-            padding: 15px 35px; cursor: pointer; 
-            background: linear-gradient(45deg, #2d6a4f, #52b788); 
-            color: white; border: none; border-radius: 50px; 
-            font-weight: bold; font-size: 16px;
-        }
+        button { 
+            padding: 15px 35px; cursor: pointer; 
+            background: linear-gradient(45deg, #2d6a4f, #52b788); 
+            color: white; border: none; border-radius: 50px; 
+            font-weight: bold; font-size: 16px;
+        }
 
-        label { display: block; padding: 12px; margin: 8px 0; border-radius: 12px; background: #f8f9fa; cursor: pointer; font-size: 18px; }
-        input[type='radio'] { accent-color: var(--secondary); transform: scale(1.3); margin-right: 12px; }
-        
-        .loi-giai { 
-            margin-top: 15px; 
-            padding: 10px;
-            border-radius: 10px;
-            display: none; 
-            font-weight: 500;
-            line-height: 1.5;
-        }
-    </style>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+        label { display: block; padding: 12px; margin: 8px 0; border-radius: 12px; background: #f8f9fa; cursor: pointer; font-size: 18px; }
+        input[type='radio'] { accent-color: var(--secondary); transform: scale(1.3); margin-right: 12px; }
+        
+        .loi-giai { 
+            margin-top: 15px; 
+            padding: 10px;
+            border-radius: 10px;
+            display: none; 
+            font-weight: 500;
+            line-height: 1.5;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 </head>
 <body>
-    <div id="ai-container" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
-    <!-- Bong bóng lời nói (Động viên) -->
-    <div id="ai-bubble" style="background: white; border: 2px solid var(--secondary); padding: 10px 15px; border-radius: 20px; margin-bottom: 10px; font-size: 13px; max-width: 250px; display: none; box-shadow: 0 5px 15px rgba(0,0,0,0.1); position: relative;">
-        <span id="ai-speech">Chào em!</span>
-        <div style="position: absolute; bottom: -10px; right: 20px; width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: 10px solid var(--secondary);"></div>
-    </div>
+    <div id="ai-container" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+        <div id="ai-bubble" style="background: white; border: 2px solid var(--secondary); padding: 10px 15px; border-radius: 20px; margin-bottom: 10px; font-size: 13px; max-width: 250px; display: none; box-shadow: 0 5px 15px rgba(0,0,0,0.1); position: relative;">
+            <span id="ai-speech">Chào em!</span>
+            <div style="position: absolute; bottom: -10px; right: 20px; width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: 10px solid var(--secondary);"></div>
+        </div>
 
-    <!-- Khung Chat (Gợi ý) -->
-    <div id="chat-box" style="width: 280px; background: white; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); border: 2px solid var(--secondary); overflow: hidden; display: flex; flex-direction: column;">
-        <div style="background: var(--secondary); color: white; padding: 10px; font-weight: bold; display: flex; justify-content: space-between; align-items: center;">
-            <span style="font-size: 13px;">💬 TRỢ LÝ EZMATH</span>
-            <span id="ask-count" style="font-size: 11px; background: rgba(0,0,0,0.2); padding: 2px 8px; border-radius: 10px;">Lượt hỏi: 2/2</span>
-        </div>
-        <div id="chat-content" style="height: 120px; overflow-y: auto; padding: 10px; font-size: 12px; background: #f9f9f9;">
-            <p style="color: #666;"><i>Gõ "Gợi ý câu 1" để được giúp đỡ. Nghiêm cấm tám chuyện!</i></p>
-        </div>
-        <div style="display: flex; border-top: 1px solid #eee;">
-            <input type="text" id="user-input" placeholder="Hỏi gì đi em..." style="flex: 1; border: none; padding: 10px; outline: none; font-size: 13px;">
-            <button id="btn-send" style="padding: 10px; border-radius: 0; font-size: 12px; width: 50px; background: var(--secondary); color: white; border: none; cursor: pointer;">Gửi</button>
-        </div>
-    </div>
-</div>
-    <audio id="sound-click" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
-    <audio id="sound-success" src="https://www.soundjay.com/human/sounds/applause-01.mp3"></audio>
-    <audio id="sound-denied" src="https://www.soundjay.com/buttons/sounds/beep-05.mp3"></audio>
+        <div id="chat-box" style="width: 280px; background: white; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); border: 2px solid var(--secondary); overflow: hidden; display: flex; flex-direction: column;">
+            <div style="background: var(--secondary); color: white; padding: 10px; font-weight: bold; display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 13px;">💬 TRỢ LÝ EZMATH</span>
+                <span id="ask-count" style="font-size: 11px; background: rgba(0,0,0,0.2); padding: 2px 8px; border-radius: 10px;">Lượt hỏi: 2/2</span>
+            </div>
+            <div id="chat-content" style="height: 120px; overflow-y: auto; padding: 10px; font-size: 12px; background: #f9f9f9;">
+                <p style="color: #666;"><i>Gõ "Gợi ý câu 1" để được giúp đỡ. Nghiêm cấm tám chuyện!</i></p>
+            </div>
+            <div style="display: flex; border-top: 1px solid #eee;">
+                <input type="text" id="user-input" placeholder="Hỏi gì đi em..." style="flex: 1; border: none; padding: 10px; outline: none; font-size: 13px;">
+                <button id="btn-send" style="padding: 10px; border-radius: 0; font-size: 12px; width: 50px; background: var(--secondary); color: white; border: none; cursor: pointer;">Gửi</button>
+            </div>
+        </div>
+    </div>
+
+    <audio id="sound-click" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
+    <audio id="sound-success" src="https://www.soundjay.com/human/sounds/applause-01.mp3"></audio>
+    <audio id="sound-denied" src="https://www.soundjay.com/buttons/sounds/beep-05.mp3"></audio>
 
 <div class="container">
-    <div id="login-screen">
-        <h1>🌿 EzMath 🌿</h1>
-        <p>Chọn một avatar thật ngầu nhen các em! ✨</p>
-        
-        <div class="avatar-picker">
-            <img src="https://img5.thuthuatphanmem.vn/uploads/2021/11/08/anh-gau-truc-cute_082040722.jpg" class="avatar-option selected" data-seed="https://img5.thuthuatphanmem.vn/uploads/2021/11/08/anh-gau-truc-cute_082040722.jpg">
-            <img src="https://i.pinimg.com/originals/6d/dc/3f/6ddc3f9a79c891e0efd6042624e08f51.png" class="avatar-option" data-seed="https://i.pinimg.com/originals/6d/dc/3f/6ddc3f9a79c891e0efd6042624e08f51.png">
-            <img src="https://i.pinimg.com/originals/9a/c3/55/9ac355832f81c37f4964583c22bee6a0.jpg" class="avatar-option" data-seed="https://i.pinimg.com/originals/9a/c3/55/9ac355832f81c37f4964583c22bee6a0.jpg">
-            <img src="https://antimatter.vn/wp-content/uploads/2022/03/anh-anime-nam-chibi-meo-cute.jpg" class="avatar-option" data-seed="https://antimatter.vn/wp-content/uploads/2022/03/anh-anime-nam-chibi-meo-cute.jpg">
-            <img src="https://png.pngtree.com/png-clipart/20210314/original/pngtree-math-clipart-balloon-cartoon-math-symbol-png-image_6086532.jpg" class="avatar-option" data-seed="https://png.pngtree.com/png-clipart/20210314/original/pngtree-math-clipart-balloon-cartoon-math-symbol-png-image_6086532.jpg">
-        </div>
-        <input type="text" id="student-name" class="input-login" placeholder="👤 Nhập họ và tên..."><br>
-        <input type="password" id="student-code" class="input-login" placeholder="🔑 Nhập mã bí mật..."><br>
-        <button id="btn-login">🚀 BẮT ĐẦU THỬ THÁCH</button>
-    </div>
+    <div id="login-screen">
+        <h1>🌿 EzMath 🌿</h1>
+        <p>Chọn một avatar thật ngầu nhen các em! ✨</p>
+        <div class="avatar-picker">
+            <img src="https://img5.thuthuatphanmem.vn/uploads/2021/11/08/anh-gau-truc-cute_082040722.jpg" class="avatar-option selected" data-seed="https://img5.thuthuatphanmem.vn/uploads/2021/11/08/anh-gau-truc-cute_082040722.jpg">
+            <img src="https://i.pinimg.com/originals/6d/dc/3f/6ddc3f9a79c891e0efd6042624e08f51.png" class="avatar-option" data-seed="https://i.pinimg.com/originals/6d/dc/3f/6ddc3f9a79c891e0efd6042624e08f51.png">
+            <img src="https://i.pinimg.com/originals/9a/c3/55/9ac355832f81c37f4964583c22bee6a0.jpg" class="avatar-option" data-seed="https://i.pinimg.com/originals/9a/c3/55/9ac355832f81c37f4964583c22bee6a0.jpg">
+            <img src="https://antimatter.vn/wp-content/uploads/2022/03/anh-anime-nam-chibi-meo-cute.jpg" class="avatar-option" data-seed="https://antimatter.vn/wp-content/uploads/2022/03/anh-anime-nam-chibi-meo-cute.jpg">
+            <img src="https://png.pngtree.com/png-clipart/20210314/original/pngtree-math-clipart-balloon-cartoon-math-symbol-png-image_6086532.jpg" class="avatar-option" data-seed="https://png.pngtree.com/png-clipart/20210314/original/pngtree-math-clipart-balloon-cartoon-math-symbol-png-image_6086532.jpg">
+        </div>
+        <input type="text" id="student-name" class="input-login" placeholder="👤 Nhập họ và tên..."><br>
+        <input type="password" id="student-code" class="input-login" placeholder="🔑 Nhập mã bí mật..."><br>
+        <button id="btn-login">🚀 BẮT ĐẦU THỬ THÁCH</button>
+    </div>
 
-    <div id="main-content" style="display:none;">
-        <div id="profile-header" class="header-profile">
-            <img id="user-img" src="">
-            <span id="user-name" style="font-weight: bold; color: var(--primary);"></span>
-        </div>
-        <h1>✍️ BÀI TẬP RÈN LUYỆN</h1>
-        <div id="progress-container"><div id="progress-bar"></div></div>
-        <div id="dong-ho">⏳ Thời gian còn lại: 15:00</div>
-        <div id="vung-chua"></div>
-        <div style="text-align: center;">
-            <button id="btn-nop-bai">✔️ HOÀN THÀNH & NỘP BÀI</button>
-            <button onclick="location.reload()" style="margin-left: 10px; background: #6c757d;">🔄 LÀM ĐỀ MỚI</button>
-        </div>
-        <div id="ket-qua"></div>
-    </div>
+    <div id="main-content" style="display:none;">
+        <div id="profile-header" class="header-profile">
+            <img id="user-img" src="">
+            <span id="user-name" style="font-weight: bold; color: var(--primary);"></span>
+        </div>
+        <h1>✍️ BÀI TẬP RÈN LUYỆN</h1>
+        <div id="progress-container"><div id="progress-bar"></div></div>
+        <div id="dong-ho">⏳ Thời gian còn lại: 15:00</div>
+        <div id="vung-chua"></div>
+        <div style="text-align: center;">
+            <button id="btn-nop-bai">✔️ HOÀN THÀNH & NỘP BÀI</button>
+            <button onclick="location.reload()" style="margin-left: 10px; background: #6c757d;">🔄 LÀM ĐỀ MỚI</button>
+        </div>
+        <div id="ket-qua"></div>
+    </div>
 </div>
 
 <script>
@@ -210,28 +208,8 @@
         });
     });
 
-    document.getElementById('btn-login').onclick = checkLogin;
-    document.getElementById('btn-nop-bai').onclick = chamDiem;
-
-    // Gộp 2 sự kiện document change làm 1 để tối ưu và không mất tính năng nào
-    document.addEventListener('change', function(e) {
-        if(e.target.type === 'radio') {
-            document.getElementById('sound-click').play();
-            
-            // Logic Progress Bar
-            let done = 0;
-            for(let i=0; i < SO_CAU_MOI_DE; i++) {
-                if(document.querySelector(`input[name="cau${i}"]:checked`)) done++;
-            }
-            document.getElementById('progress-bar').style.width = (done / SO_CAU_MOI_DE) * 100 + "%";
-
-            // Logic AI khen ngợi ngẫu nhiên
-            if (Math.random() > 0.7) {
-                const loiVui = ["Đúng rồi, cứ bình tĩnh!", "Anh thấy em làm khá nhanh đấy!", "Tự tin lên, sắp xong rồi!"];
-                aiNoi(loiVui[Math.floor(Math.random() * loiVui.length)]);
-            }
-        }
-    });
+    document.getElementById('btn-login').addEventListener('click', checkLogin);
+    document.getElementById('btn-nop-bai').addEventListener('click', chamDiem);
 
     function checkLogin() {
         var n = document.getElementById('student-name').value.trim();
@@ -245,7 +223,7 @@
             document.getElementById('user-name').innerText = studentNameStored;
             taoDe();
             batDauDemNguoc();
-            aiNoi("Chào " + studentNameStored + "! Chúc em thi tốt nhé! ✨"); 
+            aiNoi("Chào " + studentNameStored + "! Anh là trợ lý của em. Chúc em thi tốt nhé! ✨"); 
         } else { 
             alert("Sai thông tin rồi em ơi! ❌"); 
         }
@@ -256,15 +234,10 @@
             if (daNopBai) return;
             var p = Math.floor(giay / 60), g = giay % 60;
             document.getElementById('dong-ho').innerHTML = "⏳ Thời gian còn lại: " + p + ":" + (g < 10 ? "0" + g : g);
-            
-            if (giay === 300) aiNoi("Còn 5 phút nữa thôi, soát bài đi em! ⏳");
-            if (giay === 60) aiNoi("1 phút cuối cùng! Khẩn trương lên! 🔥"); 
-            
-            if (giay <= 0) { 
-                clearInterval(timer); 
-                chamDiem(); 
-            }
-            giay--; // Chỉnh lại thứ tự trừ để không mất 1 giây đầu
+            if (giay === 300) aiNoi("Còn 5 phút nữa thôi, soát lại bài đi em ơi! ⏳");
+            if (giay === 60) aiNoi("1 phút cuối cùng! Khẩn trương lên nào! 🔥"); 
+            if (giay <= 0) { clearInterval(timer); chamDiem(); }
+            giay--;
         }, 1000);
     }
 
@@ -274,11 +247,11 @@
         danhSachHienTai = khoCauHoi.sort(() => 0.5 - Math.random()).slice(0, SO_CAU_MOI_DE);
         danhSachHienTai.forEach(function(item, i) {
             item.luaChon.sort(() => 0.5 - Math.random());
-            var html = `<div class='khung' id='box${i}'><p style='font-weight:bold; font-size:20px;'>📝 Câu ${i+1}: ${item.de}</p>`;
-            item.luaChon.forEach(lc => {
-                html += `<label><input type='radio' name='cau${i}' value='${lc}'> ${lc}</label>`;
+            var html = "<div class='khung' id='box"+i+"'><p style='font-weight:bold; font-size:20px;'>📝 Câu "+(i+1)+": "+item.de+"</p>";
+            item.luaChon.forEach(function(lc) {
+                html += "<label><input type='radio' name='cau"+i+"' value='"+lc+"'> "+lc+"</label>";
             });
-            html += `<div class='loi-giai' id='note${i}'></div></div>`;
+            html += "<div class='loi-giai' id='note"+i+"'></div></div>";
             v.innerHTML += html;
         });
     }
@@ -288,7 +261,7 @@
         daNopBai = true; 
         clearInterval(timer);
         var d = 0;
-        let badges = ""; // Sửa lỗi quan trọng nhất: Khai báo biến badges
+        let badges = "";
 
         danhSachHienTai.forEach(function(item, i) {
             var chon = Array.from(document.getElementsByName('cau' + i)).find(r => r.checked)?.value;
@@ -302,36 +275,74 @@
                 noteBox.innerHTML = "<b>🌟 Chính xác!</b><br>💡 Giải thích: " + item.giaiThich;
             } else { 
                 b.classList.add('cau-sai'); 
-                noteBox.innerHTML = "<b>❌ Tiếc quá!</b> Đáp án đúng: <b>" + item.dung + "</b><br>💡 Giải thích: " + item.giaiThich;
+                noteBox.innerHTML = "<b>❌ Tiếc quá!</b> Đáp án đúng là: <b>" + item.dung + "</b><br>💡 Giải thích: " + item.giaiThich;
             }
         });
 
         var diem = Math.round((d / SO_CAU_MOI_DE) * 100) / 10;
+        if (diem >= 8) { banPhaoHoa(); }
         
-        // Hệ thống danh hiệu của cậu
         if (diem === 10) badges += "💎 Siêu nhân Toán học ";
         if (900 - giay < 120) badges += "⚡ Thần tốc ";
         if (soLanViPham === 0) badges += "🛡️ Hiệp sĩ trung thực ";
 
-        if (diem >= 8) {
-            if(typeof confetti !== 'undefined') {
-                document.getElementById('sound-success').play();
-                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-            }
-        }
-        
         var icon = diem >= 8 ? "🏆 Tuyệt vời!" : (diem >= 5 ? "👏 Khá lắm!" : "💪 Cố gắng lên!");
-        
         document.getElementById('ket-qua').innerHTML = `
             <div style='background:#e9f5ee; padding:20px; border-radius:20px; border:2px solid #b7e4c7; text-align:center; margin-top: 20px;'>
                 <img src="${currentSeed}" style="width:80px; height:80px; object-fit:cover; border-radius:50%; border:3px solid var(--secondary); margin-bottom:10px;">
                 <h2 style='color:#1b4332;'>${icon}</h2>
                 <p style='font-size:40px; font-weight:bold; color:#d00000; margin-bottom: 5px;'>💯 ${diem} ĐIỂM</p>
                 <div style="margin-bottom: 15px; color: #d97706; font-weight: bold; font-size: 16px;">${badges}</div>
-                <p>Đúng ${d}/${SO_CAU_MOI_DE} câu.</p>
+                <p>Đúng ${d}/${SO_CAU_MOI_DE} câu. Xem lại lời giải chi tiết ở trên nhen!</p>
             </div>`;
     }
 
+    function banPhaoHoa(){
+        if(typeof confetti !== 'undefined') {
+            document.getElementById('sound-success').play();
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+        }
+    }
+
+    // Chống gian lận & AI Khen ngợi
+    document.addEventListener('change', function(e) {
+        if(e.target.type === 'radio') {
+            document.getElementById('sound-click').play();
+            let done = 0;
+            for(let i=0; i < SO_CAU_MOI_DE; i++) {
+                if(document.querySelector('input[name="cau'+i+'"]:checked')) done++;
+            }
+            document.getElementById('progress-bar').style.width = (done / SO_CAU_MOI_DE) * 100 + "%";
+            if (Math.random() > 0.7) {
+                const loiVui = ["Đúng rồi, cứ bình tĩnh mà chọn!", "Anh thấy em làm khá nhanh đấy!", "Tự tin lên, sắp xong rồi!"];
+                aiNoi(loiVui[Math.floor(Math.random() * loiVui.length)]);
+            }
+        }
+    });
+
+    document.addEventListener("visibilitychange", function() {
+        if (document.visibilityState === 'hidden' && !daNopBai && studentNameStored !== "") {
+            soLanViPham++;
+            if (soLanViPham < GIOI_HAN_VI_PHAM) alert("⚠️ CẢNH BÁO: Rời trang " + soLanViPham + " lần! 1/2");
+            else chamDiem();
+        }
+    });
+
+    // CHẶN F12 & THANH TRỪNG
+    function trucXuat() {
+        window.stop(); 
+        document.body.innerHTML = "<div style='display:flex; flex-direction:column; justify-content:center; align-items:center; height:100vh; width:100vw; background:red; color:white; font-family:sans-serif; position:fixed; top:0; left:0; z-index:999999;'><h1 style='font-size:50px;'>⛔ PHÁT HIỆN GIAN LẬN!</h1><p style='font-size:25px;'>Hệ thống đã tự hủy để bảo mật đề thi.</p></div>";
+        setTimeout(() => { window.location.replace("https://www.google.com"); }, 2000);
+    }
+
+    window.addEventListener('keydown', function(e) {
+        if (e.keyCode === 123 || (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) || (e.ctrlKey && e.keyCode === 85)) {
+            e.preventDefault();
+            trucXuat();
+        }
+    }, true);
+
+    // AI CHAT
     function aiNoi(msg) {
         const bubble = document.getElementById('ai-bubble');
         const speech = document.getElementById('ai-speech');
@@ -340,30 +351,15 @@
         setTimeout(() => { bubble.style.display = 'none'; }, 4000);
     }
 
-    // Chống gian lận
-    document.addEventListener("visibilitychange", function() {
-        if (document.visibilityState === 'hidden' && !daNopBai && studentNameStored !== "") {
-            soLanViPham++;
-            if (soLanViPham < GIOI_HAN_VI_PHAM) alert("⚠️ CẢNH BÁO: Đừng rời trang nhé em! Lần " + soLanViPham);
-            else {
-                alert("Em đã vi phạm quá nhiều lần. Hệ thống tự động nộp bài!");
-                chamDiem();
-            }
-        }
-    });
-
-    // AI Chat Handler
     let soLuotHoi = 2;
-    document.getElementById('btn-send').onclick = function() {
+    function xuLyChat() {
         let input = document.getElementById('user-input');
         let content = document.getElementById('chat-content');
         let message = input.value.toLowerCase().trim();
         if (message === "") return;
-        
         content.innerHTML += `<p><b>Em:</b> ${input.value}</p>`;
-        
         if (soLuotHoi <= 0) {
-            content.innerHTML += `<p style="color: red;"><b>AI:</b> Anh đã hết lượt gợi ý rồi, em tự làm nhé!</p>`;
+            content.innerHTML += `<p style="color: red;"><b>AI:</b> Hết lượt hỏi rồi em ơi!</p>`;
         } else if (message.includes("gợi ý")) {
             let match = message.match(/\d+/);
             let index = match ? parseInt(match[0]) - 1 : -1;
@@ -372,16 +368,16 @@
                 soLuotHoi--;
                 document.getElementById('ask-count').innerText = `Lượt hỏi: ${soLuotHoi}/2`;
             } else {
-                content.innerHTML += `<p><b>AI:</b> Em muốn gợi ý câu số mấy? (VD: Gợi ý câu 1)</p>`;
+                content.innerHTML += `<p><b>AI:</b> Em hỏi gợi ý câu mấy? (VD: Gợi ý câu 1)</p>`;
             }
         } else {
             content.innerHTML += `<p><b>AI:</b> Anh chỉ hỗ trợ gợi ý câu hỏi thôi nè!</p>`;
         }
-        
         input.value = "";
         content.scrollTop = content.scrollHeight;
-    };
+    }
+    document.getElementById('btn-send').onclick = xuLyChat;
+    document.getElementById('user-input').onkeypress = (e) => { if (e.key === 'Enter') xuLyChat(); };
 </script>
 </body>
 </html>
-này hả
