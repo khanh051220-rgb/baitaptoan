@@ -360,8 +360,6 @@
             var b = document.getElementById('box' + i);
             var noteBox = document.getElementById('note' + i);
             noteBox.style.display = "block";
-// --- ĐOẠN NÀY ĐÃ FIX LỖI ICON VỠ VÀ HIỂN THỊ ẢNH ---
-// --- FIX LỖI ẢNH VỠ TẠI ĐÂY ---
         let anhHtml = "";
         if (item.hinhAnh && item.hinhAnh.trim() !== "") {
             anhHtml = `<br><img src="${item.hinhAnh}" onerror="this.style.display='none'" style="max-width:180px; border-radius:15px; margin-top:10px; border: 3px solid #eee; display:block; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">`;
@@ -412,13 +410,10 @@ let danhHieu = "";
                 <p style='font-size:40px; font-weight:bold; color:#d00000;'>💯 ${diem} ĐIỂM</p>
                 <!-- Hiển thị Rank Badge ở đây -->
                 <div class="rank-badge" style="background:${mauSac}; --color:${mauSac}; margin-bottom: 15px;">
-                    ${bieuTuong} ${danhHieu
+                    ${bieuTuong} ${danhHieu}
+                    </div>
                 <p>Đúng ${d}/${SO_CAU_MOI_DE} câu. Xem lại lời giải chi tiết ở trên nhen!</p>
             </div>`;
-        // Thêm dòng này vào phần hiển thị kết quả
-<div class="rank-badge" style="background:${mauSac}; --color:${mauSac}">
-    ${bieuTuong} ${danhHieu}
-</div>
         fetch("https://script.google.com/macros/s/AKfycbz4IPNx4fkDGi_oy3K15LSqIhB8ZtfmfN3Q_kKNIb7KKGrBjqkl8yKT2FusSjeVNlw/exec", {
             method: "POST", mode: "no-cors", 
             body: JSON.stringify({hoTen: studentNameStored, soCauDung: d+"/"+SO_CAU_MOI_DE, diemSo: diem})
