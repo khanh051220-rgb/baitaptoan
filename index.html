@@ -67,15 +67,17 @@
             flex-wrap: wrap;
         }
         .avatar-option {
-    width: 60px !important;    /* Thêm !important để ép nó nhỏ lại */
-    height: 60px !important;   /* Thêm !important */
+    width: 60px !important;    /* Ép chiều rộng cố định */
+    height: 60px !important;   /* Ép chiều cao cố định */
+    min-width: 60px;           /* Chặn không cho nó phình ra */
+    min-height: 60px;          /* Chặn không cho nó phình ra */
     border-radius: 50%;
     border: 3px solid transparent;
     cursor: pointer;
     transition: 0.3s;
     background: #eee;
-    object-fit: cover;
-    display: inline-block;     /* Đảm bảo nó không chiếm hết một hàng */
+    object-fit: cover;         /* Quan trọng: Để ảnh không bị móp khi thu nhỏ */
+    display: inline-block;
 }
         .avatar-option.selected {
             border-color: var(--accent);
