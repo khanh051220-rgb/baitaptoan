@@ -12,16 +12,17 @@
             --accent: #ff9f1c;
         }
 
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            padding: 20px; 
-            background: linear-gradient(135deg, #d8f3dc 0%, #b7e4c7 100%); 
-            min-height: 100vh;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-        }
-
+        body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f2f5;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Thay center bằng flex-start để tránh trôi nội dung */
+    min-height: 100vh;
+    padding: 20px;
+    box-sizing: border-box; /* Đảm bảo padding không làm tràn khung */
+}
         .container { 
             width: 95%;
             max-width: 1000px; 
