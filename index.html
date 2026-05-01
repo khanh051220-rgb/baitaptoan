@@ -188,8 +188,8 @@
     
     // Đã thêm lời giải chi tiết (giaiThich) cho từng câu hỏi
     var khoCauHoi = [
-        { de: "15 + 25 bằng bao nhiêu?", luaChon: ["30", "35", "40", "45"], dung: "40", giaiThich: "Ta có: 15 + 25 = (10 + 20) + (5 + 5) = 30 + 10 = 40." },
-        { de: "Hình tam giác có mấy cạnh?", luaChon: ["2", "3", "4", "5"], dung: "3", giaiThich: "Định nghĩa: Hình tam giác là hình đa giác có 3 cạnh và 3 đỉnh." },
+        { de: "15 + 25 bằng bao nhiêu?", luaChon: ["30", "35", "40", "45"], dung: "40", giaiThich: "Ta có: 15 + 25 = (10 + 20) + (5 + 5) = 30 + 10 = 40.",goiY: "Em thử cộng hàng chục trước rồi cộng hàng đơn vị xem sao." },
+        { de: "Hình tam giác có mấy cạnh?", luaChon: ["2", "3", "4", "5"], dung: "3", giaiThich: "Định nghĩa: Hình tam giác là hình đa giác có 3 cạnh và 3 đỉnh.",goiY: "Trong Hán Việt tam là mấy nhỉ" },
         { de: "Số nào lớn nhất: 89, 98, 100, 99?", luaChon: ["89", "98", "100", "99"], dung: "100", giaiThich: "So sánh các số: 100 là số có 3 chữ số, các số còn lại chỉ có 2 chữ số." },
         { de: "Kết quả của phép tính 7 x 8 là?", luaChon: ["54", "56", "64", "49"], dung: "56", giaiThich: "Dựa vào bảng cửu chương 7 hoặc 8: 7 x 8 = 56." },
         { de: "Số nào là số chẵn nhỏ nhất có hai chữ số?", luaChon: ["10", "12", "02", "11"], dung: "10", giaiThich: "Số nhỏ nhất có hai chữ số là 10, và 10 cũng là số chẵn." },
@@ -458,7 +458,6 @@ function aiNoi(msg) {
     setTimeout(() => { bubble.style.display = 'none'; }, 4000);
 }
 
-// 2. Logic xử lý Chat (Gợi ý nhẹ + Giới hạn lượt)
 function xuLyChat() {
     let input = document.getElementById('user-input');
     let content = document.getElementById('chat-content');
@@ -469,35 +468,45 @@ function xuLyChat() {
     // Hiện tin nhắn của học sinh
     content.innerHTML += `<p><b>Em:</b> ${input.value}</p>`;
 
-    // Kiểm tra lượt hỏi
+    // 1. Kiểm tra lượt hỏi
     if (soLuotHoi <= 0) {
         content.innerHTML += `<p style="color: red;"><b>AI:</b> Hết lượt hỏi rồi em ơi! Tự lực cánh sinh nhé.</p>`;
         input.value = "";
         return;
     }
 
-    // Kiểm tra xem có đang "tám chuyện" không
+    let reply = "";
+
+    // 2. Kiểm tra xem có đang "tám chuyện" không
     const camTamChuyen = ["người yêu", "yêu", "vợ", "chồng", "ăn", "chơi", "game", "hack", "đẹp trai", "xinh"];
     let dangTamChuyen = camTamChuyen.some(tu => message.includes(tu));
 
-    let reply = "";
-    
     if (dangTamChuyen) {
-        reply = "Nghiêm túc làm bài! Anh không ở đây để tám chuyện linh tinh nhé. ✨";
-    } else if (message.includes("gợi ý câu")) {
-        let cauSo = message.replace(/[^0-9]/g, ''); // Lấy số câu từ tin nhắn
-        if (cauSo && cauSo > 0 && cauSo <= SO_CAU_MOI_DE) {
-            reply = "Gợi ý cho em: Hãy đọc kỹ yêu cầu và xem lại bảng cửu chương/công thức tương ứng nhé!";
-            soLuotHoi--; // Chỉ trừ lượt khi hỏi đúng trọng tâm bài học
+        reply = "Mẫu người yêu của anh là người giỏi Toán! Lo làm bài đi, đừng tám chuyện nhé. ✨";
+    } 
+    // 3. Logic xử lý gợi ý câu hỏi (Quan trọng nhất đây)
+    else if (message.includes("gợi ý")) {
+        let match = message.match(/\d+/); // Tìm con số trong tin nhắn
+        let index = match ? parseInt(match[0]) - 1 : -1; // Chuyển số câu thành chỉ số mảng (ví dụ câu 1 là index 0)
+
+        // Kiểm tra xem số câu hỏi có hợp lệ không (từ 1 đến 5)
+        if (index >= 0 && index < SO_CAU_MOI_DE) {
+            // Lấy nội dung gợi ý từ câu hỏi thực tế trong danh sách hiện tại
+            let noiDungGoiY = danhSachHienTai[index].goiY || "Câu này em xem lại bảng cửu chương và công thức nhé!";
+            
+            reply = `Gợi ý câu ${index + 1}: ${noiDungGoiY}`;
+            soLuotHoi--; 
             document.getElementById('ask-count').innerText = `Lượt hỏi: ${soLuotHoi}/2`;
         } else {
-            reply = "Em muốn hỏi gợi ý câu mấy? Ví dụ gõ: 'Gợi ý câu 1'.";
+            reply = "Em muốn hỏi gợi ý câu mấy? Ví dụ: 'Gợi ý câu 1'. (Anh chỉ có 5 câu thôi nhé)";
         }
-    } else {
-        reply = "Anh chỉ hỗ trợ gợi ý bài tập. Đừng hỏi ngoài lề mất thời gian nhé!";
+    } 
+    // 4. Các trường hợp còn lại
+    else {
+        reply = "Anh là trợ lý học tập. Em gõ 'Gợi ý câu + số' để anh giúp nhé!";
     }
 
-    // Phản hồi
+    // Hiển thị phản hồi của AI sau 0.5s cho giống đang suy nghĩ
     setTimeout(() => {
         content.innerHTML += `<p style="color: #2d6a4f;"><b>AI:</b> ${reply}</p>`;
         content.scrollTop = content.scrollHeight;
@@ -505,7 +514,6 @@ function xuLyChat() {
 
     input.value = "";
 }
-
 // Gán sự kiện
 document.getElementById('btn-send').onclick = xuLyChat;
 document.getElementById('user-input').onkeypress = (e) => { if (e.key === 'Enter') xuLyChat(); };
