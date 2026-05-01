@@ -212,6 +212,22 @@
     document.getElementById('btn-login').addEventListener('click', checkLogin);
     document.getElementById('btn-nop-bai').addEventListener('click', chamDiem);
 
+    document.addEventListener('change', function(e) {
+        if(e.target.type === 'radio') {
+            document.getElementById('sound-click').play();
+            let done = 0;
+            for(let i=0; i < SO_CAU_MOI_DE; i++) {
+                if(document.querySelector('input[name="cau'+i+'"]:checked')) done++;
+            }
+            document.getElementById('progress-bar').style.width = (done / SO_CAU_MOI_DE) * 100 + "%";
+            
+            if (Math.random() > 0.7) {
+                const loiVui = ["Đúng rồi, cứ bình tĩnh mà chọn!", "Anh thấy em làm khá nhanh đấy!", "Tự tin lên, sắp xong rồi!"];
+                aiNoi(loiVui[Math.floor(Math.random() * loiVui.length)]);
+            }
+        }
+    });
+
     function checkLogin() {
         var n = document.getElementById('student-name').value.trim();
         var c = document.getElementById('student-code').value.trim();
@@ -261,38 +277,40 @@
         daNopBai = true; 
         clearInterval(timer);
         var d = 0;
+        
         danhSachHienTai.forEach(function(item, i) {
             var chon = Array.from(document.getElementsByName('cau' + i)).find(function(r) { return r.checked; })?.value;
             var b = document.getElementById('box' + i);
             var noteBox = document.getElementById('note' + i);
             noteBox.style.display = "block";
+
             if (chon === item.dung) { 
-                d++; b.classList.add('cau-dung'); 
+                d++; 
+                b.classList.add('cau-dung'); 
+                noteBox.style.background = "#e6fffa";
+                noteBox.style.color = "#234e52";
                 noteBox.innerHTML = "<b>🌟 Chính xác!</b><br>💡 Giải thích: " + item.giaiThich;
             } else { 
                 b.classList.add('cau-sai'); 
+                noteBox.style.background = "#fff5f5";
+                noteBox.style.color = "#c53030";
                 noteBox.innerHTML = "<b>❌ Tiếc quá!</b> Đáp án đúng là: <b>" + item.dung + "</b><br>💡 Giải thích: " + item.giaiThich;
             }
         });
 
         var diem = Math.round((d / SO_CAU_MOI_DE) * 100) / 10;
         if (diem >= 8) { banPhaoHoa(); }
-        var thoiGianDaDung = 900 - giay;
-        let badges = "";
-        if (diem === 10) badges += "💎 Siêu nhân Toán học ";
-        if (thoiGianDaDung < 120) badges += "⚡ Thần tốc ";
-        if (soLanViPham === 0) badges += "🛡️ Hiệp sĩ trung thực ";
+
+        var icon = diem >= 8 ? "🏆 Tuyệt vời!" : (diem >= 5 ? "👏 Khá lắm!" : "💪 Cố gắng lên!");
         
         document.getElementById('ket-qua').innerHTML = `
             <div style='background:#e9f5ee; padding:20px; border-radius:20px; border:2px solid #b7e4c7; text-align:center; margin-top: 20px;'>
                 <img src="${currentSeed}" style="width:80px; height:80px; object-fit:cover; border-radius:50%; border:3px solid var(--secondary); margin-bottom:10px;">
-                <h2 style='color:#1b4332;'>${diem >= 8 ? "🏆 Tuyệt vời!" : "👏 Cố gắng lên!"}</h2>
-                <p style='font-size:40px; font-weight:bold; color:#d00000; margin-bottom: 5px;'>💯 ${diem} ĐIỂM</p>
-                <div style="margin-bottom: 15px; color: #d97706; font-weight: bold; font-size: 16px;">${badges}</div>
+                <h2 style='color:#1b4332;'>${icon}</h2>
+                <p style='font-size:40px; font-weight:bold; color:#d00000;'>💯 ${diem} ĐIỂM</p>
                 <p>Đúng ${d}/${SO_CAU_MOI_DE} câu. Xem lại lời giải chi tiết ở trên nhen!</p>
             </div>`;
         
-        // --- KHÔI PHỤC LINK GOOGLE SHEET CỦA CẬU ---
         fetch("https://script.google.com/macros/s/AKfycbz4IPNx4fkDGi_oy3K15LSqIhB8ZtfmfN3Q_kKNIb7KKGrBjqkl8yKT2FusSjeVNlw/exec", {
             method: "POST", mode: "no-cors", 
             body: JSON.stringify({hoTen: studentNameStored, soCauDung: d+"/"+SO_CAU_MOI_DE, diemSo: diem})
@@ -312,11 +330,46 @@
         }
     }
 
-    // --- TÍNH NĂNG CHẶN GIAN LẬN ---
+    document.addEventListener("visibilitychange", function() {
+        if (document.visibilityState === 'hidden' && !daNopBai && studentNameStored !== "") {
+            soLanViPham++;
+            if (soLanViPham < GIOI_HAN_VI_PHAM) alert("⚠️ CẢNH BÁO: Rời trang " + soLanViPham + " lần! 1/2");
+            else chamDiem();
+        }
+    });
+
+    document.addEventListener('contextmenu', function(event) {
+        if (!daNopBai && studentNameStored !== "") { event.preventDefault(); alert("🤫 Không dùng chuột phải!"); }
+    });
+
+    window.addEventListener("pagehide", function (e) {
+        if (studentNameStored !== "" && !daNopBai) {
+            var d = 0;
+            danhSachHienTai.forEach(function(item, i) {
+                var chon = Array.from(document.getElementsByName('cau' + i)).find(function(r) { return r.checked; })?.value;
+                if (chon === item.dung) { d++; }
+            });
+            var diemTamThoi = Math.round((d / SO_CAU_MOI_DE) * 100) / 10;
+            var data = JSON.stringify({ hoTen: studentNameStored + " (Thoát ngang)", soCauDung: d + "/" + SO_CAU_MOI_DE, diemSo: diemTamThoi });
+            var url = "https://script.google.com/macros/s/AKfycbz4IPNx4fkDGi_oy3K15LSqIhB8ZtfmfN3Q_kKNIb7KKGrBjqkl8yKT2FusSjeVNlw/exec";
+            if (navigator.sendBeacon) { navigator.sendBeacon(url, data); } 
+            else { fetch(url, { method: "POST", mode: "no-cors", keepalive: true, body: data }); }
+        }
+    });
+
+    window.addEventListener("beforeunload", function (e) {
+        if (studentNameStored && studentNameStored.trim() !== "" && !daNopBai) {
+            e.preventDefault();
+            e.returnValue = "Hệ thống sẽ ghi nhận điểm 0 nếu bạn thoát bây giờ!"; 
+        }
+    });
+
     function trucXuat() {
         window.stop(); 
         document.body.innerHTML = `
-            <div style='display:flex; flex-direction:column; justify-content:center; align-items:center; height:100vh; width:100vw; background:red; color:white; font-family:sans-serif; position:fixed; top:0; left:0; z-index:999999;'>
+            <div style='display:flex; flex-direction:column; justify-content:center; align-items:center; 
+                        height:100vh; width:100vw; background:red; color:white; 
+                        font-family:sans-serif; position:fixed; top:0; left:0; z-index:999999;'>
                 <h1 style='font-size:50px;'>⛔ PHÁT HIỆN GIAN LẬN!</h1>
                 <p style='font-size:25px;'>Hệ thống đã tự hủy để bảo mật đề thi.</p>
                 <p>Đang chuyển hướng về trang an toàn...</p>
@@ -324,31 +377,34 @@
         setTimeout(function() { window.location.replace("https://www.google.com"); }, 2000);
     }
 
-    document.addEventListener("visibilitychange", function() {
-        if (document.visibilityState === 'hidden' && !daNopBai && studentNameStored !== "") {
-            soLanViPham++;
-            if (soLanViPham < GIOI_HAN_VI_PHAM) alert("⚠️ CẢNH BÁO: Rời trang lần " + soLanViPham + "!");
-            else trucXuat();
-        }
-    });
+    (function() {
+        console.log = function() {}; console.warn = function() {};
+        console.error = function() {}; console.info = function() {};
+        console.debug = function() {}; console.clear();
+    })();
 
-    // Chặn phím tắt F12, Ctrl+U và hiện cảnh báo ngẫu nhiên
     window.addEventListener('keydown', function(e) {
-        const listCB = ["⚠️ Đừng soi code!", "🤫 Tính hack hả?", "🚫 Quay lại làm bài đi!", "🕵️ Phát hiện thám tử!", "🛑 Đừng nghịch F12!"];
-        if (e.keyCode === 123 || (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) || (e.ctrlKey && e.keyCode === 85)) {
+        const danhSachCanhBao = ["⚠️ Ui da! Đừng soi code của thầy!", "🤫 Tính hack hay gì?", "🚫 Cửa này không vào được!", "🕵️ Phát hiện thám tử nhí!", "🛑 Đừng nghịch F12 nữa!"];
+        if (e.keyCode === 123 || (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) || (e.ctrlKey && e.keyCode === 85) || (e.ctrlKey && e.keyCode === 83)) {
             e.preventDefault();
             document.getElementById('sound-denied').play();
-            alert(listCB[Math.floor(Math.random() * listCB.length)]);
+            alert(danhSachCanhBao[Math.floor(Math.random() * danhSachCanhBao.length)]);
             trucXuat();
             return false;
         }
     }, true);
 
-    // --- LOGIC TRỢ LÝ AI ---
+    setInterval(function() {
+        const threshold = 160;
+        if (window.outerHeight - window.innerHeight > threshold || window.outerWidth - window.innerWidth > threshold) { trucXuat(); }
+    }, 1000);
+
     let soLuotHoi = 2;
+
     function aiNoi(msg) {
         const bubble = document.getElementById('ai-bubble');
-        document.getElementById('ai-speech').innerText = msg;
+        const speech = document.getElementById('ai-speech');
+        speech.innerText = msg;
         bubble.style.display = 'block';
         setTimeout(() => { bubble.style.display = 'none'; }, 4000);
     }
@@ -360,36 +416,30 @@
         if (message === "") return;
         content.innerHTML += `<p><b>Em:</b> ${input.value}</p>`;
         if (soLuotHoi <= 0) {
-            content.innerHTML += `<p style="color: red;"><b>AI:</b> Hết lượt rồi em ơi!</p>`;
+            content.innerHTML += `<p style="color: red;"><b>AI:</b> Hết lượt hỏi rồi em ơi!</p>`;
+            input.value = ""; return;
+        }
+        let reply = "";
+        const camTamChuyen = ["người yêu", "yêu", "vợ", "chồng", "ăn", "chơi", "game", "hack", "đẹp trai", "xinh"];
+        if (camTamChuyen.some(tu => message.includes(tu))) {
+            reply = "Lo làm bài đi, đừng tám chuyện nhé. ✨";
         } else if (message.includes("gợi ý")) {
             let match = message.match(/\d+/);
             let index = match ? parseInt(match[0]) - 1 : -1;
             if (index >= 0 && index < SO_CAU_MOI_DE) {
-                content.innerHTML += `<p style="color: #2d6a4f;"><b>AI:</b> ${danhSachHienTai[index].goiY}</p>`;
+                reply = `Gợi ý câu ${index + 1}: ${danhSachHienTai[index].goiY || "Xem lại bảng cửu chương nhé!"}`;
                 soLuotHoi--; 
                 document.getElementById('ask-count').innerText = `Lượt hỏi: ${soLuotHoi}/2`;
-            } else {
-                content.innerHTML += `<p><b>AI:</b> Em hỏi câu mấy? (Ví dụ: Gợi ý câu 1)</p>`;
-            }
-        } else {
-            content.innerHTML += `<p><b>AI:</b> Lo làm bài đi, đừng tám chuyện! ✨</p>`;
-        }
+            } else { reply = "Em muốn hỏi gợi ý câu mấy? Ví dụ: 'Gợi ý câu 1'."; }
+        } else { reply = "Gõ 'Gợi ý câu + số' để anh giúp nhé!"; }
+        setTimeout(() => {
+            content.innerHTML += `<p style="color: #2d6a4f;"><b>AI:</b> ${reply}</p>`;
+            content.scrollTop = content.scrollHeight;
+        }, 500);
         input.value = "";
-        content.scrollTop = content.scrollHeight;
     }
-
     document.getElementById('btn-send').onclick = xuLyChat;
     document.getElementById('user-input').onkeypress = (e) => { if (e.key === 'Enter') xuLyChat(); };
-
-    document.addEventListener('change', function(e) {
-        if(e.target.type === 'radio') {
-            document.getElementById('sound-click').play();
-            let done = 0;
-            for(let i=0; i < SO_CAU_MOI_DE; i++) { if(document.querySelector('input[name="cau'+i+'"]:checked')) done++; }
-            document.getElementById('progress-bar').style.width = (done / SO_CAU_MOI_DE) * 100 + "%";
-            if (Math.random() > 0.7) aiNoi("Làm tốt lắm, tiếp tục nào!");
-        }
-    });
 </script>
 </body>
 </html>
