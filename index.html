@@ -200,7 +200,7 @@
         dung: "3", 
         giaiThich: "Định nghĩa: Hình tam giác là hình đa giác có 3 cạnh và 3 đỉnh.",
         goiY: "Trong Hán Việt tam là mấy nhỉ",
-        hinhAnh: "https://vn.images.search.yahoo.com/search/images;_ylt=Awr1QRGMpvRpPgIAUB9rUwx.;_ylu=Y29sbwNzZzMEcG9zAzEEdnRpZAMEc2VjA3Nj?type=E210VN885G0&p=h%C3%ACnh+tam+gi%C3%A1c&fr=mcafee&th=256&tw=474&imgurl=https%3A%2F%2Fvnmedia2.monkeyuni.net%2Fupload%2Fweb%2Fimg%2Fhinh-tam-giac-1.jpg&rurl=https%3A%2F%2Fmonkey.edu.vn%2Fba-me-can-biet%2Fgiao-duc%2Fkien-thuc-co-ban%2Fhinh-tam-giac&size=21KB&name=H%C3%ACnh+tam+gi%C3%A1c+l%C3%A0+g%C3%AC%3F+Ph%C3%A2n+lo%E1%BA%A1i+v%C3%A0+c%C3%A1c+c%C3%B4ng+th%E1%BB%A9c+t%C3%ADnh%3F&oid=1&h=433&w=800&turl=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.qIOcBbStKfYoxs_koMKY-QHaEA%3Fpid%3DApi&tt=H%C3%ACnh+tam+gi%C3%A1c+l%C3%A0+g%C3%AC%3F+Ph%C3%A2n+lo%E1%BA%A1i+v%C3%A0+c%C3%A1c+c%C3%B4ng+th%E1%BB%A9c+t%C3%ADnh%3F&sigr=ntH2CobXxgil&sigit=VYj5EzmpePw.&sigi=uPkN.qFJR53C&sign=I0UyJXbrU1oD&sigt=I0UyJXbrU1oD" // Dán link ảnh minh họa vào đây
+        hinhAnh: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Regular_triangle.svg/200px-Regular_triangle.svg.png" // Dán link ảnh minh họa vào đây
     },
     { 
         de: "Số nào lớn nhất: 89, 98, 100, 99?", 
@@ -346,7 +346,7 @@
             var b = document.getElementById('box' + i);
             var noteBox = document.getElementById('note' + i);
             noteBox.style.display = "block";
-// Tạo thẻ ảnh nếu câu hỏi có link ảnh
+// Tìm đoạn này trong hàm chamDiem() và thay bằng:
 let anhHtml = item.hinhAnh ? `<br><img src="${item.hinhAnh}" style="max-width:100%; border-radius:10px; margin-top:10px; border: 1px solid #ddd;">` : "";
             if (chon === item.dung) { 
                 d++; 
