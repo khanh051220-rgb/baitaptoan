@@ -20,7 +20,9 @@
             margin: 0;
             display: flex;
             justify-content: center;
-            align-items: flex-start; /* Giúp trang không bị nhảy khi nội dung dài */
+            align-items: flex-start;
+            /* Chống bôi đen văn bản để copy đề bài */
+            user-select: none; 
         }
 
         .container { 
@@ -47,7 +49,6 @@
             text-align: center;
         }
 
-        /* FIX: Khống chế kích thước avatar để không bị tràn màn hình */
         .avatar-picker {
             display: flex;
             justify-content: center;
@@ -81,7 +82,6 @@
             padding: 10px;
             border-radius: 50px;
         }
-        /* FIX: Kích thước ảnh đại diện nhỏ gọn trong header */
         .header-profile img { width: 45px !important; height: 45px !important; border-radius: 50%; object-fit: cover; }
 
         #progress-container { width: 100%; background: #eee; border-radius: 10px; margin-bottom: 25px; height: 15px; overflow: hidden; display:none; }
@@ -126,7 +126,8 @@
     </style>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 </head>
-<body>
+<body oncontextmenu="return false;"> <!-- Chặn chuột phải toàn trang -->
+
     <!-- TRỢ LÝ AI -->
     <div id="ai-container" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
         <div id="ai-bubble" style="background: white; border: 2px solid var(--secondary); padding: 10px 15px; border-radius: 20px; margin-bottom: 10px; font-size: 13px; max-width: 250px; display: none; box-shadow: 0 5px 15px rgba(0,0,0,0.1); position: relative;">
@@ -155,7 +156,6 @@
     <audio id="sound-denied" src="https://www.soundjay.com/buttons/sounds/beep-05.mp3"></audio>
 
 <div class="container">
-    <!-- MÀN HÌNH ĐĂNG NHẬP -->
     <div id="login-screen">
         <h1>🌿 EzMath 🌿</h1>
         <p>Chọn một avatar thật ngầu nhen các em! ✨</p>
@@ -171,7 +171,6 @@
         <button id="btn-login">🚀 BẮT ĐẦU THỬ THÁCH</button>
     </div>
 
-    <!-- NỘI DUNG CHÍNH -->
     <div id="main-content" style="display:none;">
         <div id="profile-header" class="header-profile">
             <img id="user-img" src="">
@@ -190,6 +189,26 @@
 </div>
 
 <script>
+    // --- KHỐI BẢO MẬT HỆ THỐNG (MỚI BỔ SUNG) ---
+    // 1. Chặn phím tắt (F12, Ctrl+Shift+I, Ctrl+U, v.v.)
+    document.addEventListener('keydown', function(e) {
+        if (
+            e.keyCode === 123 || // F12
+            (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) || // Ctrl+Shift+I/J
+            (e.ctrlKey && e.keyCode === 85) // Ctrl+U
+        ) {
+            e.preventDefault();
+            alert("🔒 Tính năng này đã bị khóa để đảm bảo tính công bằng!");
+            return false;
+        }
+    });
+
+    // 2. Debugger trap (Nếu mở được console bằng cách nào đó, code sẽ bị treo)
+    setInterval(function() {
+        (function() {}.constructor("debugger")());
+    }, 1000);
+
+    // --- LOGIC BÀI THI ---
     var studentNameStored = "", giay = 900, timer, daNopBai = false, soLanViPham = 0;
     var currentSeed = "https://img5.thuthuatphanmem.vn/uploads/2021/11/08/anh-gau-truc-cute_082040722.jpg"; 
     const GIOI_HAN_VI_PHAM = 2, SO_CAU_MOI_DE = 5;
@@ -206,7 +225,6 @@
 
     var danhSachHienTai = []; 
 
-    // CHỌN AVATAR
     document.querySelectorAll('.avatar-option').forEach(opt => {
         opt.addEventListener('click', function() {
             document.querySelectorAll('.avatar-option').forEach(img => img.classList.remove('selected'));
@@ -318,11 +336,11 @@
         confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
     }
 
-    // CHỐNG GIAN LẬN
+    // CHỐNG GIAN LẬN (CHUYỂN TAB)
     document.addEventListener("visibilitychange", () => {
         if (document.hidden && !daNopBai && studentNameStored) {
             soLanViPham++;
-            if(soLanViPham >= 2) { trucXuat(); }
+            if(soLanViPham >= GIOI_HAN_VI_PHAM) { trucXuat(); }
             else alert("⚠️ CẢNH BÁO: Không được rời trang khi đang làm bài!");
         }
     });
