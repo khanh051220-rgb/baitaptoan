@@ -368,7 +368,27 @@
 
         var diem = Math.round((d / SO_CAU_MOI_DE) * 100) / 10;
         if (diem >= 8) { banPhaoHoa(); }
+let danhHieu = "";
+        let mauSac = "";
+        let bieuTuong = "";
 
+        if (diem === 10) {
+            danhHieu = "THẦN ĐỒNG TOÁN HỌC";
+            mauSac = "#ff0054"; // Hồng neon rực rỡ
+            bieuTuong = "⚡";
+        } else if (diem >= 8) {
+            danhHieu = "HỌC GIẢ ƯU TÚ";
+            mauSac = "#3a86ff"; // Xanh dương tri thức
+            bieuTuong = "📚";
+        } else if (diem >= 5) {
+            danhHieu = "MẦM NON GIẢI THUẬT";
+            mauSac = "#fb5607"; // Cam nhiệt huyết
+            bieuTuong = "🌱";
+        } else {
+            danhHieu = "CHIẾN THẦN CẦN CÙ";
+            mauSac = "#8338ec"; // Tím huyền bí (đợi bứt phá)
+            bieuTuong = "🔥";
+        }
         var icon = diem >= 8 ? "🏆 Tuyệt vời!" : (diem >= 5 ? "👏 Khá lắm!" : "💪 Cố gắng lên!");
         
         document.getElementById('ket-qua').innerHTML = `
@@ -554,6 +574,20 @@
 }
     document.getElementById('btn-send').onclick = xuLyChat;
     document.getElementById('user-input').onkeypress = (e) => { if (e.key === 'Enter') xuLyChat(); };
+    @keyframes shine {
+    from { filter: drop-shadow(0 0 5px #fff); }
+    to { filter: drop-shadow(0 0 15px var(--color)); }
+}
+.rank-badge {
+    display: inline-block;
+    padding: 10px 25px;
+    border-radius: 50px;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    margin-top: 10px;
+    animation: shine 1s ease-in-out infinite alternate;
+}
 </script>
 </body>
 </html>
