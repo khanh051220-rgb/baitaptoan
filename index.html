@@ -362,6 +362,32 @@
             debugger; 
         }
     }, 500);
+    // Hàm trục xuất học sinh gian lận
+function trucXuat() {
+    alert("⛔ CẢNH BÁO: Bạn cố tình can thiệp hệ thống. Kết quả sẽ bị hủy và bạn bị mời ra ngoài!");
+    window.location.replace("https://www.google.com"); // Đuổi sang trang khác
+}
+
+// Chặn các phím tắt và đuổi thẳng tay
+window.addEventListener('keydown', function(e) {
+    if (e.keyCode === 123 || // F12
+        (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) || // Ctrl+Shift+I/J
+        (e.ctrlKey && e.keyCode === 85) || // Ctrl+U (Xem nguồn)
+        (e.ctrlKey && e.keyCode === 83)) { // Ctrl+S (Lưu trang)
+        
+        e.preventDefault();
+        trucXuat(); // Gọi hàm đuổi
+        return false;
+    }
+}, true);
+    // Kiểm tra nếu màn hình bị thay đổi kích thước đột ngột (thường là do mở Console)
+setInterval(function() {
+    const threshold = 160;
+    if (window.outerHeight - window.innerHeight > threshold || 
+        window.outerWidth - window.innerWidth > threshold) {
+        trucXuat();
+    }
+}, 1000);
 </script>
 </body>
 </html>
