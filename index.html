@@ -67,15 +67,16 @@
             flex-wrap: wrap;
         }
         .avatar-option {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            border: 3px solid transparent;
-            cursor: pointer;
-            transition: 0.3s;
-            background: #eee;
-            object-fit: cover;
-        }
+    width: 60px !important;    /* Thêm !important để ép nó nhỏ lại */
+    height: 60px !important;   /* Thêm !important */
+    border-radius: 50%;
+    border: 3px solid transparent;
+    cursor: pointer;
+    transition: 0.3s;
+    background: #eee;
+    object-fit: cover;
+    display: inline-block;     /* Đảm bảo nó không chiếm hết một hàng */
+}
         .avatar-option.selected {
             border-color: var(--accent);
             transform: scale(1.1);
