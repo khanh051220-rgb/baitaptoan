@@ -347,26 +347,24 @@
             var noteBox = document.getElementById('note' + i);
             noteBox.style.display = "block";
 // --- ĐOẠN NÀY ĐÃ FIX LỖI ICON VỠ VÀ HIỂN THỊ ẢNH ---
-let anhHtml = "";
-if (item.hinhAnh) {
-    // Tớ thêm onerror để nếu link chết thì nó ẩn luôn cái icon vỡ đi cho đẹp
-    anhHtml = `<br><img src="${item.hinhAnh}" onerror="this.style.display='none'" style="max-width:150px; border-radius:10px; margin-top:10px; border: 2px solid #eee; display:block;">`;
-}
-            if (chon === item.dung) { 
-                d++; 
-                b.classList.add('cau-dung'); 
-                noteBox.style.background = "#e6fffa";
-                noteBox.style.color = "#234e52";
-               // 2. PHẢI CỘNG THÊM + anhHtml Ở CUỐI DÒNG NÀY
-           noteBox.innerHTML = "<b>🌟 Chính xác!</b><br>💡 Giải thích: " + item.giaiThich + anhHtml;
+// --- FIX LỖI ẢNH VỠ TẠI ĐÂY ---
+        let anhHtml = "";
+        if (item.hinhAnh && item.hinhAnh.trim() !== "") {
+            anhHtml = `<br><img src="${item.hinhAnh}" onerror="this.style.display='none'" style="max-width:180px; border-radius:15px; margin-top:10px; border: 3px solid #eee; display:block; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">`;
+        }
+           if (chon === item.dung) { 
+            d++; 
+            b.classList.add('cau-dung'); 
+            noteBox.style.background = "#e6fffa";
+            noteBox.style.color = "#234e52";
+            noteBox.innerHTML = `<b>🌟 Chính xác!</b><br>💡 Giải thích: ${item.giaiThich}${anhHtml}`;
         } else { 
-                b.classList.add('cau-sai'); 
-                noteBox.style.background = "#fff5f5";
-                noteBox.style.color = "#c53030";
-               // Nhánh sai - CẬU QUÊN + anhHtml Ở ĐÂY NÈ! Tớ thêm vào rồi đó:
-   noteBox.innerHTML = "<b>❌ Tiếc quá!</b> Đáp án đúng là: <b>" + item.dung + "</b><br>💡 Giải thích: " + item.giaiThich + anhHtml;
-}
-        });
+            b.classList.add('cau-sai'); 
+            noteBox.style.background = "#fff5f5";
+            noteBox.style.color = "#c53030";
+            noteBox.innerHTML = `<b>❌ Tiếc quá!</b> Đáp án đúng là: <b>${item.dung}</b><br>💡 Giải thích: ${item.giaiThich}${anhHtml}`;
+        }
+    });
 
         var diem = Math.round((d / SO_CAU_MOI_DE) * 100) / 10;
         if (diem >= 8) { banPhaoHoa(); }
