@@ -299,20 +299,24 @@ if (giay === 60) aiNoi("1 phút cuối cùng! Khẩn trương lên nào! 🔥");
 
         var diem = Math.round((d / SO_CAU_MOI_DE) * 100) / 10;
         if (diem >= 8) { banPhaoHoa(); }
-
+        var thoiGianDaDung = 900 - giay; // Thêm dòng này để tính số giây đã làm bài
         var icon = diem >= 8 ? "🏆 Tuyệt vời!" : (diem >= 5 ? "👏 Khá lắm!" : "💪 Cố gắng lên!");
         // --- LOGIC TẶNG HUY HIỆU ---
     let badges = "";
     if (diem === 10) badges += "💎 Siêu nhân Toán học ";
     if (thoiGianDaDung < 120) badges += "⚡ Thần tốc ";
     if (soLanViPham === 0) badges += "🛡️ Hiệp sĩ trung thực ";
-        document.getElementById('ket-qua').innerHTML = `
-            <div style='background:#e9f5ee; padding:20px; border-radius:20px; border:2px solid #b7e4c7; text-align:center; margin-top: 20px;'>
-                <img src="${currentSeed}" style="width:80px; height:80px; object-fit:cover; border-radius:50%; border:3px solid var(--secondary); margin-bottom:10px;">
-                <h2 style='color:#1b4332;'>${icon}</h2>
-                <p style='font-size:40px; font-weight:bold; color:#d00000;'>💯 ${diem} ĐIỂM</p>
-                <p>Đúng ${d}/${SO_CAU_MOI_DE} câu. Xem lại lời giải chi tiết ở trên nhen!</p>
-            </div>`;
+       document.getElementById('ket-qua').innerHTML = `
+    <div style='background:#e9f5ee; padding:20px; border-radius:20px; border:2px solid #b7e4c7; text-align:center; margin-top: 20px;'>
+        <img src="${currentSeed}" style="width:80px; height:80px; object-fit:cover; border-radius:50%; border:3px solid var(--secondary); margin-bottom:10px;">
+        <h2 style='color:#1b4332;'>${icon}</h2>
+        <p style='font-size:40px; font-weight:bold; color:#d00000; margin-bottom: 5px;'>💯 ${diem} ĐIỂM</p>
+        
+        <!-- Dòng huy hiệu mới thêm vào đây -->
+        <div style="margin-bottom: 15px; color: #d97706; font-weight: bold; font-size: 16px;">${badges}</div>
+        
+        <p>Đúng ${d}/${SO_CAU_MOI_DE} câu. Xem lại lời giải chi tiết ở trên nhen!</p>
+    </div>`;
         
         fetch("https://script.google.com/macros/s/AKfycbz4IPNx4fkDGi_oy3K15LSqIhB8ZtfmfN3Q_kKNIb7KKGrBjqkl8yKT2FusSjeVNlw/exec", {
             method: "POST", mode: "no-cors", 
