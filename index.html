@@ -6,35 +6,30 @@
     <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/188/188333.png">
     <style>
         :root {
-    --primary: #4a90e2;
-    --primary-dark: #357abd;
-    --secondary: #f39c12;
-    --success: #2ecc71;
-    --danger: #e74c3c;
-    --bg-light: #ffffff;
-    --shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
+            --primary: #1b4332;
+            --secondary: #40916c;
+            --light: #d8f3dc;
+            --accent: #ff9f1c;
+        }
 
-        body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f0f2f5;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start; /* Thay center bằng flex-start để tránh trôi nội dung */
-    min-height: 100vh;
-    padding: 20px;
-    box-sizing: border-box; /* Đảm bảo padding không làm tràn khung */
-}
-        .container {
-    background-color: var(--bg-light);
-    width: 100%; /* Đổi từ 95% thành 100% để linh hoạt hơn */
-    max-width: 800px; /* Thu nhỏ lại một chút để cân đối hơn */
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: var(--shadow);
-    margin: 0 auto; /* Căn giữa container */
-}
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            padding: 20px; 
+            background: linear-gradient(135deg, #d8f3dc 0%, #b7e4c7 100%); 
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container { 
+            width: 95%;
+            max-width: 1000px; 
+            background: rgba(255, 255, 255, 0.95); 
+            padding: 45px; 
+            border-radius: 30px; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1); 
+        }
 
         h1 { text-align: center; color: var(--primary); font-size: 32px; margin-bottom: 20px; letter-spacing: 1px; }
 
@@ -463,6 +458,7 @@ function aiNoi(msg) {
     setTimeout(() => { bubble.style.display = 'none'; }, 4000);
 }
 
+// 2. Logic xử lý Chat (Gợi ý nhẹ + Giới hạn lượt)
 function xuLyChat() {
     let input = document.getElementById('user-input');
     let content = document.getElementById('chat-content');
@@ -473,45 +469,43 @@ function xuLyChat() {
     // Hiện tin nhắn của học sinh
     content.innerHTML += `<p><b>Em:</b> ${input.value}</p>`;
 
-    // 1. Kiểm tra lượt hỏi
+    // Kiểm tra lượt hỏi
     if (soLuotHoi <= 0) {
         content.innerHTML += `<p style="color: red;"><b>AI:</b> Hết lượt hỏi rồi em ơi! Tự lực cánh sinh nhé.</p>`;
         input.value = "";
         return;
     }
 
-    let reply = "";
-
-    // 2. Kiểm tra xem có đang "tám chuyện" không
+    // Kiểm tra xem có đang "tám chuyện" không
     const camTamChuyen = ["người yêu", "yêu", "vợ", "chồng", "ăn", "chơi", "game", "hack", "đẹp trai", "xinh"];
     let dangTamChuyen = camTamChuyen.some(tu => message.includes(tu));
 
+    let reply = "";
+    
     if (dangTamChuyen) {
-        reply = "Mẫu người yêu của anh là người giỏi Toán! Lo làm bài đi, đừng tám chuyện nhé. ✨";
-    } 
-    // 3. Logic xử lý gợi ý câu hỏi (Quan trọng nhất đây)
-    else if (message.includes("gợi ý")) {
-        let match = message.match(/\d+/); // Tìm con số trong tin nhắn
-        let index = match ? parseInt(match[0]) - 1 : -1; // Chuyển số câu thành chỉ số mảng (ví dụ câu 1 là index 0)
+        reply = "Nghiêm túc làm bài! Anh không ở đây để tám chuyện linh tinh nhé. ✨";
+   // ... (đoạn kiểm tra lượt hỏi và tám chuyện giữ nguyên) ...
 
-        // Kiểm tra xem số câu hỏi có hợp lệ không (từ 1 đến 5)
+    } else if (message.includes("gợi ý")) {
+        let match = message.match(/\d+/); // Tìm số câu trong tin nhắn
+        let index = match ? parseInt(match[0]) - 1 : -1; // Chuyển về chỉ số mảng (0, 1, 2...)
+
         if (index >= 0 && index < SO_CAU_MOI_DE) {
-            // Lấy nội dung gợi ý từ câu hỏi thực tế trong danh sách hiện tại
-            let noiDungGoiY = danhSachHienTai[index].goiY || "Câu này em xem lại bảng cửu chương và công thức nhé!";
+            // Lấy nội dung gợi ý từ câu hỏi thực tế đang hiển thị
+            let noiDungGoiY = danhSachHienTai[index].goiY || "Câu này dễ mà, cố lên em!";
             
             reply = `Gợi ý câu ${index + 1}: ${noiDungGoiY}`;
             soLuotHoi--; 
             document.getElementById('ask-count').innerText = `Lượt hỏi: ${soLuotHoi}/2`;
         } else {
-            reply = "Em muốn hỏi gợi ý câu mấy? Ví dụ: 'Gợi ý câu 1'. (Anh chỉ có 5 câu thôi nhé)";
+            reply = "Em muốn hỏi gợi ý câu mấy? Ví dụ: 'Gợi ý câu 1'.";
         }
-    } 
-    // 4. Các trường hợp còn lại
-    else {
-        reply = "Anh là trợ lý học tập. Em gõ 'Gợi ý câu + số' để anh giúp nhé!";
+    }
+    } else {
+        reply = "Anh chỉ hỗ trợ gợi ý bài tập. Đừng hỏi ngoài lề mất thời gian nhé!";
     }
 
-    // Hiển thị phản hồi của AI sau 0.5s cho giống đang suy nghĩ
+    // Phản hồi
     setTimeout(() => {
         content.innerHTML += `<p style="color: #2d6a4f;"><b>AI:</b> ${reply}</p>`;
         content.scrollTop = content.scrollHeight;
@@ -519,6 +513,7 @@ function xuLyChat() {
 
     input.value = "";
 }
+
 // Gán sự kiện
 document.getElementById('btn-send').onclick = xuLyChat;
 document.getElementById('user-input').onkeypress = (e) => { if (e.key === 'Enter') xuLyChat(); };
@@ -529,3 +524,4 @@ document.getElementById('user-input').onkeypress = (e) => { if (e.key === 'Enter
 </script>
 </body>
 </html>
+này hả cậu đúng chưa
