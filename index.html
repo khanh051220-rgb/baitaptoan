@@ -213,18 +213,6 @@
 
     document.getElementById('btn-login').addEventListener('click', checkLogin);
     document.getElementById('btn-nop-bai').addEventListener('click', chamDiem);
-
-    document.addEventListener('change', function(e) {
-        if(e.target.type === 'radio') {
-            document.getElementById('sound-click').play();
-            let done = 0;
-            for(let i=0; i < SO_CAU_MOI_DE; i++) {
-                if(document.querySelector('input[name="cau'+i+'"]:checked')) done++;
-            }
-            document.getElementById('progress-bar').style.width = (done / SO_CAU_MOI_DE) * 100 + "%";
-        }
-    });
-
 function checkLogin() {
     var n = document.getElementById('student-name').value.trim();
     var c = document.getElementById('student-code').value.trim();
@@ -238,7 +226,7 @@ function checkLogin() {
         taoDe();
         batDauDemNguoc();
         aiNoi("Chào " + studentNameStored + "! Anh là trợ lý của em. Chúc em thi tốt nhé! ✨"); 
-    } // <--- CẬU CẦN DẤU NÀY ĐỂ ĐÓNG LỆNH IF LẠI
+    }// <--- CẬU CẦN DẤU NÀY ĐỂ ĐÓNG LỆNH IF LẠI
     else { 
         alert("Sai thông tin rồi em ơi! ❌"); 
     }
