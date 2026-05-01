@@ -5,6 +5,14 @@
     <title>Học toán cùng Khánh</title>
     <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/188/188333.png">
     <style>
+        /* Giới hạn kích thước ảnh đại diện sau khi đăng nhập */
+#user-img {
+    width: 100px;  /* Hoặc kích thước em muốn */
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--secondary);
+}
         :root {
             --primary: #1b4332;
             --secondary: #40916c;
@@ -12,15 +20,16 @@
             --accent: #ff9f1c;
         }
 
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            padding: 20px; 
-            background: linear-gradient(135deg, #d8f3dc 0%, #b7e4c7 100%); 
-            min-height: 100vh;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-        }
+        body { 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    padding: 20px; 
+    background: linear-gradient(135deg, #d8f3dc 0%, #b7e4c7 100%); 
+    min-height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Thêm dòng này để cố định nội dung ở trên */
+}
 
         .container { 
             width: 95%;
