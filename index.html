@@ -180,347 +180,158 @@
     </div>
 </div>
 
+// ... (Giữ nguyên phần HTML/CSS phía trên) ...
+
 <script>
-    var studentNameStored = "", giay = 900, timer, daNopBai = false, soLanViPham = 0;
-    var currentSeed = "https://img5.thuthuatphanmem.vn/uploads/2021/11/08/anh-gau-truc-cute_082040722.jpg"; 
-    const GIOI_HAN_VI_PHAM = 2, SO_CAU_MOI_DE = 5;
-    var danhSachHocSinh = { "Nguyễn Văn An": "an123", "Trần Thị Bình": "binh456", "Khánh": "0512" };
-    
-    // Đã thêm lời giải chi tiết (giaiThich) cho từng câu hỏi
-    var khoCauHoi = [
-        { de: "15 + 25 bằng bao nhiêu?", luaChon: ["30", "35", "40", "45"], dung: "40", giaiThich: "Ta có: 15 + 25 = (10 + 20) + (5 + 5) = 30 + 10 = 40.",goiY: "Em thử cộng hàng chục trước rồi cộng hàng đơn vị xem sao." },
-        { de: "Hình tam giác có mấy cạnh?", luaChon: ["2", "3", "4", "5"], dung: "3", giaiThich: "Định nghĩa: Hình tam giác là hình đa giác có 3 cạnh và 3 đỉnh.",goiY: "Trong Hán Việt tam là mấy nhỉ" },
-        { de: "Số nào lớn nhất: 89, 98, 100, 99?", luaChon: ["89", "98", "100", "99"], dung: "100", giaiThich: "So sánh các số: 100 là số có 3 chữ số, các số còn lại chỉ có 2 chữ số." },
-        { de: "Kết quả của phép tính 7 x 8 là?", luaChon: ["54", "56", "64", "49"], dung: "56", giaiThich: "Dựa vào bảng cửu chương 7 hoặc 8: 7 x 8 = 56." },
-        { de: "Số nào là số chẵn nhỏ nhất có hai chữ số?", luaChon: ["10", "12", "02", "11"], dung: "10", giaiThich: "Số nhỏ nhất có hai chữ số là 10, và 10 cũng là số chẵn." },
-        { de: "Một hình vuông có cạnh 5cm. Chu vi là?", luaChon: ["10cm", "20cm", "25cm", "15cm"], dung: "20cm", giaiThich: "Chu vi hình vuông = Cạnh x 4. Vậy: 5 x 4 = 20cm." },
-        { de: "Số liền trước của 1000 là?", luaChon: ["999", "1001", "990", "900"], dung: "999", giaiThich: "Số liền trước = Số đã cho - 1. Ta có: 1000 - 1 = 999." },
-        { de: "3 giờ bằng bao nhiêu phút?", luaChon: ["120 phút", "150 phút", "180 phút", "200 phút"], dung: "180 phút", giaiThich: "1 giờ = 60 phút. Vậy 3 giờ = 60 x 3 = 180 phút." },
-        { de: "Kết quả của 100 - 45 là?", luaChon: ["45", "55", "65", "35"], dung: "55", giaiThich: "Thực hiện phép tính: 100 - 40 = 60, sau đó 60 - 5 = 55." },
-        { de: "Số gồm 5 trăm và 5 đơn vị là?", luaChon: ["55", "550", "505", "5005"], dung: "505", giaiThich: "5 trăm = 500, 5 đơn vị = 5. Vậy số đó là 500 + 5 = 505." }
-    ];
+    var studentNameStored = "", giay = 900, timer, daNopBai = false, soLanViPham = 0;
+    var currentSeed = "https://img5.thuthuatphanmem.vn/uploads/2021/11/08/anh-gau-truc-cute_082040722.jpg"; 
+    const GIOI_HAN_VI_PHAM = 2, SO_CAU_MOI_DE = 5;
+    var danhSachHocSinh = { "Nguyễn Văn An": "an123", "Trần Thị Bình": "binh456", "Khánh": "0512" };
+    
+    var khoCauHoi = [
+        { de: "15 + 25 bằng bao nhiêu?", luaChon: ["30", "35", "40", "45"], dung: "40", giaiThich: "Ta có: 15 + 25 = (10 + 20) + (5 + 5) = 30 + 10 = 40.",goiY: "Em thử cộng hàng chục trước rồi cộng hàng đơn vị xem sao." },
+        { de: "Hình tam giác có mấy cạnh?", luaChon: ["2", "3", "4", "5"], dung: "3", giaiThich: "Định nghĩa: Hình tam giác là hình đa giác có 3 cạnh và 3 đỉnh.",goiY: "Trong Hán Việt tam là mấy nhỉ" },
+        { de: "Số nào lớn nhất: 89, 98, 100, 99?", luaChon: ["89", "98", "100", "99"], dung: "100", giaiThich: "So sánh các số: 100 là số có 3 chữ số, các số còn lại chỉ có 2 chữ số." },
+        { de: "Kết quả của phép tính 7 x 8 là?", luaChon: ["54", "56", "64", "49"], dung: "56", giaiThich: "Dựa vào bảng cửu chương 7 hoặc 8: 7 x 8 = 56." },
+        { de: "Số nào là số chẵn nhỏ nhất có hai chữ số?", luaChon: ["10", "12", "02", "11"], dung: "10", giaiThich: "Số nhỏ nhất có hai chữ số là 10, và 10 cũng là số chẵn." },
+        { de: "Một hình vuông có cạnh 5cm. Chu vi là?", luaChon: ["10cm", "20cm", "25cm", "15cm"], dung: "20cm", giaiThich: "Chu vi hình vuông = Cạnh x 4. Vậy: 5 x 4 = 20cm." },
+        { de: "Số liền trước của 1000 là?", luaChon: ["999", "1001", "990", "900"], dung: "999", giaiThich: "Số liền trước = Số đã cho - 1. Ta có: 1000 - 1 = 999." },
+        { de: "3 giờ bằng bao nhiêu phút?", luaChon: ["120 phút", "150 phút", "180 phút", "200 phút"], dung: "180 phút", giaiThich: "1 giờ = 60 phút. Vậy 3 giờ = 60 x 3 = 180 phút." },
+        { de: "Kết quả của 100 - 45 là?", luaChon: ["45", "55", "65", "35"], dung: "55", giaiThich: "Thực hiện phép tính: 100 - 40 = 60, sau đó 60 - 5 = 55." },
+        { de: "Số gồm 5 trăm và 5 đơn vị là?", luaChon: ["55", "550", "505", "5005"], dung: "505", giaiThich: "5 trăm = 500, 5 đơn vị = 5. Vậy số đó là 500 + 5 = 505." }
+    ];
 
-    var danhSachHienTai = []; 
+    var danhSachHienTai = []; 
 
-    document.querySelectorAll('.avatar-option').forEach(opt => {
-        opt.addEventListener('click', function() {
-            document.querySelectorAll('.avatar-option').forEach(img => img.classList.remove('selected'));
-            this.classList.add('selected');
-            currentSeed = this.getAttribute('data-seed');
-            document.getElementById('sound-click').play();
-        });
-    });
+    document.querySelectorAll('.avatar-option').forEach(opt => {
+        opt.addEventListener('click', function() {
+            document.querySelectorAll('.avatar-option').forEach(img => img.classList.remove('selected'));
+            this.classList.add('selected');
+            currentSeed = this.getAttribute('data-seed');
+            document.getElementById('sound-click').play();
+        });
+    });
 
-    document.getElementById('btn-login').addEventListener('click', checkLogin);
-    document.getElementById('btn-nop-bai').addEventListener('click', chamDiem);
+    document.getElementById('btn-login').addEventListener('click', checkLogin);
+    document.getElementById('btn-nop-bai').addEventListener('click', chamDiem);
 
-    document.addEventListener('change', function(e) {
-        if(e.target.type === 'radio') {
-            document.getElementById('sound-click').play();
-            let done = 0;
-            for(let i=0; i < SO_CAU_MOI_DE; i++) {
-                if(document.querySelector('input[name="cau'+i+'"]:checked')) done++;
-            }
-            document.getElementById('progress-bar').style.width = (done / SO_CAU_MOI_DE) * 100 + "%";
-        }
-    });
+    // Gộp chung logic xử lý chọn đáp án
+    document.addEventListener('change', function(e) {
+        if(e.target.type === 'radio') {
+            document.getElementById('sound-click').play();
+            let done = 0;
+            for(let i=0; i < SO_CAU_MOI_DE; i++) {
+                if(document.querySelector('input[name="cau'+i+'"]:checked')) done++;
+            }
+            document.getElementById('progress-bar').style.width = (done / SO_CAU_MOI_DE) * 100 + "%";
+            
+            if (Math.random() > 0.7) {
+                const loiVui = ["Đúng rồi, cứ bình tĩnh mà chọn!", "Anh thấy em làm khá nhanh đấy!", "Tự tin lên, sắp xong rồi!"];
+                aiNoi(loiVui[Math.floor(Math.random() * loiVui.length)]);
+            }
+        }
+    });
 
-function checkLogin() {
-    var n = document.getElementById('student-name').value.trim();
-    var c = document.getElementById('student-code').value.trim();
-    if (danhSachHocSinh[n] === c) {
-        studentNameStored = n;
-        document.getElementById('login-screen').style.display = "none";
-        document.getElementById('main-content').style.display = "block";
-        document.getElementById('progress-container').style.display = "block";
-        document.getElementById('user-img').src = currentSeed;
-        document.getElementById('user-name').innerText = studentNameStored;
-        taoDe();
-        batDauDemNguoc();
-        aiNoi("Chào " + studentNameStored + "! Anh là trợ lý của em. Chúc em thi tốt nhé! ✨"); 
-    } // <--- CẬU CẦN DẤU NÀY ĐỂ ĐÓNG LỆNH IF LẠI
-    else { 
-        alert("Sai thông tin rồi em ơi! ❌"); 
-    }
-}
-    function batDauDemNguoc() {
-        timer = setInterval(function() {
-            if (daNopBai) return;
-            var p = Math.floor(giay / 60), g = giay % 60;
-            document.getElementById('dong-ho').innerHTML = "⏳ Thời gian còn lại: " + p + ":" + (g < 10 ? "0" + g : g);
-           if (giay === 300) aiNoi("Còn 5 phút nữa thôi, soát lại bài đi em ơi! ⏳");
-if (giay === 60) aiNoi("1 phút cuối cùng! Khẩn trương lên nào! 🔥"); 
-            if (giay-- <= 0) { clearInterval(timer); chamDiem(); }
-        }, 1000);
-    }
-    function taoDe() {
-        var v = document.getElementById('vung-chua'); 
-        v.innerHTML = "";
-        danhSachHienTai = khoCauHoi.sort(function() { return 0.5 - Math.random(); }).slice(0, SO_CAU_MOI_DE);
-        danhSachHienTai.forEach(function(item, i) {
-            item.luaChon.sort(function() { return 0.5 - Math.random(); });
-            var html = "<div class='khung' id='box"+i+"'><p style='font-weight:bold; font-size:20px;'>📝 Câu "+(i+1)+": "+item.de+"</p>";
-            item.luaChon.forEach(function(lc) {
-                html += "<label><input type='radio' name='cau"+i+"' value='"+lc+"'> "+lc+"</label>";
-            });
-            // Khu vực hiển thị lời giải (ẩn lúc đầu)
-            html += "<div class='loi-giai' id='note"+i+"'></div></div>";
-            v.innerHTML += html;
-        });
-    }
+    function checkLogin() {
+        var n = document.getElementById('student-name').value.trim();
+        var c = document.getElementById('student-code').value.trim();
+        if (danhSachHocSinh[n] === c) {
+            studentNameStored = n;
+            document.getElementById('login-screen').style.display = "none";
+            document.getElementById('main-content').style.display = "block";
+            document.getElementById('progress-container').style.display = "block";
+            document.getElementById('user-img').src = currentSeed;
+            document.getElementById('user-name').innerText = studentNameStored;
+            taoDe();
+            batDauDemNguoc();
+            aiNoi("Chào " + studentNameStored + "! Anh là trợ lý của em. Chúc em thi tốt nhé! ✨"); 
+        } else { 
+            alert("Sai thông tin rồi em ơi! ❌"); 
+        }
+    }
 
-    function chamDiem() {
-        if (daNopBai) return; 
-        daNopBai = true; 
-        clearInterval(timer);
-        var d = 0;
-        
-        danhSachHienTai.forEach(function(item, i) {
-            var chon = Array.from(document.getElementsByName('cau' + i)).find(function(r) { return r.checked; })?.value;
-            var b = document.getElementById('box' + i);
-            var noteBox = document.getElementById('note' + i);
-            
-            // Hiển thị khung lời giải
-            noteBox.style.display = "block";
+    function batDauDemNguoc() {
+        timer = setInterval(function() {
+            if (daNopBai) return;
+            var p = Math.floor(giay / 60), g = giay % 60;
+            document.getElementById('dong-ho').innerHTML = "⏳ Thời gian còn lại: " + p + ":" + (g < 10 ? "0" + g : g);
+            
+            if (giay === 300) aiNoi("Còn 5 phút nữa thôi, soát lại bài đi em ơi! ⏳");
+            if (giay === 60) aiNoi("1 phút cuối cùng! Khẩn trương lên nào! 🔥"); 
+            
+            if (giay <= 0) { 
+                clearInterval(timer); 
+                chamDiem(); 
+            }
+            giay--;
+        }, 1000);
+    }
 
-            if (chon === item.dung) { 
-                d++; 
-                b.classList.add('cau-dung'); 
-                noteBox.style.background = "#e6fffa";
-                noteBox.style.color = "#234e52";
-                noteBox.innerHTML = "<b>🌟 Chính xác!</b><br>💡 Giải thích: " + item.giaiThich;
-            } else { 
-                b.classList.add('cau-sai'); 
-                noteBox.style.background = "#fff5f5";
-                noteBox.style.color = "#c53030";
-                noteBox.innerHTML = "<b>❌ Tiếc quá!</b> Đáp án đúng là: <b>" + item.dung + "</b><br>💡 Giải thích: " + item.giaiThich;
-            }
-        });
+    function taoDe() {
+        var v = document.getElementById('vung-chua'); 
+        v.innerHTML = "";
+        danhSachHienTai = khoCauHoi.sort(function() { return 0.5 - Math.random(); }).slice(0, SO_CAU_MOI_DE);
+        danhSachHienTai.forEach(function(item, i) {
+            item.luaChon.sort(function() { return 0.5 - Math.random(); });
+            var html = "<div class='khung' id='box"+i+"'><p style='font-weight:bold; font-size:20px;'>📝 Câu "+(i+1)+": "+item.de+"</p>";
+            item.luaChon.forEach(function(lc) {
+                html += "<label><input type='radio' name='cau"+i+"' value='"+lc+"'> "+lc+"</label>";
+            });
+            html += "<div class='loi-giai' id='note"+i+"'></div></div>";
+            v.innerHTML += html;
+        });
+    }
 
-        var diem = Math.round((d / SO_CAU_MOI_DE) * 100) / 10;
-        if (diem >= 8) { banPhaoHoa(); }
+    function chamDiem() {
+        if (daNopBai) return; 
+        daNopBai = true; 
+        clearInterval(timer);
+        var d = 0;
+        let badges = ""; // Khai báo biến badges để không bị lỗi undefined
+        
+        danhSachHienTai.forEach(function(item, i) {
+            var chon = Array.from(document.getElementsByName('cau' + i)).find(function(r) { return r.checked; })?.value;
+            var b = document.getElementById('box' + i);
+            var noteBox = document.getElementById('note' + i);
+            noteBox.style.display = "block";
 
-        var icon = diem >= 8 ? "🏆 Tuyệt vời!" : (diem >= 5 ? "👏 Khá lắm!" : "💪 Cố gắng lên!");
-        
-        document.getElementById('ket-qua').innerHTML = `
-            <div style='background:#e9f5ee; padding:20px; border-radius:20px; border:2px solid #b7e4c7; text-align:center; margin-top: 20px;'>
-                <img src="${currentSeed}" style="width:80px; height:80px; object-fit:cover; border-radius:50%; border:3px solid var(--secondary); margin-bottom:10px;">
-                <h2 style='color:#1b4332;'>${icon}</h2>
-                <p style='font-size:40px; font-weight:bold; color:#d00000;'>💯 ${diem} ĐIỂM</p>
-                <p>Đúng ${d}/${SO_CAU_MOI_DE} câu. Xem lại lời giải chi tiết ở trên nhen!</p>
-            </div>`;
-        
-        fetch("https://script.google.com/macros/s/AKfycbz4IPNx4fkDGi_oy3K15LSqIhB8ZtfmfN3Q_kKNIb7KKGrBjqkl8yKT2FusSjeVNlw/exec", {
-            method: "POST", mode: "no-cors", 
-            body: JSON.stringify({hoTen: studentNameStored, soCauDung: d+"/"+SO_CAU_MOI_DE, diemSo: diem})
-        });
-    }
+            if (chon === item.dung) { 
+                d++; 
+                b.classList.add('cau-dung'); 
+                noteBox.style.background = "#e6fffa";
+                noteBox.innerHTML = "<b>🌟 Chính xác!</b><br>💡 Giải thích: " + item.giaiThich;
+            } else { 
+                b.classList.add('cau-sai'); 
+                noteBox.style.background = "#fff5f5";
+                noteBox.innerHTML = "<b>❌ Tiếc quá!</b> Đáp án đúng là: <b>" + item.dung + "</b><br>💡 Giải thích: " + item.giaiThich;
+            }
+        });
 
-    // --- CÁC TÍNH NĂNG CŨ GIỮ NGUYÊN ---
-    function banPhaoHoa(){
-        if(typeof confetti !== 'undefined') {
-            document.getElementById('sound-success').play();
-            var duration = 3 * 1000;
-            var end = Date.now() + duration;
-            (function frame() {
-                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0, y: 0.8 }, colors: ['#40916c', '#ff9f1c', '#2d6a4f'] });
-                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1, y: 0.8 }, colors: ['#40916c', '#ff9f1c', '#2d6a4f'] });
-                if (Date.now() < end) { requestAnimationFrame(frame); }
-            }());
-        }
-    }
+        var diem = Math.round((d / SO_CAU_MOI_DE) * 100) / 10;
+        
+        // Logic tính huy hiệu
+        if (diem === 10) badges += "💎 Siêu nhân Toán học ";
+        if (900 - giay < 120) badges += "⚡ Thần tốc ";
 
-    document.addEventListener("visibilitychange", function() {
-        if (document.visibilityState === 'hidden' && !daNopBai && studentNameStored !== "") {
-            soLanViPham++;
-            if (soLanViPham < GIOI_HAN_VI_PHAM) alert("⚠️ CẢNH BÁO: Rời trang " + soLanViPham + " lần! 1/2");
-            else chamDiem();
-        }
-    });
+        if (diem >= 8) { banPhaoHoa(); }
+        var icon = diem >= 8 ? "🏆 Tuyệt vời!" : (diem >= 5 ? "👏 Khá lắm!" : "💪 Cố gắng lên!");
+        
+        document.getElementById('ket-qua').innerHTML = `
+            <div style='background:#e9f5ee; padding:20px; border-radius:20px; border:2px solid #b7e4c7; text-align:center; margin-top: 20px;'>
+                <img src="${currentSeed}" style="width:80px; height:80px; object-fit:cover; border-radius:50%; border:3px solid var(--secondary); margin-bottom:10px;">
+                <h2 style='color:#1b4332;'>${icon}</h2>
+                <p style='font-size:40px; font-weight:bold; color:#d00000; margin-bottom: 5px;'>💯 ${diem} ĐIỂM</p>
+                <div style="margin-bottom: 15px; color: #d97706; font-weight: bold; font-size: 16px;">${badges}</div>
+                <p>Đúng ${d}/${SO_CAU_MOI_DE} câu. Xem lại lời giải chi tiết ở trên nhen!</p>
+            </div>`;
+        
+        fetch("https://script.google.com/macros/s/AKfycbz4IPNx4fkDGi_oy3K15LSqIhB8ZtfmfN3Q_kKNIb7KKGrBjqkl8yKT2FusSjeVNlw/exec", {
+            method: "POST", mode: "no-cors", 
+            body: JSON.stringify({hoTen: studentNameStored, soCauDung: d+"/"+SO_CAU_MOI_DE, diemSo: diem})
+        });
+    }
 
-    document.addEventListener('contextmenu', function(event) {
-        if (!daNopBai && studentNameStored !== "") { event.preventDefault(); alert("🤫 Không dùng chuột phải!"); }
-    });// Gộp chung logic xử lý khi chọn đáp án và AI khen ngợi
-document.addEventListener('change', function(e) {
-    if(e.target.type === 'radio') {
-        document.getElementById('sound-click').play();
-        let done = 0;
-        for(let i=0; i < SO_CAU_MOI_DE; i++) {
-            if(document.querySelector('input[name="cau'+i+'"]:checked')) done++;
-        }
-        document.getElementById('progress-bar').style.width = (done / SO_CAU_MOI_DE) * 100 + "%";
-
-        // AI ngẫu nhiên khen ngợi
-        if (Math.random() > 0.7) {
-            const loiVui = ["Đúng rồi, cứ bình tĩnh mà chọn!", "Anh thấy em làm khá nhanh đấy!", "Tự tin lên, sắp xong rồi!"];
-            aiNoi(loiVui[Math.floor(Math.random() * loiVui.length)]);
-        }
-    }
-});
-    window.addEventListener("pagehide", function (e) {
-        if (studentNameStored !== "" && !daNopBai) {
-            var d = 0;
-            danhSachHienTai.forEach(function(item, i) {
-                var chon = Array.from(document.getElementsByName('cau' + i)).find(function(r) { return r.checked; })?.value;
-                if (chon === item.dung) { d++; }
-            });
-            var diemTamThoi = Math.round((d / SO_CAU_MOI_DE) * 100) / 10;
-            var data = JSON.stringify({ hoTen: studentNameStored + " (Thoát ngang)", soCauDung: d + "/" + SO_CAU_MOI_DE, diemSo: diemTamThoi });
-            var url = "https://script.google.com/macros/s/AKfycbz4IPNx4fkDGi_oy3K15LSqIhB8ZtfmfN3Q_kKNIb7KKGrBjqkl8yKT2FusSjeVNlw/exec";
-            if (navigator.sendBeacon) { navigator.sendBeacon(url, data); } 
-            else { fetch(url, { method: "POST", mode: "no-cors", keepalive: true, body: data }); }
-        }
-    });
-
-    window.addEventListener("beforeunload", function (e) {
-        if (studentNameStored && studentNameStored.trim() !== "" && !daNopBai) {
-            e.preventDefault();
-            e.returnValue = "Hệ thống sẽ ghi nhận điểm 0 nếu bạn thoát bây giờ!"; 
-            return "Hệ thống sẽ ghi nhận điểm 0 nếu bạn thoát bây giờ!";
-        }
-    });
-
-    window.addEventListener('keydown', function(e) {
-        const danhSachCanhBao = [
-            "⚠️ Ui da! Đừng soi code của thầy mà, lo làm bài đi em ơi!",
-            "🤫 Tính hack hay gì? Tập trung chuyên môn đi nhen!",
-            "🚫 Cửa này không vào được đâu em, quay lại làm toán thôi!",
-            "🕵️ Phát hiện một thám tử nhí đang soi code! Dừng lại ngay!",
-            "🛑 Hệ thống đang quan sát em... đừng nghịch F12 nữa nhé!"
-        ];
-        if (e.keyCode === 123 || (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) || (e.ctrlKey && e.keyCode === 85)) {
-            e.preventDefault();
-            document.getElementById('sound-denied').play();
-            alert(danhSachCanhBao[Math.floor(Math.random() * danhSachCanhBao.length)]);
-            return false;
-        }
-    }, true);
-  // Hàm "thanh trừng" khi phát hiện gian lận
-function trucXuat() {
-    // Ngăn chặn mọi tiến trình đang chạy
-    window.stop(); 
-    // Biến trang web thành màn hình đỏ cảnh báo
-    document.body.innerHTML = `
-        <div style='display:flex; flex-direction:column; justify-content:center; align-items:center; 
-                    height:100vh; width:100vw; background:red; color:white; 
-                    font-family:sans-serif; position:fixed; top:0; left:0; z-index:999999;'>
-            <h1 style='font-size:50px;'>⛔ PHÁT HIỆN GIAN LẬN!</h1>
-            <p style='font-size:25px;'>Hệ thống đã tự hủy để bảo mật đề thi.</p>
-            <p>Đang chuyển hướng về trang an toàn...</p>
-        </div>`;
-    
-    // Đẩy sang Google sau 2 giây
-    setTimeout(function() {
-        window.location.replace("https://www.google.com");
-    }, 2000);
-}
-
-// Khóa miệng toàn bộ hệ thống Console
-(function() {
-    console.log = function() {};
-    console.warn = function() {};
-    console.error = function() {};
-    console.info = function() {};
-    console.debug = function() {};
-    console.clear();
-})();
-
-// Chặn các phím tắt và đuổi thẳng tay
-window.addEventListener('keydown', function(e) {
-    if (e.keyCode === 123 || // F12
-        (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) || // Ctrl+Shift+I/J
-        (e.ctrlKey && e.keyCode === 85) || // Ctrl+U (Xem nguồn)
-        (e.ctrlKey && e.keyCode === 83)) { // Ctrl+S (Lưu trang)
-        
-        e.preventDefault();
-        trucXuat(); // Gọi hàm đuổi
-        return false;
-    }
-}, true);
-    // Kiểm tra nếu màn hình bị thay đổi kích thước đột ngột (thường là do mở Console)
-setInterval(function() {
-    const threshold = 160;
-    if (window.outerHeight - window.innerHeight > threshold || 
-        window.outerWidth - window.innerWidth > threshold) {
-        trucXuat();
-    }
-}, 1000);
-    let soLuotHoi = 2;
-
-// 1. Hàm AI nói (Bong bóng tự động hiện rồi ẩn)
-function aiNoi(msg) {
-    const bubble = document.getElementById('ai-bubble');
-    const speech = document.getElementById('ai-speech');
-    speech.innerText = msg;
-    bubble.style.display = 'block';
-    
-    // Tự động ẩn sau 4 giây
-    setTimeout(() => { bubble.style.display = 'none'; }, 4000);
-}
-
-function xuLyChat() {
-    let input = document.getElementById('user-input');
-    let content = document.getElementById('chat-content');
-    let message = input.value.toLowerCase().trim();
-
-    if (message === "") return;
-
-    // Hiện tin nhắn của học sinh
-    content.innerHTML += `<p><b>Em:</b> ${input.value}</p>`;
-
-    // 1. Kiểm tra lượt hỏi
-    if (soLuotHoi <= 0) {
-        content.innerHTML += `<p style="color: red;"><b>AI:</b> Hết lượt hỏi rồi em ơi! Tự lực cánh sinh nhé.</p>`;
-        input.value = "";
-        return;
-    }
-
-    let reply = "";
-
-    // 2. Kiểm tra xem có đang "tám chuyện" không
-    const camTamChuyen = ["người yêu", "yêu", "vợ", "chồng", "ăn", "chơi", "game", "hack", "đẹp trai", "xinh"];
-    let dangTamChuyen = camTamChuyen.some(tu => message.includes(tu));
-
-    if (dangTamChuyen) {
-        reply = "Mẫu người yêu của anh là người giỏi Toán! Lo làm bài đi, đừng tám chuyện nhé. ✨";
-    } 
-    // 3. Logic xử lý gợi ý câu hỏi (Quan trọng nhất đây)
-    else if (message.includes("gợi ý")) {
-        let match = message.match(/\d+/); // Tìm con số trong tin nhắn
-        let index = match ? parseInt(match[0]) - 1 : -1; // Chuyển số câu thành chỉ số mảng (ví dụ câu 1 là index 0)
-
-        // Kiểm tra xem số câu hỏi có hợp lệ không (từ 1 đến 5)
-        if (index >= 0 && index < SO_CAU_MOI_DE) {
-            // Lấy nội dung gợi ý từ câu hỏi thực tế trong danh sách hiện tại
-            let noiDungGoiY = danhSachHienTai[index].goiY || "Câu này em xem lại bảng cửu chương và công thức nhé!";
-            
-            reply = `Gợi ý câu ${index + 1}: ${noiDungGoiY}`;
-            soLuotHoi--; 
-            document.getElementById('ask-count').innerText = `Lượt hỏi: ${soLuotHoi}/2`;
-        } else {
-            reply = "Em muốn hỏi gợi ý câu mấy? Ví dụ: 'Gợi ý câu 1'. (Anh chỉ có 5 câu thôi nhé)";
-        }
-    } 
-    // 4. Các trường hợp còn lại
-    else {
-        reply = "Anh là trợ lý học tập. Em gõ 'Gợi ý câu + số' để anh giúp nhé!";
-    }
-
-    // Hiển thị phản hồi của AI sau 0.5s cho giống đang suy nghĩ
-    setTimeout(() => {
-        content.innerHTML += `<p style="color: #2d6a4f;"><b>AI:</b> ${reply}</p>`;
-        content.scrollTop = content.scrollHeight;
-    }, 500);
-
-    input.value = "";
-}
-// Gán sự kiện
-document.getElementById('btn-send').onclick = xuLyChat;
-document.getElementById('user-input').onkeypress = (e) => { if (e.key === 'Enter') xuLyChat(); };
-
-// Ví dụ: Gài AI nói tự động khi học sinh bắt đầu làm bài
-// Thêm dòng này vào cuối hàm checkLogin() của cậu:
-// aiNoi("Chào em! Anh là trợ lý của anh Khánh. Chúc em thi tốt!");
+    // ... (Giữ nguyên các hàm banPhaoHoa, trucXuat, AI Chat phía dưới) ...
 </script>
 </body>
 </html>
