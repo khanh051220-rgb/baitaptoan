@@ -340,7 +340,8 @@ if (giay === 60) aiNoi("1 phút cuối cùng! Khẩn trương lên nào! 🔥");
 
     document.addEventListener('contextmenu', function(event) {
         if (!daNopBai && studentNameStored !== "") { event.preventDefault(); alert("🤫 Không dùng chuột phải!"); }
-    });document.addEventListener('change', function(e) {
+    });// Gộp chung logic xử lý khi chọn đáp án và AI khen ngợi
+document.addEventListener('change', function(e) {
     if(e.target.type === 'radio') {
         document.getElementById('sound-click').play();
         let done = 0;
@@ -349,14 +350,13 @@ if (giay === 60) aiNoi("1 phút cuối cùng! Khẩn trương lên nào! 🔥");
         }
         document.getElementById('progress-bar').style.width = (done / SO_CAU_MOI_DE) * 100 + "%";
 
-        // Gộp phần AI khen vào đây luôn
+        // AI ngẫu nhiên khen ngợi
         if (Math.random() > 0.7) {
             const loiVui = ["Đúng rồi, cứ bình tĩnh mà chọn!", "Anh thấy em làm khá nhanh đấy!", "Tự tin lên, sắp xong rồi!"];
             aiNoi(loiVui[Math.floor(Math.random() * loiVui.length)]);
         }
     }
 });
-
     window.addEventListener("pagehide", function (e) {
         if (studentNameStored !== "" && !daNopBai) {
             var d = 0;
