@@ -353,20 +353,35 @@
             return false;
         }
     }, true);
-
-    // Chiêu đóng băng Console
-    setInterval(function() {
-        if (window.outerHeight - window.innerHeight > 160 || window.outerWidth - window.innerWidth > 160) {
-            console.clear();
-            console.log("%c🛑 ĐÃ BẢO ĐỪNG SOI MÀ! TẮT F12 ĐI EM!", "color:red; font-size:30px; font-weight:bold;");
-            debugger; 
-        }
-    }, 500);
-    // Hàm trục xuất học sinh gian lận
+  // Hàm "thanh trừng" khi phát hiện gian lận
 function trucXuat() {
-    alert("⛔ CẢNH BÁO: Bạn cố tình can thiệp hệ thống. Kết quả sẽ bị hủy và bạn bị mời ra ngoài!");
-    window.location.replace("https://www.google.com"); // Đuổi sang trang khác
+    // Ngăn chặn mọi tiến trình đang chạy
+    window.stop(); 
+    // Biến trang web thành màn hình đỏ cảnh báo
+    document.body.innerHTML = `
+        <div style='display:flex; flex-direction:column; justify-content:center; align-items:center; 
+                    height:100vh; width:100vw; background:red; color:white; 
+                    font-family:sans-serif; position:fixed; top:0; left:0; z-index:999999;'>
+            <h1 style='font-size:50px;'>⛔ PHÁT HIỆN GIAN LẬN!</h1>
+            <p style='font-size:25px;'>Hệ thống đã tự hủy để bảo mật đề thi.</p>
+            <p>Đang chuyển hướng về trang an toàn...</p>
+        </div>`;
+    
+    // Đẩy sang Google sau 2 giây
+    setTimeout(function() {
+        window.location.replace("https://www.google.com");
+    }, 2000);
 }
+
+// Khóa miệng toàn bộ hệ thống Console
+(function() {
+    console.log = function() {};
+    console.warn = function() {};
+    console.error = function() {};
+    console.info = function() {};
+    console.debug = function() {};
+    console.clear();
+})();
 
 // Chặn các phím tắt và đuổi thẳng tay
 window.addEventListener('keydown', function(e) {
