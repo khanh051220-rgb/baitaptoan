@@ -67,18 +67,15 @@
             flex-wrap: wrap;
         }
         .avatar-option {
-    width: 60px !important;    /* Ép chiều rộng cố định */
-    height: 60px !important;   /* Ép chiều cao cố định */
-    min-width: 60px;           /* Chặn không cho nó phình ra */
-    min-height: 60px;          /* Chặn không cho nó phình ra */
-    border-radius: 50%;
-    border: 3px solid transparent;
-    cursor: pointer;
-    transition: 0.3s;
-    background: #eee;
-    object-fit: cover;         /* Quan trọng: Để ảnh không bị móp khi thu nhỏ */
-    display: inline-block;
-}
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            cursor: pointer;
+            transition: 0.3s;
+            background: #eee;
+            object-fit: cover;
+        }
         .avatar-option.selected {
             border-color: var(--accent);
             transform: scale(1.1);
@@ -168,11 +165,11 @@
         <p>Chọn một avatar thật ngầu nhen các em! ✨</p>
         
         <div class="avatar-picker">
-            <img src="https://img5.thuthuatphanmem.vn/uploads/2021/11/08/anh-gau-truc-cute_082040722.jpg" class="avatar-option selected" data-seed="https://img5.thuthuatphanmem.vn/uploads/2021/11/08/anh-gau-truc-cute_082040722.jpg">
-            <img src="https://i.pinimg.com/originals/6d/dc/3f/6ddc3f9a79c891e0efd6042624e08f51.png" class="avatar-option" data-seed="https://i.pinimg.com/originals/6d/dc/3f/6ddc3f9a79c891e0efd6042624e08f51.png">
-            <img src="https://i.pinimg.com/originals/9a/c3/55/9ac355832f81c37f4964583c22bee6a0.jpg" class="avatar-option" data-seed="https://i.pinimg.com/originals/9a/c3/55/9ac355832f81c37f4964583c22bee6a0.jpg">
-            <img src="https://antimatter.vn/wp-content/uploads/2022/03/anh-anime-nam-chibi-meo-cute.jpg" class="avatar-option" data-seed="https://antimatter.vn/wp-content/uploads/2022/03/anh-anime-nam-chibi-meo-cute.jpg">
-            <img src="https://png.pngtree.com/png-clipart/20210314/original/pngtree-math-clipart-balloon-cartoon-math-symbol-png-image_6086532.jpg" class="avatar-option" data-seed="https://png.pngtree.com/png-clipart/20210314/original/pngtree-math-clipart-balloon-cartoon-math-symbol-png-image_6086532.jpg">
+            <img src="https://img5.thuthuatphanmem.vn/uploads/2021/11/08/anh-gau-truc-chibi-dang-yeu_082042341.jpg" class="avatar-option selected" data-seed="https://img5.thuthuatphanmem.vn/uploads/2021/11/08/anh-gau-truc-chibi-dang-yeu_082042341.jpg">
+            <img src="https://img.pikbest.com/origin/09/23/74/026pIkbEsTCbm.png!bw700" class="avatar-option" data-seed="https://img.pikbest.com/origin/09/23/74/026pIkbEsTCbm.png!bw700">
+            <img src="https://png.pngtree.com/png-clipart/20221227/ourlarge/pngtree-cartoon-girl-hand-painted-cute-schoolgirl-couple-head-portrait-png-image_6507492.png" class="avatar-option" data-seed="https://png.pngtree.com/png-clipart/20221227/ourlarge/pngtree-cartoon-girl-hand-painted-cute-schoolgirl-couple-head-portrait-png-image_6507492.png">
+            <img src="https://i.pinimg.com/736x/ff/61/95/ff6195012f664e4a2225ac47b393ba60.jpg" class="avatar-option" data-seed="https://i.pinimg.com/736x/ff/61/95/ff6195012f664e4a2225ac47b393ba60.jpg">
+            <img src="https://tse2.mm.bing.net/th/id/OIP.rnxnXXsXxWLNMAKu_hbVXAHaEO?pid=Api&P=0&h=180" class="avatar-option" data-seed="https://tse2.mm.bing.net/th/id/OIP.rnxnXXsXxWLNMAKu_hbVXAHaEO?pid=Api&P=0&h=180">
         </div>
         <input type="text" id="student-name" class="input-login" placeholder="👤 Nhập họ và tên..."><br>
         <input type="password" id="student-code" class="input-login" placeholder="🔑 Nhập mã bí mật..."><br>
@@ -198,7 +195,7 @@
 
 <script>
     var studentNameStored = "", giay = 900, timer, daNopBai = false, soLanViPham = 0;
-    var currentSeed = "https://img5.thuthuatphanmem.vn/uploads/2021/11/08/anh-gau-truc-cute_082040722.jpg"; 
+    var currentSeed = "https://img5.thuthuatphanmem.vn/uploads/2021/11/08/anh-gau-truc-chibi-dang-yeu_082042341.jpg"; 
     const GIOI_HAN_VI_PHAM = 2, SO_CAU_MOI_DE = 5;
     var danhSachHocSinh = { "Nguyễn Văn An": "an123", "Trần Thị Bình": "binh456", "Khánh": "0512" };
     
