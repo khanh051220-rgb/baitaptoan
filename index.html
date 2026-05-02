@@ -5,6 +5,22 @@
     <title>Học toán cùng Khánh</title>
     <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/188/188333.png">
     <style>
+        /* Ép màu cho phần hiển thị điểm số */
+#result-container h2, 
+#result-container p {
+    color: #333 !important; /* Màu tối để nổi trên nền sáng của bảng */
+}
+
+/* Nếu cậu dùng class riêng cho dòng "0 điểm" */
+.score-text {
+    color: #d9534f !important; /* Cho màu đỏ hoặc cam cho rực rỡ */
+    font-weight: bold;
+}
+
+/* Dòng chữ nhỏ dưới cùng */
+.result-footer {
+    color: #555 !important;
+}
         * {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
