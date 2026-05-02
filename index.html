@@ -351,6 +351,8 @@ button:active {
         danhSachHienTai = khoCauHoi.sort(function() { return 0.5 - Math.random(); }).slice(0, SO_CAU_MOI_DE);
         danhSachHienTai.forEach(function(item, i) {
             item.luaChon.sort(function() { return 0.5 - Math.random(); });
+            // THÊM DÒNG NÀY: Tạo một badge nhỏ hiển thị số thứ tự câu hỏi
+    var badge = `<span style="background:var(--secondary); color:white; padding:3px 10px; border-radius:10px; font-size:12px; float:right;">Câu ${i+1}/${SO_CAU_MOI_DE}</span>`;
             var html = "<div class='khung' id='box"+i+"'><p style='font-weight:bold; font-size:20px;'>📝 Câu "+(i+1)+": "+item.de+"</p>";
             item.luaChon.forEach(function(lc) {
                 html += "<label><input type='radio' name='cau"+i+"' value='"+lc+"'> "+lc+"</label>";
