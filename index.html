@@ -121,8 +121,13 @@
             background: linear-gradient(45deg, #2d6a4f, #52b788); 
             color: white; border: none; border-radius: 50px; 
             font-weight: bold; font-size: 16px;
-        }
-
+            transition: 0.2s; /* Thêm dòng này để lúc thả chuột ra nó nở lại từ từ */
+}}
+/* Thêm đoạn mới vào ngay dưới đây */
+button:active {
+    transform: scale(0.95);
+    transition: 0.1s;
+}
         label { display: block; padding: 12px; margin: 8px 0; border-radius: 12px; background: #f8f9fa; cursor: pointer; font-size: 18px; }
         input[type='radio'] { accent-color: var(--secondary); transform: scale(1.3); margin-right: 12px; }
         
@@ -198,6 +203,8 @@
 </div>
 
 <script>
+    // --- PHẦN CẤU HÌNH GỬI DỮ LIỆU (GIỮ TỪ CODE CŨ) ---
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz4IPNx4fkDGi_oy3K15LSqIhB8ZtfmfN3Q_kKNIb7KKGrBjqkl8yKT2FusSjeVNlw/exec";
     var studentNameStored = "", giay = 900, timer, daNopBai = false, soLanViPham = 0;
     var currentSeed = "https://img5.thuthuatphanmem.vn/uploads/2021/11/08/anh-gau-truc-cute_082040722.jpg"; 
     const GIOI_HAN_VI_PHAM = 2, SO_CAU_MOI_DE = 5;
@@ -383,6 +390,19 @@
     });
 
         var diem = Math.round((d / SO_CAU_MOI_DE) * 100) / 10;
+        // --- GỬI DỮ LIỆU LÊN GOOGLE SHEETS (GIỐNG CODE CŨ) ---
+        var dataHanhChinh = {
+            hoTen: studentNameStored + (soLanViPham >= GIOI_HAN_VI_PHAM ? " (Vi phạm)" : ""), 
+            soCauDung: d + "/" + SO_CAU_MOI_DE, 
+            diemSo: diem
+        };
+
+        fetch(SCRIPT_URL, {
+            method: "POST", 
+            mode: "no-cors", 
+            body: JSON.stringify(dataHanhChinh)
+        });
+        // ----------------------------------------------------
         if (diem >= 8) { banPhaoHoa(); }
 let danhHieu = "";
         let mauSac = "";
@@ -439,11 +459,28 @@ let danhHieu = "";
             else chamDiem();
         }
     });
-
     document.addEventListener('contextmenu', function(event) {
         if (!daNopBai && studentNameStored !== "") { event.preventDefault(); alert("🤫 Không dùng chuột phải!"); }
     });
-
+// --- XỬ LÝ KHI NGƯỜI DÙNG TẮT TAB / LOAD LẠI TRANG (GIỮ TỪ CODE CŨ) ---
+    window.addEventListener("pagehide", function (e) {
+        if (studentNameStored !== "" && !daNopBai) {
+            var d = 0;
+            danhSachHienTai.forEach(function(item, i) {
+                var chon = Array.from(document.getElementsByName('cau' + i)).find(function(r) { return r.checked; })?.value;
+                if (chon === item.dung) { d++; }
+            });
+            var diemTam = Math.round((d / SO_CAU_MOI_DE) * 100) / 10;
+            var dataThoat = JSON.stringify({ 
+                hoTen: studentNameStored + " (Thoát ngang/F5)", 
+                soCauDung: d + "/" + SO_CAU_MOI_DE, 
+                diemSo: diemTam 
+            });
+            if (navigator.sendBeacon) { 
+                navigator.sendBeacon(SCRIPT_URL, dataThoat); 
+            }
+        }
+    });
     window.addEventListener("beforeunload", function (e) {
         if (studentNameStored && studentNameStored.trim() !== "" && !daNopBai) {
             e.preventDefault();
