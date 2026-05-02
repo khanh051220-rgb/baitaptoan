@@ -362,6 +362,19 @@ button:active {
 
     function chamDiem() {
         if (daNopBai) return; 
+        // --- BƯỚC KIỂM TRA CHƯA LÀM HẾT ---
+    let soCauDaLam = 0;
+    for (let i = 0; i < SO_CAU_MOI_DE; i++) {
+        if (document.querySelector(`input[name="cau${i}"]:checked`)) {
+            soCauDaLam++;
+        }
+    }
+
+    if (soCauDaLam < SO_CAU_MOI_DE) {
+        let xacNhan = confirm(`⚠️ Em mới làm được ${soCauDaLam}/${SO_CAU_MOI_DE} câu thôi. Em có chắc chắn muốn nộp bài luôn không?`);
+        if (!xacNhan) return; // Nếu nhấn "Cancel" thì dừng lại, cho học sinh làm tiếp
+    }
+    // ----------------------------------
         daNopBai = true; 
         clearInterval(timer);
         var d = 0;
