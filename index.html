@@ -5,6 +5,9 @@
     <title>Học toán cùng Khánh</title>
     <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/188/188333.png">
     <style>
+        * {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
         @keyframes shine {
             from { filter: drop-shadow(0 0 5px #fff); }
             to { filter: drop-shadow(0 0 15px var(--color)); }
@@ -139,10 +142,59 @@ button:active {
             font-weight: 500;
             line-height: 1.5;
         }
+        /* --- DARK MODE CONFIG --- */
+body.dark-mode {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%) !important;
+    color: #e0e0e0;
+}
+
+body.dark-mode .container, 
+body.dark-mode .khung, 
+body.dark-mode #chat-box, 
+body.dark-mode #ai-bubble {
+    background: #252525 !important;
+    color: #e0e0e0 !important;
+    border-color: #40916c;
+}
+
+body.dark-mode h1, body.dark-mode p, body.dark-mode label {
+    color: #e0e0e0 !important;
+}
+
+body.dark-mode label {
+    background: #333;
+}
+
+body.dark-mode .header-profile {
+    background: #2d6a4f;
+}
+
+body.dark-mode #chat-content {
+    background: #1e1e1e !important;
+}
+
+/* Nút chuyển đổi giao diện */
+.theme-switch {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 9999;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 24px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
     </style>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 </head>
 <body>
+    <div class="theme-switch" onclick="toggleDarkMode()" title="Đổi màu nền">🌓</div>
     <div id="ai-container" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
         <div id="ai-bubble" style="background: white; border: 2px solid var(--secondary); padding: 10px 15px; border-radius: 20px; margin-bottom: 10px; font-size: 13px; max-width: 250px; display: none; box-shadow: 0 5px 15px rgba(0,0,0,0.1); position: relative;">
             <span id="ai-speech">Chào em!</span>
@@ -646,6 +698,24 @@ let danhHieu = "";
 }
     document.getElementById('btn-send').onclick = xuLyChat;
     document.getElementById('user-input').onkeypress = (e) => { if (e.key === 'Enter') xuLyChat(); };
+    // --- DARK MODE LOGIC ---
+function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+    const isDark = document.body.classList.contains('dark-mode');
+    localStorage.setItem('ezmath-theme', isDark ? 'dark' : 'light');
+    
+    // Thông báo cho AI nói một câu cho vui
+    if(typeof aiNoi === "function") {
+        aiNoi(isDark ? "Uầy, giao diện tối nhìn ngầu đấy em!" : "Sáng sủa hẳn ra, học bài thôi!");
+    }
+}
+
+// Kiểm tra cài đặt cũ khi load trang
+window.addEventListener('DOMContentLoaded', (event) => {
+    if (localStorage.getItem('ezmath-theme') === 'dark') {
+        document.body.classList.add('dark-mode');
+    }
+});
 </script>
 </body>
 </html>
