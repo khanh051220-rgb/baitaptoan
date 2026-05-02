@@ -576,23 +576,23 @@ let danhHieu = "";
         var icon = diem >= 8 ? "🏆 Tuyệt vời!" : (diem >= 5 ? "👏 Khá lắm!" : "💪 Cố gắng lên!");
 // --- BẮT ĐẦU ĐOẠN DÁN MỚI ---
 
-// --- ĐOẠN FIX LỖI MẤT BẢNG ĐIỂM ---
-let streakHTML = ""; // Mặc định để trống để không gây lỗi hiển thị
+// --- BẮT ĐẦU ĐOẠN DÁN LOGIC ---
+let streakHTML = ""; 
 try {
-    // 1. Lấy ID học sinh an toàn
     let inputMa = document.getElementById('ma-bi-mat');
     let maHS = inputMa ? inputMa.value : 'khach';
     let keyLuuTru = 'streak_' + maHS;
 
-    // 2. Lấy dữ liệu Streak
     const homNay = new Date().toDateString();
     let sData = JSON.parse(localStorage.getItem(keyLuuTru)) || { count: 0, lastDate: "" };
 
-    // 3. Tính toán (Dùng biến số câu đúng của cậu, tớ giả sử là biến 'd')
-    // Nếu biến điểm của cậu tên là 'score' thì đổi 'diem' thành 'score' nhé
+    // KIỂM TRA CHẶN XUYÊN KHÔNG: Chỉ tính nếu ngày máy tính không lớn hơn ngày thật
+    let ngayMayTinh = new Date(homNay);
+    let ngayThucTe = new Date();
+    
     let diemKiemTra = (typeof diem !== 'undefined') ? diem : 0; 
 
-    if (diemKiemTra > 0 && sData.lastDate !== homNay) {
+    if (diemKiemTra > 0 && sData.lastDate !== homNay && ngayMayTinh <= ngayThucTe) {
         let homQua = new Date();
         homQua.setDate(homQua.getDate() - 1);
         
@@ -609,8 +609,9 @@ try {
         streakHTML = `<div style="color: #ff4d00; font-weight: bold; margin: 10px 0;">🔥 Chuỗi chăm chỉ: ${sData.count} ngày</div>`;
     }
 } catch (e) {
-    console.log("Lỗi streak nhưng vẫn cho hiện bảng điểm:", e);
+    console.log("Lỗi streak nhưng vẫn hiện bảng điểm:", e);
 }
+// --- KẾT THÚC ĐOẠN DÁN LOGIC ---
 
 // 4. Hiển thị bảng điểm (Đã bỏ sạch các ký tự lỗi)
 document.getElementById('ket-qua').innerHTML = `
@@ -621,6 +622,11 @@ document.getElementById('ket-qua').innerHTML = `
         <div class="rank-badge" style="background:${mauSac}; --color:${mauSac}; margin-bottom: 15px;">
             ${bieuTuong} ${danhHieu}
         </div>
+
+        ${streakHTML} 
+
+        <p style="color: #1b4332;">Đúng ${d}/${SO_CAU_MOI_DE} câu. Xem lại lời giải chi tiết nhen!</p>
+    </div>`;
         ${streakHTML}
         <p style="color: #1b4332;">Đúng ${d}/${SO_CAU_MOI_DE} câu. Xem lại lời giải chi tiết nhen!</p>
     </div>`;
