@@ -448,6 +448,20 @@ let danhHieu = "";
                     </div>
                 <p>Đúng ${d}/${SO_CAU_MOI_DE} câu. Xem lại lời giải chi tiết ở trên nhen!</p>
             </div>`;
+        // --- THÊM LỜI KHEN TỪ TRỢ LÝ AI Ở ĐÂY ---
+        let loiKhen = "";
+        if (diem === 10) {
+            loiKhen = `Ôi trời ơi! ${studentNameStored} là thiên tài à? 10 điểm tuyệt đối luôn! Anh ngưỡng mộ em quá! 😍`;
+        } else if (diem >= 8) {
+            loiKhen = `Giỏi lắm ${studentNameStored}! Suýt chút nữa là được điểm 10 rồi. Về khoe bố mẹ ngay đi nhen! 🏆`;
+        } else if (diem >= 5) {
+            loiKhen = `Kết quả khá ổn đấy! Cố gắng thêm chút nữa ở các bài sau là em sẽ thành cao thủ ngay! 💪`;
+        } else {
+            loiKhen = `Không sao đâu ${studentNameStored} ơi, "thất bại là mẹ thành công" mà. Anh tin lần sau em sẽ làm tốt hơn! Cố lên! ❤️`;
+        }
+        
+        // Gọi AI nói sau khi hiển thị kết quả 0.5s để tạo bất ngờ
+        setTimeout(() => aiNoi(loiKhen), 500);
     }
 
     function banPhaoHoa(){
