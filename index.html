@@ -206,6 +206,32 @@ body.dark-mode #chat-content {
     font-size: 24px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
+        /* Chèn đoạn này vào cuối phần <style> của cậu */
+
+/* Sửa lỗi hiển thị kết quả trong Dark Mode */
+body.dark-mode #ket-qua div {
+    background: #1e3a2f !important; /* Đổi nền bảng kết quả sang màu tối hơn */
+    border-color: #40916c !important;
+}
+
+body.dark-mode #ket-qua h2, 
+body.dark-mode #ket-qua p,
+body.dark-mode #ket-qua span {
+    color: #e0e0e0 !important; /* Ép chữ lên màu sáng */
+}
+
+/* Đảm bảo khung lời giải cũng nhìn rõ trong Dark Mode */
+body.dark-mode .loi-giai {
+    background: #2d2d2d !important;
+    color: #ffd166 !important; /* Màu vàng nhạt cho dễ đọc lời giải */
+    border: 1px dashed #40916c;
+}
+
+/* Nút "Làm đề mới" nên có màu sắc rõ ràng hơn */
+.btn-reload {
+    background: #6c757d;
+    margin-left: 10px;
+}
     </style>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 </head>
@@ -536,16 +562,17 @@ let danhHieu = "";
         }
         var icon = diem >= 8 ? "🏆 Tuyệt vời!" : (diem >= 5 ? "👏 Khá lắm!" : "💪 Cố gắng lên!");
         
-        document.getElementById('ket-qua').innerHTML = `
-            <div style='background:#e9f5ee; padding:20px; border-radius:20px; border:2px solid #b7e4c7; text-align:center; margin-top: 20px;'>
-                <img src="${currentSeed}" style="width:80px; height:80px; object-fit:cover; border-radius:50%; border:3px solid var(--secondary); margin-bottom:10px;">
-                <h2 style='color:#1b4332;'>${icon}</h2>
-                <p style='font-size:40px; font-weight:bold; color:#d00000;'>💯 ${diem} ĐIỂM</p>
-                <div class="rank-badge" style="background:${mauSac}; --color:${mauSac}; margin-bottom: 15px;">
-                    ${bieuTuong} ${danhHieu}
-                    </div>
-                <p>Đúng ${d}/${SO_CAU_MOI_DE} câu. Xem lại lời giải chi tiết ở trên nhen!</p>
-            </div>`;
+       // Tìm đến đoạn cuối hàm chamDiem() và thay bằng đoạn này:
+document.getElementById('ket-qua').innerHTML = `
+    <div style='padding:20px; border-radius:20px; border:2px solid #b7e4c7; text-align:center; margin-top: 20px;' class="result-box">
+        <img src="${currentSeed}" style="width:80px; height:80px; object-fit:cover; border-radius:50%; border:3px solid var(--secondary); margin-bottom:10px;">
+        <h2 style='color:var(--primary);'>${icon}</h2>
+        <p style='font-size:40px; font-weight:bold; color:#d9534f;'>💯 ${diem} ĐIỂM</p>
+        <div class="rank-badge" style="background:${mauSac}; --color:${mauSac}; margin-bottom: 15px;">
+            ${bieuTuong} ${danhHieu}
+        </div>
+        <p>Đúng ${d}/${SO_CAU_MOI_DE} câu. Xem lại lời giải chi tiết ở trên nhen!</p>
+    </div>`;
         // --- THÊM LỜI KHEN TỪ TRỢ LÝ AI Ở ĐÂY ---
         let loiKhen = "";
         if (diem === 10) {
