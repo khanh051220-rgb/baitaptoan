@@ -498,19 +498,24 @@ body.dark-mode .loi-giai {
     }
 
     function chamDiem() {
-        if (daNopBai) return; 
-        // --- BƯỚC KIỂM TRA CHƯA LÀM HẾT ---
+    if (daNopBai) return; 
+
+    // --- BƯỚC KIỂM TRA CHƯA LÀM HẾT ---
     let soCauDaLam = 0;
     for (let i = 0; i < SO_CAU_MOI_DE; i++) {
         if (document.querySelector(`input[name="cau${i}"]:checked`)) {
             soCauDaLam++;
         }
     }
-    if (soCauDaLam < SO_CAU_MOI_DE) {
+
+    // CHỈ HIỆN CẢNH BÁO NẾU KHÔNG PHẢI BỊ ÉP NỘP DO VI PHẠM
+    if (soCauDaLam < SO_CAU_MOI_DE && soLanViPham < GIOI_HAN_VI_PHAM) {
         let xacNhan = confirm(`⚠️ Em mới làm được ${soCauDaLam}/${SO_CAU_MOI_DE} câu thôi. Em có chắc chắn muốn nộp bài luôn không?`);
-        if (!xacNhan) return; // Nếu nhấn "Cancel" thì dừng lại, cho học sinh làm tiếp
+        if (!xacNhan) return; 
     }
-        daNopBai = true; 
+
+    daNopBai = true; 
+    // ... phần còn lại giữ nguyên ... 
         clearInterval(timer);
         var d = 0;
         
@@ -658,15 +663,19 @@ document.getElementById('ket-qua').innerHTML = `
         }
     }
 
-    document.addEventListener("visibilitychange", function() {
+   document.addEventListener("visibilitychange", function() {
     if (document.visibilityState === 'hidden' && !daNopBai && studentNameStored !== "") {
         soLanViPham++;
         
         if (soLanViPham < GIOI_HAN_VI_PHAM) {
             alert("⚠️ CẢNH BÁO: Rời trang " + soLanViPham + " lần! 1/2");
         } else {
-            // Lần 2: Tự động nộp bài
             alert("🛑 VI PHẠM QUÁ GIỚI HẠN: Hệ thống đang tự động nộp bài của bạn!");
+            
+            // THÊM DÒNG NÀY: Ẩn vùng chứa câu hỏi (cậu kiểm tra ID của div chứa đề bài nhé)
+            let vungDe = document.getElementById('vung-lam-bai') || document.querySelector('.quiz-container');
+            if (vungDe) vungDe.style.display = 'none';
+
             chamDiem(); 
         }
     }
