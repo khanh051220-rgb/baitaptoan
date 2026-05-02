@@ -232,6 +232,19 @@ body.dark-mode .loi-giai {
     background: #6c757d;
     margin-left: 10px;
 }
+        .streak-fire {
+    color: #ff4d00 !important;
+    font-weight: bold;
+    font-size: 1.1rem;
+    display: block;
+    margin: 10px 0;
+    animation: flame 1.5s infinite alternate;
+}
+
+@keyframes flame {
+    from { opacity: 0.8; transform: scale(1); }
+    to { opacity: 1; transform: scale(1.02); }
+}
     </style>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 </head>
@@ -561,8 +574,29 @@ let danhHieu = "";
             bieuTuong = "🔥";
         }
         var icon = diem >= 8 ? "🏆 Tuyệt vời!" : (diem >= 5 ? "👏 Khá lắm!" : "💪 Cố gắng lên!");
-        
-       // Tìm đến đoạn cuối hàm chamDiem() và thay bằng đoạn này:
+// --- BẮT ĐẦU ĐOẠN DÁN MỚI ---
+
+// 1. Logic tính Streak (Giữ lại lửa theo acc)
+let maHS = document.getElementById('ma-bi-mat').value || 'khach'; 
+let keyLuuTru = 'streak_' + maHS;
+const homNay = new Date().toDateString();
+let duLieuStreak = JSON.parse(localStorage.getItem(keyLuuTru)) || { count: 0, lastDate: "" };
+
+if (diem > 0 && duLieuStreak.lastDate !== homNay) {
+    let homQua = new Date();
+    homQua.setDate(homQua.getDate() - 1);
+    if (duLieuStreak.lastDate === homQua.toDateString()) {
+        duLieuStreak.count += 1;
+    } else {
+        duLieuStreak.count = 1; 
+    }
+    duLieuStreak.lastDate = homNay;
+    localStorage.setItem(keyLuuTru, JSON.stringify(duLieuStreak));
+}
+
+const streakHTML = duLieuStreak.count > 0 ? `<div class="streak-fire" style="color: #ff4d00; font-weight: bold; margin-bottom: 10px;">🔥 Chuỗi chăm chỉ: ${duLieuStreak.count} ngày</div>` : "";
+
+// 2. Hiển thị ra màn hình (Chỗ cậu hỏi dán vào đâu nè)
 document.getElementById('ket-qua').innerHTML = `
     <div style='padding:20px; border-radius:20px; border:2px solid #b7e4c7; text-align:center; margin-top: 20px;' class="result-box">
         <img src="${currentSeed}" style="width:80px; height:80px; object-fit:cover; border-radius:50%; border:3px solid var(--secondary); margin-bottom:10px;">
@@ -571,8 +605,13 @@ document.getElementById('ket-qua').innerHTML = `
         <div class="rank-badge" style="background:${mauSac}; --color:${mauSac}; margin-bottom: 15px;">
             ${bieuTuong} ${danhHieu}
         </div>
+
+        ${streakHTML} 
+
         <p>Đúng ${d}/${SO_CAU_MOI_DE} câu. Xem lại lời giải chi tiết ở trên nhen!</p>
     </div>`;
+
+// --- KẾT THÚC ĐOẠN DÁN MỚI ---
         // --- THÊM LỜI KHEN TỪ TRỢ LÝ AI Ở ĐÂY ---
         let loiKhen = "";
         if (diem === 10) {
