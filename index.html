@@ -355,27 +355,37 @@ button:active {
         }, 1000);
     }
 
-    function taoDe() {
+  function taoDe() {
         var v = document.getElementById('vung-chua'); 
         v.innerHTML = "";
         danhSachHienTai = khoCauHoi.sort(function() { return 0.5 - Math.random(); }).slice(0, SO_CAU_MOI_DE);
+        
         danhSachHienTai.forEach(function(item, i) {
             item.luaChon.sort(function() { return 0.5 - Math.random(); });
-            mauLoai = "#2d6a4f"; // Mặc định là xanh lá (Nhận biết)
-        let tenLoai = item.loai || "NB"; // Nếu quên không ghi thì mặc định là NB
+            
+            let mauLoai = "#2d6a4f"; 
+            let tenLoai = item.loai || "NB"; 
+            if (tenLoai === "TH") mauLoai = "#3a86ff";  
+            if (tenLoai === "VD") mauLoai = "#f77f00";  
+            if (tenLoai === "VDC") mauLoai = "#d62828"; 
 
-        if (tenLoai === "TH") mauLoai = "#3a86ff";  // Thông hiểu - Màu xanh dương
-        if (tenLoai === "VD") mauLoai = "#f77f00";  // Vận dụng - Màu cam
-        if (tenLoai === "VDC") mauLoai = "#d62828"; // Vận dụng cao - Màu đỏ đậm
-          // Tạo badge tích hợp cả số câu và độ khó
-        var badge = `<span style="background:${mauLoai}; color:white; padding:3px 10px; border-radius:10px; font-size:12px; float:right; margin-left:5px;">${tenLoai}</span>`;
-        var badgeStt = `<span style="background:#6c757d; color:white; padding:3px 10px; border-radius:10px; font-size:12px; float:right;">Câu ${i+1}/${SO_CAU_MOI_DE}</span>`;
-           // 2. Chèn badge vào ngay sau thẻ mở đầu của 'khung' (Sửa dòng này nhé)
-            var html = "<div class='khung' id='box"+i+"'>" + badge + "<p style='font-weight:bold; font-size:20px;'>📝 Câu "+(i+1)+": "+item.de+"</p>";
+            // 1. Badge số thứ tự câu: Cho nó float:right để lên góc phải (thay chỗ NB cũ)
+            var badgeStt = `<span style="background:#6c757d; color:white; padding:3px 12px; border-radius:10px; font-size:12px; float:right;">Câu ${i+1}/${SO_CAU_MOI_DE}</span>`;
+            
+            // 2. Badge phân loại: Để hiển thị ngay sau văn bản câu hỏi
+            var badgePhanLoai = `<span style="background:${mauLoai}; color:white; padding:2px 8px; border-radius:5px; font-size:11px; margin-left:8px; vertical-align:middle;">${tenLoai}</span>`;
+
+            // 3. Ráp vào khung
+            var html = "<div class='khung' id='box" + i + "'>";
+            // Chèn badgeStt vào đầu để nó nổi sang phải, sau đó là nội dung câu hỏi + badgePhanLoai
+            html += badgeStt; 
+            html += "<p style='font-weight:bold; font-size:20px; margin-top:0;'>📝 Câu " + (i+1) + ": " + item.de + badgePhanLoai + "</p>";
+            
             item.luaChon.forEach(function(lc) {
-                html += "<label><input type='radio' name='cau"+i+"' value='"+lc+"'> "+lc+"</label>";
+                html += "<label><input type='radio' name='cau" + i + "' value='" + lc + "'> " + lc + "</label>";
             });
-            html += "<div class='loi-giai' id='note"+i+"'></div></div>";
+            
+            html += "<div class='loi-giai' id='note" + i + "'></div></div>";
             v.innerHTML += html;
         });
     }
