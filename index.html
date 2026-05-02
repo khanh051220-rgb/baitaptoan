@@ -639,6 +639,7 @@ document.getElementById('ket-qua').innerHTML = `
         } else {
             loiKhen = `Không sao đâu ${studentNameStored} ơi, "thất bại là mẹ thành công" mà. Anh tin lần sau em sẽ làm tốt hơn! Cố lên! ❤️`;
         }
+        if (soLanViPham >= 2) loiKhen = "Hừm, em bị nộp bài tự động do rời trang quá nhiều nhé! Rút kinh nghiệm lần sau nè. ❤️";
         
         // Gọi AI nói sau khi hiển thị kết quả 0.5s để tạo bất ngờ
         setTimeout(() => aiNoi(loiKhen), 500);
@@ -658,12 +659,18 @@ document.getElementById('ket-qua').innerHTML = `
     }
 
     document.addEventListener("visibilitychange", function() {
-        if (document.visibilityState === 'hidden' && !daNopBai && studentNameStored !== "") {
-            soLanViPham++;
-            if (soLanViPham < GIOI_HAN_VI_PHAM) alert("⚠️ CẢNH BÁO: Rời trang " + soLanViPham + " lần! 1/2");
-            else chamDiem();
+    if (document.visibilityState === 'hidden' && !daNopBai && studentNameStored !== "") {
+        soLanViPham++;
+        
+        if (soLanViPham < GIOI_HAN_VI_PHAM) {
+            alert("⚠️ CẢNH BÁO: Rời trang " + soLanViPham + " lần! 1/2");
+        } else {
+            // Lần 2: Tự động nộp bài
+            alert("🛑 VI PHẠM QUÁ GIỚI HẠN: Hệ thống đang tự động nộp bài của bạn!");
+            chamDiem(); 
         }
-    });
+    }
+});
     document.addEventListener('contextmenu', function(event) {
         if (!daNopBai && studentNameStored !== "") { event.preventDefault(); alert("🤫 Không dùng chuột phải!"); }
     });
