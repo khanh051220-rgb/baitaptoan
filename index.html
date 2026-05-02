@@ -217,7 +217,8 @@ button:active {
         dung: "40", 
         giaiThich: "Ta có: 15 + 25 = (10 + 20) + (5 + 5) = 30 + 10 = 40.",
         goiY: "Em thử cộng hàng chục trước rồi cộng hàng đơn vị xem sao.",
-        hinhAnh: "" 
+        hinhAnh: "", 
+        loai:"NB"
     },
     { 
         de: "Hình tam giác có mấy cạnh?", 
@@ -225,28 +226,32 @@ button:active {
         dung: "3", 
         giaiThich: "Định nghĩa: Hình tam giác là hình đa giác có 3 cạnh và 3 đỉnh.",
         goiY: "Trong Hán Việt tam là mấy nhỉ",
-        hinhAnh: "https://i.postimg.cc/0NGCDPDK/WIN-20260501-21-16-15-Pro.jpg" 
+        hinhAnh: "https://i.postimg.cc/0NGCDPDK/WIN-20260501-21-16-15-Pro.jpg",
+        loai:"NB"
     },
     { 
         de: "Số nào lớn nhất: 89, 98, 100, 99?", 
         luaChon: ["89", "98", "100", "99"], 
         dung: "100", 
         giaiThich: "So sánh các số: 100 là số có 3 chữ số, các số còn lại chỉ có 2 chữ số.",
-        hinhAnh: "" 
+        hinhAnh: "" ,
+        loai:"NB"
     },
     { 
         de: "Kết quả của phép tính 7 x 8 là?", 
         luaChon: ["54", "56", "64", "49"], 
         dung: "56", 
         giaiThich: "Dựa vào bảng cửu chương 7 hoặc 8: 7 x 8 = 56.",
-        hinhAnh: "" 
+        hinhAnh: "" ,
+        loai:"NB"
     },
     { 
         de: "Số nào là số chẵn nhỏ nhất có hai chữ số?", 
         luaChon: ["10", "12", "02", "11"], 
         dung: "10", 
         giaiThich: "Số nhỏ nhất có hai chữ số là 10, và 10 cũng là số chẵn.",
-        hinhAnh: "" 
+        hinhAnh: "", 
+        loai:"NB",
     },
     { 
         de: "Một hình vuông có cạnh 5cm. Chu vi là?", 
@@ -254,35 +259,40 @@ button:active {
         dung: "20cm", 
         giaiThich: "Chu vi hình vuông = Cạnh x 4. Vậy: 5 x 4 = 20cm.",
         goiY: "Nhớ công thức: P = a x 4 nha!",
-        hinhAnh: "" 
+        hinhAnh: "" ,
+        loai:"NB"
     },
     { 
         de: "Số liền trước của 1000 là?", 
         luaChon: ["999", "1001", "990", "900"], 
         dung: "999", 
         giaiThich: "Số liền trước = Số đã cho - 1. Ta có: 1000 - 1 = 999.",
-        hinhAnh: "" 
+        hinhAnh: "", 
+        loai:"NB"
     },
     { 
         de: "3 giờ bằng bao nhiêu phút?", 
         luaChon: ["120 phút", "150 phút", "180 phút", "200 phút"], 
         dung: "180 phút", 
         giaiThich: "1 giờ = 60 phút. Vậy 3 giờ = 60 x 3 = 180 phút.",
-        hinhAnh: "" 
+        hinhAnh: "", 
+        loai:"NB"
     },
     { 
         de: "Kết quả của 100 - 45 là?", 
         luaChon: ["45", "55", "65", "35"], 
         dung: "55", 
         giaiThich: "Thực hiện phép tính: 100 - 40 = 60, sau đó 60 - 5 = 55.",
-        hinhAnh: "" 
+        hinhAnh: "", 
+        loai:"NB",
     },
     { 
         de: "Số gồm 5 trăm và 5 đơn vị là?", 
         luaChon: ["55", "550", "505", "5005"], 
         dung: "505", 
         giaiThich: "5 trăm = 500, 5 đơn vị = 5. Vậy số đó là 500 + 5 = 505.",
-        hinhAnh: "" 
+        hinhAnh: "", 
+        loai:"TH",
     }
 ];
 
@@ -351,8 +361,15 @@ button:active {
         danhSachHienTai = khoCauHoi.sort(function() { return 0.5 - Math.random(); }).slice(0, SO_CAU_MOI_DE);
         danhSachHienTai.forEach(function(item, i) {
             item.luaChon.sort(function() { return 0.5 - Math.random(); });
-           // 1. Tạo badge
-            var badge = `<span style="background:var(--secondary); color:white; padding:3px 10px; border-radius:10px; font-size:12px; float:right;">Câu ${i+1}/${SO_CAU_MOI_DE}</span>`;
+            mauLoai = "#2d6a4f"; // Mặc định là xanh lá (Nhận biết)
+        let tenLoai = item.loai || "NB"; // Nếu quên không ghi thì mặc định là NB
+
+        if (tenLoai === "TH") mauLoai = "#3a86ff";  // Thông hiểu - Màu xanh dương
+        if (tenLoai === "VD") mauLoai = "#f77f00";  // Vận dụng - Màu cam
+        if (tenLoai === "VDC") mauLoai = "#d62828"; // Vận dụng cao - Màu đỏ đậm
+          // Tạo badge tích hợp cả số câu và độ khó
+        var badge = `<span style="background:${mauLoai}; color:white; padding:3px 10px; border-radius:10px; font-size:12px; float:right; margin-left:5px;">${tenLoai}</span>`;
+        var badgeStt = `<span style="background:#6c757d; color:white; padding:3px 10px; border-radius:10px; font-size:12px; float:right;">Câu ${i+1}/${SO_CAU_MOI_DE}</span>`;
            // 2. Chèn badge vào ngay sau thẻ mở đầu của 'khung' (Sửa dòng này nhé)
             var html = "<div class='khung' id='box"+i+"'>" + badge + "<p style='font-weight:bold; font-size:20px;'>📝 Câu "+(i+1)+": "+item.de+"</p>";
             item.luaChon.forEach(function(lc) {
