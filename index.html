@@ -10,8 +10,6 @@
 #result-container p {
     color: #333 !important; /* Màu tối để nổi trên nền sáng của bảng */
 }
-
-/* Nếu cậu dùng class riêng cho dòng "0 điểm" */
 .score-text {
     color: #d9534f !important; /* Cho màu đỏ hoặc cam cho rực rỡ */
     font-weight: bold;
@@ -206,8 +204,6 @@ body.dark-mode #chat-content {
     font-size: 24px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
-        /* Chèn đoạn này vào cuối phần <style> của cậu */
-
 /* Sửa lỗi hiển thị kết quả trong Dark Mode */
 body.dark-mode #ket-qua div {
     background: #1e3a2f !important; /* Đổi nền bảng kết quả sang màu tối hơn */
@@ -543,7 +539,7 @@ body.dark-mode .loi-giai {
     });
 
         var diem = Math.round((d / SO_CAU_MOI_DE) * 100) / 10;
-        // --- GỬI DỮ LIỆU LÊN GOOGLE SHEETS (GIỐNG CODE CŨ) ---
+        // --- GỬI DỮ LIỆU LÊN GOOGLE SHEETS ---
         var dataHanhChinh = {
             hoTen: studentNameStored + (soLanViPham >= GIOI_HAN_VI_PHAM ? " (Vi phạm)" : ""), 
             soCauDung: d + "/" + SO_CAU_MOI_DE, 
@@ -618,7 +614,7 @@ try {
 }
 // --- KẾT THÚC ĐOẠN DÁN LOGIC ---
 
-// 4. Hiển thị bảng điểm (Đã bỏ sạch các ký tự lỗi)
+// 4. Hiển thị bảng điểm
 document.getElementById('ket-qua').innerHTML = `
     <div style='padding:20px; border-radius:20px; border:2px solid #b7e4c7; text-align:center; margin-top: 20px;' class="result-box">
         <img src="${currentSeed}" style="width:80px; height:80px; object-fit:cover; border-radius:50%; border:3px solid var(--secondary); margin-bottom:10px;">
@@ -646,7 +642,7 @@ document.getElementById('ket-qua').innerHTML = `
         }
         if (soLanViPham >= 2) loiKhen = "Hừm, em bị nộp bài tự động do rời trang quá nhiều nhé! Rút kinh nghiệm lần sau nè. ❤️";
         
-        // Gọi AI nói sau khi hiển thị kết quả 0.5s để tạo bất ngờ
+        // Gọi AI nói sau khi hiển thị kết quả 0.5s 
         setTimeout(() => aiNoi(loiKhen), 500);
     }
 
@@ -683,7 +679,7 @@ document.getElementById('ket-qua').innerHTML = `
     document.addEventListener('contextmenu', function(event) {
         if (!daNopBai && studentNameStored !== "") { event.preventDefault(); alert("🤫 Không dùng chuột phải!"); }
     });
-// --- XỬ LÝ KHI NGƯỜI DÙNG TẮT TAB / LOAD LẠI TRANG (GIỮ TỪ CODE CŨ) ---
+// --- XỬ LÝ KHI NGƯỜI DÙNG TẮT TAB / LOAD LẠI TRANG ---
     window.addEventListener("pagehide", function (e) {
         if (studentNameStored !== "" && !daNopBai) {
             var d = 0;
