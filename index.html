@@ -419,6 +419,15 @@ body.dark-mode .loi-giai {
         codeInput.onkeypress = (e) => { 
             if (e.key === 'Enter') { checkLogin(); } 
         };
+        // --- BẤM DOUBLE CLICK ĐỂ HIỆN/ẨN MẬT KHẨU ---
+codeInput.title = "Nhấp đúp chuột để hiện/ẩn mã bí mật nhen!";
+codeInput.addEventListener('dblclick', function() {
+    if (this.type === 'password') {
+        this.type = 'text';
+    } else {
+        this.type = 'password';
+    }
+});
     }
 });
     document.getElementById('btn-login').addEventListener('click', checkLogin);
