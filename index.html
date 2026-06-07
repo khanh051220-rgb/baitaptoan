@@ -409,7 +409,9 @@ body.dark-mode .loi-giai {
             document.getElementById('sound-click').play();
         });
     });
-
+// --- THÊM ĐOẠN NÀY ĐỂ BẤM ENTER KHI ĐĂNG NHẬP ---
+document.getElementById('student-name').onkeypress = (e) => { if (e.key === 'Enter') checkLogin(); };
+document.getElementById('student-code').onkeypress = (e) => { if (e.key === 'Enter') checkLogin(); };
     document.getElementById('btn-login').addEventListener('click', checkLogin);
     document.getElementById('btn-nop-bai').addEventListener('click', chamDiem);
 
