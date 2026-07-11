@@ -5,49 +5,6 @@
     <title>Học toán cùng Khánh</title>
     <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/188/188333.png">
     <style>
-        /* Lớp nền mờ bao phủ toàn màn hình */
-  #nen-thong-bao {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.6); /* Màu đen mờ */
-    display: none; /* Mặc định giấu đi */
-    justify-content: center; /* Căn giữa chiều ngang */
-    align-items: center; /* Căn giữa chiều dọc */
-    z-index: 9999; /* Ưu tiên nổi lên trên cùng */
-  }
-
-  /* Cái hộp thông báo màu trắng */
-  .hop-thong-bao {
-    background-color: #ffffff;
-    color: #333333;
-    padding: 40px 30px; /* Tăng số này lên để hộp to hơn nữa */
-    border-radius: 12px; /* Bo góc cho tròn mượt */
-    text-align: center;
-    position: relative;
-    width: 80%;
-    max-width: 500px; /* Chiều rộng tối đa của hộp */
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-    font-family: Arial, sans-serif;
-  }
-
-  /* Nút X ở góc phải */
-  #nut-tat-x {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    font-size: 28px;
-    font-weight: bold;
-    color: #888;
-    cursor: pointer;
-  }
-
-  /* Di chuột vào nút X sẽ chuyển màu đỏ */
-  #nut-tat-x:hover {
-    color: red;
-  }
         /* Ép màu cho phần hiển thị điểm số */
 #result-container h2, 
 #result-container p {
@@ -288,20 +245,6 @@ body.dark-mode .loi-giai {
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 </head>
 <body>
-    <div id="nen-thong-bao">
-  <div class="hop-thong-bao">
-    <!-- Đây là nút X -->
-    <span id="nut-tat-x">&times;</span>
-    
-    <!-- Tiêu đề thông báo -->
-    <h2>THÔNG BÁO QUAN TRỌNG</h2>
-    
-    <!-- Nội dung thông báo -->
-    <p style="font-size: 18px; line-height: 1.6;">
-      Do admin bận nên toàn bộ nội dung được AI hệ thống lại nếu có sai xót liên hệ gmail:khanh051220@gmail.com  Cảm ơn đã ghé thăm nhé!
-    </p>
-  </div>
-</div>
     <div class="theme-switch" onclick="toggleDarkMode()" title="Đổi màu nền">🌓</div>
     <div id="ai-container" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
         <div id="ai-bubble" style="background: white; border: 2px solid var(--secondary); padding: 10px 15px; border-radius: 20px; margin-bottom: 10px; font-size: 13px; max-width: 250px; display: none; box-shadow: 0 5px 15px rgba(0,0,0,0.1); position: relative;">
@@ -903,19 +846,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
         document.body.classList.add('dark-mode');
     }
 });
-    window.onload = function() {
-    // Lấy các phần tử ra
-    var nenThongBao = document.getElementById("nen-thong-bao");
-    var nutTat = document.getElementById("nut-tat-x");
-
-    // Lệnh 1: Hiển thị thông báo ngay khi trang tải xong
-    nenThongBao.style.display = "flex";
-
-    // Lệnh 2: Khi click vào nút X thì tắt thông báo đi
-    nutTat.onclick = function() {
-      nenThongBao.style.display = "none";
-    };
-  };
 </script>
 </body>
 </html>
